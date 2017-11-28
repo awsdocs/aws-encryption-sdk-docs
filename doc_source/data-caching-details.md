@@ -1,0 +1,138 @@
+# Data Key Caching Details<a name="data-caching-details"></a>
+
+Most applications can use the default implementation of data key caching without writing custom code\. This section describes the default implementation and some details about options\. 
+
+
++ [How Data Key Caching Works](#how-caching-works)
++ [Creating a Cryptographic Materials Cache](#simplecache)
++ [Creating a Caching Cryptographic Materials Manager](#caching-cmm)
++ [What Is in a Data Key Cache Entry?](#cache-entries)
++ [Encryption Context: How to Select Cache Entries](#caching-encryption-context)
+
+## How Data Key Caching Works<a name="how-caching-works"></a>
+
+When you use data key caching in a request to encrypt or decrypt data, the AWS Encryption SDK first searches the cache for a data key that matches the request\. If it finds a valid match, it uses the cached data key to encrypt the data\. Otherwise, it generates a new data key, just as it would without the cache\. 
+
+In addition to a cache, data key caching uses a caching cryptographic materials manager \(caching CMM\)\. The caching CMM is a specialized cryptographic materials manager \(CMM\) that interacts with a cache and an underlying CMM or master key provider\. The caching CMM caches the data keys that its underlying CMM \(or master key provider\) returns\. The caching CMM also enforces cache security thresholds that you set\. 
+
+To prevent the wrong data key from being selected from the cache, each caching CMM requires that several properties of each cached data key match the materials request, as follows: 
+
++ For encryption material requests, the cached entry and the request must have the same algorithm suite, encryption context \(even when empty\), and partition name \(a string that identifies the caching CMM\)\. 
+
++ For decryption material requests, the cached entry and the request must have the same algorithm suite, encryption context \(even when empty\), and partition name \(a string that identifies the caching CMM\)\.
+
+**Note**  
+The AWS Encryption SDK caches data keys only when the algorithm suite uses a [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function)\.  
+Data key caching is not used for data of unknown size, such as streamed data\. This allows the caching CMM to properly enforce the maximum bytes threshold\. To avoid this behavior, add the data length to the encryption request\. 
+
+The following workflows show how a request to encrypt data is processed with and without data key caching\. They show how the caching components that you create, including the cache and the caching CMM, are used in the process\.
+
+### Encrypt Data without Caching<a name="workflow-wo-cache"></a>
+
+To generate a data key without caching:
+
+1. An application asks the AWS Encryption SDK to encrypt data\. 
+
+   The request specifies a cryptographic materials manager \(CMM\) or master key provider\. If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with the master key provider you specified\.
+
+1. The AWS Encryption SDK asks the CMM for a data key to encrypt the data \(get cryptographic materials\)\.
+
+1. The CMM asks its master key provider for master keys \(or objects that represent master keys\)\. Then, it uses the master keys to generate a new data key\. This might involve a call to a cryptographic service, such as AWS Key Management Service \(AWS KMS\)\. The CMM returns plaintext and encrypted copies of the data key to the AWS Encryption SDK\.
+
+1. The AWS Encryption SDK uses the plaintext data key to encrypt the data and it returns an encrypted message to the user\.
+
+![\[Encrypt data without caching\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/encrypt-workflow-no-cache.png)
+
+### Encrypt Data with Caching<a name="workflow-with-cache"></a>
+
+To generate a data key with data key caching:
+
+1. An application asks the AWS Encryption SDK to encrypt data\. 
+
+   The request specifies a caching cryptographic materials manager \(caching CMM\) that is associated with a default cryptographic materials manager \(CMM\) or a master key provider\. If you specify a master key provider, the SDK creates a default CMM for you\.
+
+1. The SDK asks the specified caching CMM for a data key to encrypt the data \(get cryptographic materials\)\.
+
+1. The caching CMM requests a data key from the cache\. 
+
+   1. If the cache finds a match, it updates the age and use values of the matched cache entry, and returns the cached data key to the caching CMM\. 
+
+      If the cache entry conforms to its security thresholds, the caching CMM returns it to the SDK\. Otherwise, it tells the cache to evict the entry and proceeds as though there was no match\.
+
+   1. If the cache cannot find a valid match, the caching CMM asks its underlying CMM to generate a new data key\. 
+
+      The CMM gets master keys \(or objects that represent master keys\) from its master key provider and it uses them to generate a new data key\. This might involve a call to a service, such as AWS Key Management Service\. The CMM returns the plaintext and encrypted copies of the data key to the caching CMM\. 
+
+      The caching CMM saves the new data key in the cache\.
+
+1. The caching CMM returns plaintext and encrypted copies of the data key to the AWS Encryption SDK\.
+
+1. The AWS Encryption SDK uses the data key to encrypt the data and it returns an encrypted message to the user\.
+
+![\[Encrypt data with data key caching\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/encrypt-workflow-with-cache.png)
+
+## Creating a Cryptographic Materials Cache<a name="simplecache"></a>
+
+The AWS Encryption SDK defines the requirements for a cryptographic materials cache used in data key caching\. It also provides *LocalCryptoMaterialsCache*, a configurable, in\-memory, [least recently used \(LRU\) cache](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_.28LRU.29), and a null cryptographic materials cache for testing\.
+
+LocalCryptoMaterialsCache includes logic for basic cache management, including adding, evicting, and matching cached entries, and maintaining the cache\. You don't need to write any custom cache management logic\. You can use LocalCryptoMaterialsCache as is, customize it, or substitute any compatible cache\. 
+
+When you create a LocalCryptoMaterialsCache, you set its *capacity*, that is, the maximum number of entries that the cache can hold\. This setting helps you to design an efficient cache with limited data key reuse\.
+
+The AWS Encryption SDK also provides a *null cryptographic materials cache* \(NullCryptoMaterialsCache\)\. The NullCryptoMaterialsCache returns a miss for all get operations and does not respond to put operations\. You can use the NullCryptoMaterialsCache in testing or to temporarily disable caching in an application that includes caching code\. 
+
+In the AWS Encryption SDK, each cryptographic materials cache is associated with a caching cryptographic materials manager \(caching CMM\)\. The caching CMM gets data keys from the cache, puts data keys in the cache, and enforces security thresholds that you set\. When you create a caching CMM, you specify the cache that it uses and the underlying CMM or master key provider that generates the data keys that it caches\.
+
+## Creating a Caching Cryptographic Materials Manager<a name="caching-cmm"></a>
+
+To enable data key caching, you create a cache and a *caching cryptographic materials manager* \(caching CMM\)\. Then, in your requests to encrypt or decrypt data, you specify a caching CMM, instead of a standard cryptographic materials manager \(CMM\) or master key provider \.
+
+There are two types of CMMs\. Both get data keys \(and related cryptographic material\), but in different ways, as follows:
+
++ A CMM is associated with a master key provider\. When the SDK asks the CMM for data keys \(get encryption materials\), the CMM gets master keys \(or objects that represent master keys\) from its master key provider\. Then, it uses the master keys to generate, encrypt, or decrypt the data keys\.
+
+   
+
++ A caching CMM is associated with one cache, such as a LocalCryptoMaterialsCache, and a CMM or master key provider\. \(If you specify a master key provider, the SDK creates a default CMM for the master key provider\.\) When the SDK asks the caching CMM for data keys, the caching CMM tries to get them from the cache\. If it cannot find a valid, matching data key, the caching CMM asks its underlying CMM for the data keys\. Then, it caches those data keys before returning them to the caller\. 
+
+The caching CMM also enforces security thresholds that you set for each cache entry\. Because the security thresholds are set in and enforced by the caching CMM, you can use any compatible cache, even if the cache is not designed for sensitive material\.
+
+For details about creating and managing CMMs and caching CMMs in your application, see the SDK for your programming language\. 
+
+## What Is in a Data Key Cache Entry?<a name="cache-entries"></a>
+
+Data key caching stores data keys and related cryptographic materials in a cache\. Each entry includes the elements listed below\. You might find this information useful when you're deciding whether to use the data key caching feature, and when you're setting security thresholds on a caching cryptographic materials manager \(caching CMM\)\.
+
+**Cached Entries for Encryption Requests**  
+The entries that are added to a data key cache as a result of a encryption operation include the following elements:
+
++ Plaintext data key
+
++ Encrypted data keys \(one or more\)
+
++ Encryption context 
+
++ Message signing key \(if one is used\)
+
++ Algorithm suite
+
++ Metadata, including usage counters for enforcing security thresholds
+
+**Cached Entries for Decryption Requests**  
+The entries that are added to a data key cache as a result of a decryption operation include the following elements:
+
++ Plaintext data key
+
++ Signature verification key \(if one is used\)
+
++ Metadata, including usage counters for enforcing security thresholds
+
+## Encryption Context: How to Select Cache Entries<a name="caching-encryption-context"></a>
+
+You can specify an encryption context in any request to encrypt data\. However, the encryption context plays a special role in data key caching\. It lets you create subgroups of data keys in your cache, even when the data keys originate from the same caching CMM\.
+
+An encryption context is a set of key\-value pairs that contain arbitrary nonsecret data\. During encryption, the encryption context is cryptographically bound to the encrypted data so that the same encryption context is required to decrypt the data\. In the AWS Encryption SDK, the encryption context is stored in the encrypted message along with the encrypted data and data keys\. 
+
+When you use a data key cache, you can also use the encryption context to select particular cached data keys for your encryption operations\. The encryption context is saved in the cache entry with the data key \(it's part of the cache entry ID\)\. Cached data keys are reused only when their encryption contexts match\. If you want to reuse certain data keys for an encryption request, specify the same encryption context\. If you want to avoid those data keys, specify a different encryption context\. 
+
+The encryption context is always optional, but recommended\. If you don't specify an encryption context in your request, an empty encryption context is included in the cache entry identifier and matched to each request\.
