@@ -134,7 +134,7 @@ If you are encrypting data streams, or any data of unknown size, be sure to spec
 // the encryption operation uses the data key cache
 //
 final AwsCrypto encryptionSdk = new AwsCrypto();
-byte[] message = new AwsCrypto().encryptData(cachingCmm, plaintext_source).getResult();
+byte[] message = encryptionSdk.encryptData(cachingCmm, plaintext_source).getResult();
 ```
 
 ------
