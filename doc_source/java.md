@@ -2,7 +2,10 @@
 
 This topic explains how to install and use the AWS Encryption SDK for Java\. For details about programming with the SDK, see the [aws\-encryption\-sdk\-java](https://github.com/awslabs/aws-encryption-sdk-java) repository on GitHub the [Javadoc](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
 
-
+**Topics**
++ [Prerequisites](#java-prerequisites)
++ [Installation](#java-installation)
++ [Example Code](java-example-code.md)
 
 ## Prerequisites<a name="java-prerequisites"></a>
 
@@ -25,7 +28,7 @@ If you use [Apache Maven](https://maven.apache.org/), Bouncy Castle is available
 ```
 
 **AWS SDK for Java \(Optional\)**  
-Although you don't need the AWS SDK for Java to use the AWS Encryption SDK for Java, you do need it to use [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as a master key provider, and to use some of the example Java code in this guide\. For more information about installing and configuring the AWS SDK for Java, see [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\.
+Although you don't need the AWS SDK for Java to use the AWS Encryption SDK for Java, you do need it to use [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as a master key provider, and to use some of the [example Java code](java-example-code.md) in this guide\. For more information about installing and configuring the AWS SDK for Java, see [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\.
 
 ## Installation<a name="java-installation"></a>
 
@@ -45,4 +48,4 @@ The AWS Encryption SDK for Java is available through [Apache Maven](https://mave
 </dependency>
 ```
 
-After you install the SDK, get started by looking at the example Java code in this guide and the [Javadoc on GitHub](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/)\.
+After you install the SDK, get started by looking at the [example Java code](java-example-code.md) in this guide and the [Javadoc on GitHub](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/)\.

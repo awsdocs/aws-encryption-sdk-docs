@@ -1,6 +1,6 @@
 # Data Key Caching Example in Python<a name="sample-cache-example-python"></a>
 
-This code sample creates a basic implementation of data key caching with a LocalCryptoMaterialsCache in Python\. For details about the Python implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Python](python.md)\.
+This code sample creates a basic implementation of data key caching with a [LocalCryptoMaterialsCache](data-caching-details.md#simplecache) in Python\. For details about the Python implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Python](python.md)\.
 
 The code creates two instances of a LocalCryptoMaterialsCache; one for data producers that are encrypting data and another for data consumers \(Lambda functions\) that are decrypting data\. For implementation details, see the [Python documentation](http://aws-encryption-sdk-python.readthedocs.io/en/latest/) for the AWS Encryption SDK\.
 
@@ -8,9 +8,9 @@ The code creates two instances of a LocalCryptoMaterialsCache; one for data prod
 
 The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to an [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each region\. 
 
-The code defines a caching cryptographic materials manager \(caching CMM\) and associates it with a LocalCryptoMaterialsCache and an underlying KMS master key provider\. The caching CMM caches the data keys \(and related cryptographic materials\) from the master key provider\. It also interacts with the cache on behalf of the SDK and enforces security thresholds that you set\. 
+The code defines a [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) and associates it with a [LocalCryptoMaterialsCache](data-caching-details.md#simplecache) and an underlying KMS [master key provider](concepts.md#master-key-provider)\. The caching CMM caches the data keys \(and [related cryptographic materials](data-caching-details.md#cache-entries)\) from the master key provider\. It also interacts with the cache on behalf of the SDK and enforces security thresholds that you set\. 
 
-Because the call to the `encrypt` method specifies a caching CMM, instead of a regular cryptographic materials manager \(CMM\) or master key provider, the method will use data key caching\.
+Because the call to the `encrypt` method specifies a caching CMM, instead of a regular [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) or master key provider, the method will use data key caching\.
 
 ```
 """

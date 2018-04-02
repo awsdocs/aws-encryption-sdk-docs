@@ -2,7 +2,10 @@
 
 This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For example, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
-
+**Topics**
++ [AWS Encryption CLI Syntax](#crypto-cli-syntax)
++ [AWS Encryption CLI Command Line Parameters](#crypto-cli-parameters)
++ [Advanced Parameters](#cli-advanced-parameters)
 
 ## AWS Encryption CLI Syntax<a name="crypto-cli-syntax"></a>
 
@@ -32,7 +35,7 @@ aws-encryption-cli --encrypt
                    --master-keys  [--master-keys ...]
                        key=<keyID> [provider=<provider-name>] [region=<aws-region>] [profile=<aws-profile>]
                    --metadata-output <location> [--overwrite-metadata] | --suppress-metadata
-                   [--encryption-context <encryption_context> [<encryption_context> ...]]          
+                   [--encryption-context <encryption_context> [<encryption_context> ...]]
                    [--algorithm <algorithm_suite>]
                    [--caching <attributes>] 
                    [--frame-length <length>]
@@ -78,20 +81,20 @@ Encrypts the input data\. Every command must have an `--encrypt` or `--decrypt` 
 Decrypts the input data\. Every command must have an `--encrypt` or `--decrypt` parameter\.
 
 **\-\-master\-keys \(\-m\)**  
-Specifies the master keys used in encryption and decryption operations\. You can use multiple master keys parameters in each command\.  
+Specifies the [master keys](concepts.md#master-key) used in encryption and decryption operations\. You can use multiple master keys parameters in each command\.  
 The `--master-keys` parameter is required in encrypt commands\. It is required in decrypt commands only when you are using a custom master key provider\.  
 **Attributes**: The value of the `--master-keys` parameter consists of the following attributes\. The format is `attribute_name=value`\.     
 **key**  
 Identifies the master key\. The format is a **key**=ID pair\.   
-The **key** attribute is required in all encrypt commands\. When you use an AWS KMS CMK in an encrypt command, the value of the **key** attribute can be a CMK ID or Amazon Resource Name \(ARN\), an alias, or an alias ARN\. The key attribute is required in decrypt commands when the master key provider is not AWS KMS\.  
-The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS CMK\. The AWS Encryption CLI can use any of the CMKs that were used to encrypt a data key, provided that the AWS credentials you are using have permission to call the [Decrypt API](http://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the master key\. For more information, see [ Authentication and Access Control for AWS KMS](http://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\.   
+The **key** attribute is required in all encrypt commands\. When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a CMK ID or Amazon Resource Name \(ARN\), an alias, or an alias ARN\.   
+The key attribute is required in decrypt commands when the master key provider is not AWS KMS\. The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS CMK\.   
 You can specify multiple **key** attributes in each `--master-keys` parameter value\. However, any **provider**, **region**, and **profile** attributes apply to all master keys in the parameter value\. To specify master keys with different attribute values, use multiple `--master-keys` parameters in the command\.   
 **provider**  
-Identifies the master key provider\. The format is a **provider**=ID pair\. The default value, **aws\-kms**, represents AWS KMS\. This attribute is required only when using a different provider\.  
+Identifies the [master key provider](concepts.md#master-key-provider)\. The format is a **provider**=ID pair\. The default value, **aws\-kms**, represents AWS KMS\. This attribute is required only when the master key provider is not AWS KMS\.  
 **region**  
-Identifies the region of an AWS KMS master key\. This attribute is valid only for AWS KMS master keys\. It is used only when the key identifier does not specify a region; otherwise, it is ignored\. When it is used, it overrides the default region in the AWS CLI profile\.   
+Identifies the AWS Region of an AWS KMS CMK\. This attribute is valid only for AWS KMS CMKs\. It is used only when the **key** identifier does not specify a region; otherwise, it is ignored\. When it is used, it overrides the default region in the AWS CLI named profile\.   
 **profile**  
-Identifies an AWS CLI [named profile](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS master keys\. The region in the profile is used only when the key identifier does not specify a region and there is no **region** attribute in the command\. 
+Identifies an AWS CLI [named profile](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The region in the profile is used only when the key identifier does not specify a region and there is no **region** attribute in the command\. 
 
 **\-\-input \(\-i\)**  
 Specifies the location of the data to encrypt or decrypt\. This parameter is required\. The value can be a path to a file or directory, or a file name pattern\. If you are piping input to the command \(stdin\), use `-`\.  
@@ -131,10 +134,8 @@ Overwrites the content in the metadata output file\. By default, the `--metadata
 Suppresses the metadata about the encryption or decryption operation\. 
 
 **\-\-encryption\-context \(\-c\)**  
-Specifies an encryption context for the operation\. This parameter is not required, but it is recommended\.   
-
+Specifies an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context) for the operation\. This parameter is not required, but it is recommended\.   
 + In an `--encrypt` command, enter one or more `name=value` pairs\. Use spaces to separate the pairs\.
-
 + In a decrypt command, enter `name=value` pairs, `name` elements with no values, or both\.
 If the `name` or `value` in a `name=value` pair includes spaces or special characters, enclose the entire pair in quotation marks\. For example, `--encryption-context "department=software development"`\.
 
@@ -144,7 +145,7 @@ Prints usage and syntax at the command line\.
 **\-\-version**  
 Gets the version of the AWS Encryption CLI\.
 
-**\-v | \-vv | \-vvv | \-vvvv**  
+**\-v \| \-vv \| \-vvv \| \-vvvv**  
 Displays verbose information, warning, and debugging messages\. The detail in the output increases with the number of `v`s in the parameter\. The most detailed setting \(`-vvvv`\) returns debugging\-level data from the AWS Encryption CLI and all of the components that it uses\.
 
 **\-\-quiet \(\-q\)**  
@@ -153,7 +154,7 @@ Suppresses warning messages, such as the message that appears when you overwrite
 ## Advanced Parameters<a name="cli-advanced-parameters"></a>
 
 \-\-algorithm  
-Specifies an alternate algorithm suite\. This parameter is optional and valid only in encrypt commands\. By default, the AWS Encryption CLI uses the default algorithm suite for the AWS Encryption SDK, which is AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. This algorithm suite is recommended for most encryption operations\. For a list of alternate values, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
+Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This parameter is optional and valid only in encrypt commands\. By default, the AWS Encryption CLI uses the default algorithm suite for the AWS Encryption SDK, which is AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. This algorithm suite is recommended for most encryption operations\. For a list of alternate values, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
 
 \-\-frame\-length  
 Creates output with specified frame length\. Enter a value in bytes\. This parameter is optional and valid only in encrypt commands\.
@@ -162,7 +163,7 @@ Creates output with specified frame length\. Enter a value in bytes\. This param
 Indicates the maximum frame size \(or maximum content length for non\-framed messages\) in bytes to read from encrypted messages\. This parameter is optional and valid only in decrypt commands\. It is designed to protect you from decrypting extremely large malicious ciphertext\. 
 
 \-\-caching  
-Enables the data key caching feature, which reuses data keys, instead of generating a new data key for each input file\. This parameter supports an advanced scenario\. Be sure to read the Data Key Caching documentation before using this feature\.   
+Enables the [data key caching](data-key-caching.md) feature, which reuses data keys, instead of generating a new data key for each input file\. This parameter supports an advanced scenario\. Be sure to read the [Data Key Caching](data-key-caching.md) documentation before using this feature\.   
 The `--caching` parameter has the following attributes\.    
 **capacity \(required\)**  
 Determines the maximum number of entries in the cache\.  

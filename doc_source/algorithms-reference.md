@@ -23,7 +23,7 @@ To build your own library that can read and write ciphertexts that are compatibl
 | 00 14 | AES | 128 | GCM | 12 | 16 | Not applicable | Not applicable | 
 
 **Algorithm ID**  
-A 2\-byte value that uniquely identifies an algorithm's implementation\. This value is stored in the ciphertext's message header\.
+A 2\-byte value that uniquely identifies an algorithm's implementation\. This value is stored in the ciphertext's [message header](message-format.md#header-structure)\.
 
 **Algorithm Name**  
 The encryption algorithm used\. For all algorithm suites, the SDK uses the Advanced Encryption Standard \(AES\) encryption algorithm\.
@@ -42,26 +42,16 @@ The length of the authentication tag used with AES\-GCM\.
 
 **Key Derivation Algorithm**  
 The HMAC\-based extract\-and\-expand key derivation function \(HKDF\) used to derive the data encryption key\. The SDK uses the HKDF defined in [RFC 5869](https://tools.ietf.org/html/rfc5869), with the following specifics:  
-
 + The hash function used is either SHA\-384 or SHA\-256, as specified by the algorithm ID\.
-
 + For the extract step:
-
   + No salt is used\. Per the RFC, this means that the salt is set to a string of zeros\. The string length is equal to the length of the hash function output; that is, 48 bytes for SHA\-384 and 32 bytes for SHA\-256\.
-
   + The input keying material is the data key received from the master key provider\.
-
 + For the expand step:
-
   + The input pseudorandom key is the output from the extract step\.
-
   + The input info is a concatenation of the algorithm ID followed by the message ID\.
-
   + The length of the output keying material is the **Data Key Length** described previously\. This output is used as the data encryption key in the encryption algorithm\.
 
 **Signature Algorithm**  
 The signature algorithm used to generate a signature over the ciphertext header and body\. The SDK uses the Elliptic Curve Digital Signature Algorithm \(ECDSA\) with the following specifics:  
-
 + The elliptic curve used is either the P\-384 or P\-256 curve, as specified by the algorithm ID\. These curves are defined in [Digital Signature Standard \(DSS\) \(FIPS PUB 186\-4\)](http://doi.org/10.6028/NIST.FIPS.186-4)\.
-
 + The hash function used is SHA\-384 \(with the P\-384 curve\) or SHA\-256 \(with the P\-256 curve\)\.

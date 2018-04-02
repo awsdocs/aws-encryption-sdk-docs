@@ -7,7 +7,7 @@
 
 The following topics show examples of the AWS Encryption SDK message format\. Each example shows the raw bytes, in hexadecimal notation, followed by a description of what those bytes represent\.
 
-
+**Topics**
 + [Non\-Framed Data](#example-non-framed)
 + [Framed Data](#example-framed)
 

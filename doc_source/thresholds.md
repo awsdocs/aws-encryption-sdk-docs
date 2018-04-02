@@ -1,6 +1,6 @@
 # Setting Cache Security Thresholds<a name="thresholds"></a>
 
-When you implement data key caching, you need to configure the security thresholds that the caching CMM enforces\. 
+When you implement data key caching, you need to configure the security thresholds that the [caching CMM](data-caching-details.md#caching-cmm) enforces\. 
 
 The security thresholds help you to limit how long each cached data key is used and how much data is protected under each data key\. The caching CMM returns cached data keys only when the cache entry conforms to all of the security thresholds\. If the cache entry exceeds any threshold, the entry is not used for the current operation and it is evicted from the cache\.
 
@@ -12,7 +12,7 @@ For examples of setting cache security thresholds, see [AWS Encryption SDK: How 
 
 **Note**  
 The caching CMM enforces all of the following thresholds\. If you do not specify an optional value, the caching CMM uses the default value\.  
-To disable data key caching temporarily, do not set the cache capacity or security thresholds to 0\. Instead, use the *null cryptographic materials cache* \(NullCryptoMaterialsCache\) that the AWS Encryption SDK provides\. The NullCryptoMaterialsCache returns a miss for every get request and does not respond to put requests\. For more information, see the SDK for your programming language\.
+To disable data key caching temporarily, do not set the [cache capacity](data-caching-details.md#simplecache) or security thresholds to 0\. Instead, use the *null cryptographic materials cache* \(NullCryptoMaterialsCache\) that the AWS Encryption SDK provides\. The NullCryptoMaterialsCache returns a miss for every get request and does not respond to put requests\. For more information, see the SDK for your[ programming language](programming-languages.md)\.
 
 **Maximum age \(required\)**  
 Determines how long a cached entry can be used, beginning when it was added\. This value is required\. Enter a value greater than 0\. There is no maximum value\.  

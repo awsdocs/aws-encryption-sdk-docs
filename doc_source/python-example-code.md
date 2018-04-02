@@ -2,7 +2,10 @@
 
 The following examples show you how to use the AWS Encryption SDK for Python to encrypt and decrypt data\.
 
-
+**Topics**
++ [Strings](#python-example-strings)
++ [Byte Streams](#python-example-streams)
++ [Byte Streams with Multiple Master Key Providers](#python-example-multiple-providers)
 
 ## Encrypting and Decrypting Strings<a name="python-example-strings"></a>
 

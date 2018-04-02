@@ -2,7 +2,9 @@
 
 This topic explains how to install the AWS Encryption CLI\. For detailed information, see the [aws\-encryption\-sdk\-cli](https://github.com/awslabs/aws-encryption-sdk-cli/) repository on GitHub and [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
-
+**Topics**
++ [Installing the Prerequisites](#crypto-cli-prerequisites)
++ [Installing the AWS Encryption CLI](#install-sdk-cli)
 
 ## Installing the Prerequisites<a name="crypto-cli-prerequisites"></a>
 
@@ -36,7 +38,7 @@ PS C:\> dir HKCU:\Software\Python\PythonCore\version\InstallPath
 For help installing or upgrading **pip**, see [Installation](https://pip.pypa.io/en/latest/installing/) in the **pip** documentation\.
 
 **AWS Command Line Interface**  
-The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) with the AWS Encryption CLI\. If you are using a different master key provider, the AWS CLI is not required\.  
+The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) with the AWS Encryption CLI\. If you are using a different [master key provider](concepts.md#master-key-provider), the AWS CLI is not required\.  
 To use AWS KMS CMKs with the AWS Encryption CLI, you need to [install](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configure ](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration) the AWS CLI\. The configuration makes the credentials that you use to authenticate to AWS KMS available to the AWS Encryption CLI\. 
 
 ## Installing the AWS Encryption CLI<a name="install-sdk-cli"></a>
@@ -69,4 +71,4 @@ aws-encryption-sdk-cli/1.1.0 aws-encryption-sdk/1.3.2
 
 To install the version of the AWS Encryption CLI currently in development, see the [aws\-encryption\-sdk\-cli](https://github.com/awslabs/aws-encryption-sdk-cli/) repository on GitHub\.
 
-For more details about using **pip** to install and upgrade Python packages, see [Installing Packages](https://packaging.python.org/tutorials/installing-packages/)\. 
+For more details about using **pip** to install and upgrade Python packages, see the [pip documentation](https://pip.pypa.io/en/stable/quickstart/)\.

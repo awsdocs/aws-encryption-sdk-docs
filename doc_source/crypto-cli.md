@@ -6,7 +6,12 @@ Like all implementations of the AWS Encryption SDK, the AWS Encryption CLI offer
 
 The AWS Encryption CLI is built on the [AWS Encryption SDK for Python](https://github.com/awslabs/aws-encryption-sdk-python) and is supported on Linux, macOS, and Windows\. You can run commands and scripts to encrypt and decrypt your data in your preferred shell on Linux or macOS, in a Command Prompt window \(cmd\.exe\) on Windows, and in a PowerShell console on any system\. 
 
-All language\-specific implementations of the AWS Encryption SDK, including the AWS Encryption CLI, are interoperable\. For example, you can encrypt data with the AWS Encryption SDK for Java and decrypt it with the AWS Encryption CLI\. 
+All language\-specific implementations of the AWS Encryption SDK, including the AWS Encryption CLI, are interoperable\. For example, you can encrypt data with the [AWS Encryption SDK for Java](java.md) and decrypt it with the AWS Encryption CLI\. 
 
 This topic introduces the AWS Encryption CLI, explains how to install and use it, and provides several examples to help you get started\. For a quick start, see [How to Encrypt and Decrypt Your Data with the AWS Encryption CLI](http://aws.amazon.com/blogs/security/how-to-encrypt-and-decrypt-your-data-with-the-aws-encryption-cli/) in the AWS Security Blog\. For more detailed information, see [Read The Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/), and join us in developing the AWS Encryption CLI in the [aws\-encryption\-sdk\-cli](https://github.com/awslabs/aws-encryption-sdk-cli/) repository on GitHub\.
 
+**Topics**
++ [Installing the CLI](crypto-cli-install.md)
++ [How to Use the CLI](crypto-cli-how-to.md)
++ [Examples](crypto-cli-examples.md)
++ [Syntax and Parameter Reference](crypto-cli-reference.md)

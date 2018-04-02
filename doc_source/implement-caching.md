@@ -2,15 +2,14 @@
 
 This topic shows you how to implement data key caching in your application\. It takes you through the process step by step\. Then, it combines the steps in a simple example that uses data key caching in an operation to encrypt a string\.
 
-
+**Topics**
 + [Implement Data Key Caching: Step\-by\-Step](#implement-caching-steps)
 + [Data Key Caching Example: Encrypt a String](#caching-example-encrypt-string)
 
 ## Implement Data Key Caching: Step\-by\-Step<a name="implement-caching-steps"></a>
 
 These step\-by\-step instructions show you how to create the components that you need to implement data key caching\.
-
-+ Create a data key cache, such as a LocalCryptoMaterialsCache\.
++ [Create a data key cache](data-caching-details.md#simplecache), such as a LocalCryptoMaterialsCache\.
 
    
 
@@ -37,8 +36,7 @@ These step\-by\-step instructions show you how to create the components that you
 ------
 
    
-
-+ Create a master key provider\. This example uses an AWS Key Management Service \(AWS KMS\) master key provider\.
++ Create a [master key provider](concepts.md#master-key-provider)\. This example uses an AWS Key Management Service \(AWS KMS\) master key provider\.
 
    
 
@@ -67,12 +65,11 @@ These step\-by\-step instructions show you how to create the components that you
 ------
 
    
-
-+ Create a caching cryptographic materials manager \(caching CMM\)\. 
++ [Create a caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\)\. 
 
    
 
-  Associate your caching CMM with your cache and master key provider\. Then, set cache security thresholds on the caching CMM\. 
+  Associate your caching CMM with your cache and master key provider\. Then, [set cache security thresholds](thresholds.md) on the caching CMM\. 
 
    
 
@@ -134,7 +131,7 @@ If you are encrypting data streams, or any data of unknown size, be sure to spec
 // the encryption operation uses the data key cache
 //
 final AwsCrypto encryptionSdk = new AwsCrypto();
-byte[] message = new AwsCrypto().encryptData(cachingCmm, plaintext_source).getResult();
+byte[] message = encryptionSdk.encryptData(cachingCmm, plaintext_source).getResult();
 ```
 
 ------
@@ -154,9 +151,9 @@ encrypted_message, header = aws_encryption_sdk.encrypt(
 
 ## Data Key Caching Example: Encrypt a String<a name="caching-example-encrypt-string"></a>
 
-This simple code example uses data key caching when encrypting a string\. It combines the code from the step\-by\-step procedure into test code that you can run\.
+This simple code example uses data key caching when encrypting a string\. It combines the code from the [step\-by\-step procedure](#implement-caching-steps) into test code that you can run\.
 
-The example creates a LocalCryptoMaterialsCache and a master key provider for an AWS KMS [customer master key](http://docs.aws.amazon.com/kms/latest/developerguide//concepts.html#master_keys) \(CMK\)\. Then, it uses the cache and master key provider to create a caching CMM with appropriate security thresholds\. The encryption request specifies the caching CMM, the plaintext data to encrypt, and an encryption context\. 
+The example creates a [LocalCryptoMaterialsCache](data-caching-details.md#simplecache) and a [master key provider](concepts.md#master-key-provider) for an AWS KMS [customer master key](http://docs.aws.amazon.com/kms/latest/developerguide//concepts.html#master_keys) \(CMK\)\. Then, it uses the cache and master key provider to create a caching CMM with appropriate [security thresholds](thresholds.md)\. The encryption request specifies the caching CMM, the plaintext data to encrypt, and an [encryption context](data-caching-details.md#caching-encryption-context)\. 
 
 To run the example, you need to supply the [Amazon Resource Name \(ARN\) of a KMS CMK](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)\. Be sure that you have [permission to use the CMK](http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to generate a data key\.
 

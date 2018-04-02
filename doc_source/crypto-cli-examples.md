@@ -1,8 +1,8 @@
 # Examples of the AWS Encryption SDK Command Line Interface<a name="crypto-cli-examples"></a>
 
-Use the following examples to try the AWS Encryption CLI on the platform you prefer\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For complete documentation, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
+Use the following examples to try the AWS Encryption CLI on the platform you prefer\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For a quick reference, see [AWS Encryption SDK CLI Syntax and Parameter Reference](crypto-cli-reference.md)\.
 
-
+**Topics**
 + [Encrypting a File](#cli-example-encrypt-file)
 + [Decrypting a File](#cli-example-decrypt-file)
 + [Encrypting All Files in a Directory](#cli-example-encrypt-directory)
@@ -16,13 +16,13 @@ Use the following examples to try the AWS Encryption CLI on the platform you pre
 
 This example uses the AWS Encryption CLI to encrypt the contents of the `hello.txt` file, which contains a "Hello World" string\. 
 
-When you run an encrypt command on a file, the AWS Encryption CLI gets the contents of the file, generates a unique data key, encrypts the file contents under the data key, and then writes the encrypted message to a new file\. 
+When you run an encrypt command on a file, the AWS Encryption CLI gets the contents of the file, generates a unique [data key](concepts.md#DEK), encrypts the file contents under the data key, and then writes the [encrypted message](concepts.md#message) to a new file\. 
 
 The first command saves the [Amazon Resource Name \(ARN\)](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
 
-The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The `--master-keys` parameter, and its required **key** attribute, tell the command to use the master key represented by the CMK ARN to generate the data key\. 
+The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--master-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the master key represented by the CMK ARN\. 
 
-The command uses the `--metadata-output` parameter to specify a text file for the metadata about the encryption operation\. As a best practice, the command uses the `--encryption-context` parameter to specify an encryption context\.
+The command uses the `--metadata-output` parameter to specify a text file for the metadata about the encryption operation\. As a best practice, the command uses the `--encryption-context` parameter to specify an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context)\.
 
 The value of the `--output` parameter, a dot \(\.\), tells the command to write the output file to the current directory\. 
 
@@ -49,7 +49,7 @@ $ aws-encryption-cli --encrypt \
 PS C:\> $CmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 PS C:\> aws-encryption-cli --encrypt `
-PS C:\> aws-encryption-cli --input Hello.txt `
+                           --input Hello.txt `
                            --master-keys key=$CmkArn `
                            --metadata-output $home\Metadata.txt `
                            --encryption-context purpose=test `
@@ -80,7 +80,7 @@ True
 
 You can also use a directory listing command to see that the encrypt command created a new file, `hello.txt.encrypted`\. Because the encrypt command did not specify a file name for the output, the AWS Encryption CLI wrote the output to a file with the same name as the input file plus a `.encrypted` suffix\. To use a different suffix, or suppress the suffix, use the `--suffix` parameter\.
 
-The `hello.txt.encrypted` file contains an encrypted message that includes the ciphertext of the `hello.txt` file, an encrypted copy of the data key, and additional metadata, including the encryption context\.
+The `hello.txt.encrypted` file contains an [encrypted message](concepts.md#message) that includes the ciphertext of the `hello.txt` file, an encrypted copy of the data key, and additional metadata, including the encryption context\.
 
 ------
 #### [ Bash ]
@@ -112,11 +112,11 @@ This example uses the AWS Encryption CLI to decrypt the contents of the `Hello.t
 
 The decrypt command uses the `--decrypt` parameter to indicate the operation and `--input` parameter to identify the file to decrypt\. The value of the `--output` parameter is a dot that represents the current directory\. 
 
-This command does not have a `--master-keys` parameter\. A `--master-keys` parameter is required in decrypt commands only when you are using a custom master key provider\. If you are using an AWS KMS CMK, you do not supply the master key, because AWS KMS derives it from the encrypted message\.
+This command does not have a `--master-keys` parameter\. A `--master-keys` parameter is required in decrypt commands only when you are using a custom master key provider\. If you are using an AWS KMS CMK, you cannot specify a master key, because AWS KMS derives it from the encrypted message\.
 
-The `--encryption-context` parameter is optional in the decrypt command, even when an encryption context is provided in the encrypt command\. In this case, the decrypt command uses the same encryption context that was provided in the encrypt command\. Before decrypting, the AWS Encryption CLI will verify that the encryption context in the encrypted message includes a `purpose=test` pair\. If it does not, the decrypt command fails\.
+The `--encryption-context` parameter is optional in the decrypt command, even when an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context) is provided in the encrypt command\. In this case, the decrypt command uses the same encryption context that was provided in the encrypt command\. Before decrypting, the AWS Encryption CLI verifies that the encryption context in the encrypted message includes a `purpose=test` pair\. If it does not, the decrypt command fails\.
 
-The command also has a `--metadata-output` parameter to tell the AWS Encryption CLI where to write the metadata about the decryption operation\.
+The `--metadata-output` parameter specifies a file for metadata about the decryption operation\. The value of the `--output` parameter, a dot \(\.\), writes the output file to the current directory\. 
 
 ------
 #### [ Bash ]
@@ -180,7 +180,7 @@ Hello World
 
 This example uses the AWS Encryption CLI to encrypt the contents of all of the files in a directory\. 
 
-When a command affects multiple files, the AWS Encryption CLI processes each file individually\. It gets the file contents, gets a unique data key for the file from the master key, encrypts the file contents under the data key, and writes the results to a new file to the output directory\. As a result, you can manage, store, and decrypt the output files independently\. 
+When a command affects multiple files, the AWS Encryption CLI processes each file individually\. It gets the file contents, gets a unique [data key](concepts.md#DEK) for the file from the master key, encrypts the file contents under the data key, and writes the results to a new file in the output directory\. As a result, you can decrypt the output files independently\. 
 
 This listing of the `TestDir` directory shows the plaintext files that we want to encrypt\. 
 
@@ -213,11 +213,11 @@ The first command saves the [Amazon Resource Name \(ARN\)](http://docs.aws.amazo
 
 The second command encrypts the content of files in the `TestDir` directory and writes the files of encrypted content to the `TestEnc` directory\. If the `TestEnc` directory doesn't exist, the command fails\. Because the input location is a directory, the `--recursive` parameter is required\. 
 
-The `--master-keys` parameter, and its required **key** attribute, tell the command to which master key to use when encrypting the files\. The encrypt command includes an encryption context, `dept=IT`\. When you specify an encryption context in a command that encrypts multiple files, the same encryption context is used for all of the files\. 
+The [`--master-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, specify the master key\. The encrypt command includes an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context), `dept=IT`\. When you specify an encryption context in a command that encrypts multiple files, the same encryption context is used for all of the files\. 
 
 The command also has a `--metadata-output` parameter to tell the AWS Encryption CLI where to write the metadata about the encryption operations\. The AWS Encryption CLI writes one metadata record for each file that was encrypted\.
 
-When the command completes successfully, the AWS Encryption CLI writes the encrypted files to the `TestEnc` directory, but it does not return any output\. 
+When the command completes, the AWS Encryption CLI writes the encrypted files to the `TestEnc` directory, but it does not return any output\. 
 
 The final command lists the files in the `TestEnc` directory\. There is one output file of encrypted content for each input file of plaintext content\. Because the command did not specify an alternate suffix, the encrypt command appended `.encrypted` to each of the input file names\.
 
@@ -295,13 +295,9 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-This decrypt command decrypts all of the files in the TestEnc directory and writes the plaintext files to the TestDec directory\. Because the encrypted files were encrypted under an AWS KMS CMK, there is no `--master-keys` parameter in the command\. 
+This decrypt command decrypts all of the files in the TestEnc directory and writes the plaintext files to the TestDec directory\. Because the encrypted files were encrypted under an AWS KMS CMK, there is no `--master-keys` parameter in the command\. The command uses the `--interactive` parameter to tell the AWS Encryption CLI to prompt you before overwriting a file with the same name\.
 
-The command uses the `--interactive` parameter to tell the AWS Encryption CLI to prompt you before overwriting a file with the same name\. By default, the AWS Encryption CLI overwrites files, although the `.encrypted` and `.decrypted` suffixes make name conflicts less likely\.
-
-This command also uses the encryption context that was provided when the files were encrypted\. The same encryption context is used to verify all of the files before they are decrypted\. 
-
-When you are decrypting multiple files, the AWS Encryption CLI checks the encryption context of every file\. If the encryption context check on any file fails, the AWS Encryption CLI rejects the file, writes a warning, records the failure in the metadata, and then continues checking the remaining files\. If the AWS Encryption CLI fails to decrypt a file for any other reason, the entire decrypt command fails immediately\. 
+This command also uses the encryption context that was provided when the files were encrypted\. When decrypting multiple files, the AWS Encryption CLI checks the encryption context of every file\. If the encryption context check on any file fails, the AWS Encryption CLI rejects the file, writes a warning, records the failure in the metadata, and then continues checking the remaining files\. If the AWS Encryption CLI fails to decrypt a file for any other reason, the entire decrypt command fails immediately\. 
 
 In this example, the encrypted messages in all of the input files contain the `dept=IT` encryption context element\. However, if you were decrypting messages with different encryption contexts, you might still be able to verify part of the encryption context\. For example, if some messages had an encryption context of `dept=finance` and others had `dept=IT`, you could verify that the encryption context always contains a `dept` name without specifying the value\. If you wanted to be more specific, you could decrypt the files in separate commands\. 
 
@@ -344,12 +340,11 @@ PS C:\> dir .\TestDec
 
 ## Encrypting and Decrypting on the Command Line<a name="cli-example-stdin"></a>
 
-These examples show you how to pipe input to commands \(stdin\) and tell the command to write its output to the command line \(stdout\)\. They explain how to represent stdin and stdout in a command and how to use the built\-in Base64 encoding tools to prevent the shell from misinterpreting non\-ASCII characters\.
+These examples show you how to pipe input to commands \(stdin\) and write output to the command line \(stdout\)\. They explain how to represent stdin and stdout in a command and how to use the built\-in Base64 encoding tools to prevent the shell from misinterpreting non\-ASCII characters\.
 
 This example pipes a plaintext string to an encrypt command and saves the encrypted message in a variable\. Then, it pipes the encrypted message in the variable to a decrypt command, which writes its output to the pipeline \(stdout\)\. 
 
 The example consists of three commands:
-
 + The first command saves the [Amazon Resource Name \(ARN\)](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
 
 ------
@@ -369,12 +364,11 @@ The example consists of three commands:
 ------
 
    
-
 + The second command pipes the `Hello World` string to the encrypt command and saves the result in the `$encrypted` variable\. 
 
   The `--input` and `--output` parameters are required in all AWS Encryption CLI commands\. To indicate that input is being piped to the command \(stdin\), use a hyphen \(`-`\) for the value of the `--input` parameter\. To send the output to the command line \(stdout\), use a hyphen for the value of the `--output` parameter\. 
 
-  To prevent the shell from misinterpreting the non\-ASCII characters in the encrypted message, this command the `--encode` parameter to Base64\-encode the output before returning it\. 
+  The `--encode` parameter Base64\-encodes the output before returning it\. This prevents the shell from misinterpreting the non\-ASCII characters in the encrypted message\. 
 
   Because this command is just a proof of concept, we omit the encryption context and suppress the metadata \(`-S`\)\. 
 
@@ -399,10 +393,9 @@ The example consists of three commands:
 ------
 
    
-
 + The third command pipes the encrypted message in the `$encrypted` variable to the decrypt command\. 
 
-  This decrypt command also uses `--input -` to indicate that input is coming from the pipeline \(stdin\) and `--output -` to send the output to the pipeline \(stdout\)\. \(The input parameter takes the location of the input, not the actual input, so you cannot use the `$encrypted` variable as the value of the `--input` parameter\.\) 
+  This decrypt command uses `--input -` to indicate that input is coming from the pipeline \(stdin\) and `--output -` to send the output to the pipeline \(stdout\)\. \(The input parameter takes the location of the input, not the actual input bytes, so you cannot use the `$encrypted` variable as the value of the `--input` parameter\.\) 
 
   Because the output was encrypted and then encoded, the decrypt command uses the `--decode` parameter to decode Base64\-encoded input before decrypting it\. You can also use the `--decode` parameter to decode Base64\-encoded input before encrypting it\.
 
@@ -412,7 +405,7 @@ The example consists of three commands:
 #### [ Bash ]
 
   ```
-  $  echo $encrypted | aws-encryption-cli --decrypt -S --input - --output - --decode
+  $  echo $encrypted | aws-encryption-cli --decrypt --input - --output - --decode -S
   Hello World
   ```
 
@@ -420,7 +413,7 @@ The example consists of three commands:
 #### [ PowerShell ]
 
   ```
-  PS C:\> $encrypted | aws-encryption-cli --decrypt -S --input - --output - --decode
+  PS C:\> $encrypted | aws-encryption-cli --decrypt --input - --output - --decode -S
   Hello World
   ```
 
@@ -462,7 +455,7 @@ This example shows how to use multiple master keys when encrypting and decryptin
 
 When you use multiple master keys to encrypt data, any one of the master keys can be used to decrypt the data\. This strategy assures that you can decrypt the data even if one of the master keys is unavailable\. If you are storing the encrypted data in multiple AWS Regions, this strategy lets you use a master key in the same Region to decrypt the data\. 
 
-When you encrypt with multiple master keys, the first master key plays a special role\. It generates the data key that is used to encrypt the data\. The remaining master keys encrypt the plaintext data key\. The resulting encrypted message includes the encrypted data and a collection of encrypted data keys, one for each master key\. Although the first master key generated the data key, any of the master keys can decrypt one of the data keys, which can be used to decrypt the data\. 
+When you encrypt with multiple master keys, the first master key plays a special role\. It generates the data key that is used to encrypt the data\. The remaining master keys encrypt the plaintext data key\. The resulting [encrypted message](concepts.md#message) includes the encrypted data and a collection of encrypted data keys, one for each master key\. Although the first master key generated the data key, any of the master keys can decrypt one of the data keys, which can be used to decrypt the data\. 
 
 **Encrypting with Three Master Keys**
 
@@ -506,7 +499,7 @@ PS C:\> aws-encryption-cli --encrypt --input D:\Logs\Finance.log `
 
 ------
 
-This command decrypts the data in the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. 
+This command decrypts the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. 
 
 When you decrypt data that was encrypted under AWS KMS CMKs, you cannot tell AWS KMS to use a particular CMK to decrypt the data\. The **key** attribute of the `--master-keys` parameter is not valid in a decrypt command with the `aws-kms` provider\. The AWS Encryption CLI can use any of the CMKs that were used to encrypt the data, provided that the AWS credentials you are using have permission to call the [Decrypt API](http://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the master key\. For more information, see [ Authentication and Access Control for AWS KMS](http://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
 
@@ -661,7 +654,7 @@ PROCESS {
 
 ## Using Data Key Caching<a name="cli-example-caching"></a>
 
-This example uses data key caching in a command that encrypts a large number of files\. 
+This example uses [data key caching](data-key-caching.md) in a command that encrypts a large number of files\. 
 
 By default, the AWS Encryption CLI \(and other versions of the AWS Encryption SDK\) generates a unique data key for each file that it encrypts\. Although using a unique data key for each operation is a cryptographic best practice, limited reuse of data keys is acceptable for some situations\. If you are considering data key caching, consult with a security engineer to understand the security requirements of your application and determine security thresholds that are right for you\. 
 
@@ -669,7 +662,7 @@ In this example, data key caching speeds up the encryption operation by reducing
 
 The command in this example encrypts a large directory with multiple subdirectories that contain a total of approximately 800 small log files\. The first command saves the ARN of the CMK in a `cmkARN` variable\. The second command encrypts all of the files in the input directory \(recursively\) and writes them to an archive directory\. The command uses the `--suffix` parameter to specify the `.archive` suffix\. 
 
-The `--caching` parameter enables data key caching\. The **capacity** attribute, which limits the number of data keys in the cache, is set to 1, because file processing is serial and never uses more than one data key at a time\. The **max\_age** attribute, which determines how long the cached data key can used, is set to 10 seconds\. 
+The `--caching` parameter enables data key caching\. The **capacity** attribute, which limits the number of data keys in the cache, is set to 1, because serial file processing never uses more than one data key at a time\. The **max\_age** attribute, which determines how long the cached data key can used, is set to 10 seconds\. 
 
 The optional **max\_messages\_encrypted** attribute is set to 10 messages, so a single data key is never used to encrypt more than 10 files\. Limiting the number of files encrypted by each data key reduces the number of files that would be affected in the unlikely event that a data key was compromised\.
 

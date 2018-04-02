@@ -35,4 +35,4 @@ This algorithm suite uses a key derivation function, but lacks the ECDSA signatu
 **AES\-GCM without Key Derivation or Signing**  
 This algorithm suite uses the data encryption key as the AES\-GCM encryption key, instead of using a key derivation function to derive a unique key\. We discourage using this suite to generate ciphertext, but the SDK supports it for compatibility reasons\.
 
-For more information about how these suites are represented and used in the library, see [[ERROR] BAD/MISSING LINK TEXT](algorithms-reference.md)\.
+For more information about how these suites are represented and used in the library, see [AWS Encryption SDK Algorithms Reference](algorithms-reference.md)\.
