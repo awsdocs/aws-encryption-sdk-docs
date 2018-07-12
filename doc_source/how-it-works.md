@@ -30,7 +30,7 @@ Encryption operations can be time\-consuming, particularly when the data being e
 **Combining the Strengths of Multiple Algorithms**  
 In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than assymetric or *public key encryption*\. But, public key algorithms provide inherent separation of roles and easier key management\. You might want to combine the strengths of each\. For example, you might encrypt raw data with symmetric key encryption, and then encrypt the data key with public key encryption\.
 
-The AWS Encryption SDK uses envelope encryption\. It encrypts your data with a data key\. Then, it encryptes the data key with a master key\. The AWS Encryption SDK returns the encrypted data and the encrypted data keys in a single encrypted message, as shown in the following diagram\. 
+The AWS Encryption SDK uses envelope encryption\. It encrypts your data with a data key\. Then, it encrypts the data key with a master key\. The AWS Encryption SDK returns the encrypted data and the encrypted data keys in a single encrypted message, as shown in the following diagram\. 
 
 ![\[Envelope encryption with the AWS Encryption SDK\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/envelope-encryption.png)
 
