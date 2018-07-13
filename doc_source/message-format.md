@@ -21,14 +21,14 @@ The message header contains the encrypted data key and information about how the
 
 **Header Structure**  
 
-| Field | Length, in bytes | 
+| Field | Length \(bytes\) | 
 | --- | --- | 
 | [Version](#header-version) | 1 | 
 | [Type](#header-type) | 1 | 
 | [Algorithm ID](#header-algorithm-id) | 2 | 
 | [Message ID](#header-message-id) | 16 | 
-| [AAD Length](#header-aad-length) | 2 | 
-| [AAD](#header-aad) | Variable\. Equal to the value specified in the previous 2 bytes \(AAD Length\)\. | 
+| [AAD Length](#header-aad-length) | 2When the [encryption context](concepts.md#encryption-context) is empty, the AAD Length is 0\. | 
+| [AAD](#header-aad) | Variable\. Equal to the value specified in the previous 2 bytes \(AAD Length\)\. When the [encryption context](concepts.md#encryption-context) is empty, there is no AAD field in the header\. | 
 | [Encrypted Data Key Count](#header-data-key-count) | 2 | 
 | [Encrypted Data Key\(s\)](#header-data-keys) | Variable\. Determined by the number of encrypted data keys and the length of each\. | 
 | [Content Type](#header-content-type) | 1 | 
@@ -54,16 +54,18 @@ A randomly generated 128\-bit value that identifies the message\. The Message ID
 + Protects against accidental reuse of a data key or the wearing out of keys in the AWS Encryption SDK\.
 
 **AAD Length**  <a name="header-aad-length"></a>
-The length of the additional authenticated data \(AAD\)\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the AAD\.
+The length of the additional authenticated data \(AAD\)\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the AAD\.  
+When the [encryption context](concepts.md#encryption-context) is empty, the AAD Length is 0\.
 
 **AAD**  <a name="header-aad"></a>
-The additional authenticated data\. The AAD is an encoding of the [encryption context](http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html), an array of key\-value pairs where each key and value is a string of UTF\-8 encoded characters\. The encryption context is converted to a sequence of bytes and used for the AAD value\.  
+The additional authenticated data\. The AAD is an encoding of the [encryption context](concepts.md#encryption-context), an array of key\-value pairs where each key and value is a string of UTF\-8 encoded characters\. The encryption context is converted to a sequence of bytes and used for the AAD value\. When the encryption context is empty, there is no AAD field in the header\.  
 When the [algorithms with signing](algorithms-reference.md) are used, the encryption context must contain the key\-value pair `{'aws-crypto-public-key', Qtxt}`\. Qtxt represents the elliptic curve point Q compressed according to [SEC 1 version 2\.0](http://www.secg.org/sec1-v2.pdf) and then base64\-encoded\. The encryption context can contain additional values, but the maximum length of the constructed AAD is 2^16 \- 1 bytes\.  
 The following table describes the fields that form the AAD\. Key\-value pairs are sorted, by key, in ascending order according to UTF\-8 character code\. The bytes are appended in the order shown\.    
 **AAD Structure**    
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/message-format.html)  
 **Key\-Value Pair Count**  <a name="aad-count"></a>
 The number of key\-value pairs in the AAD\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of key\-value pairs in the AAD\. The maximum number of key\-value pairs in the AAD is 2^16 \- 1\.  
+When there is no encryption context or the encryption context is empty, this field is not present in the AAD structure\.  
 **Key Length**  <a name="aad-key-length"></a>
 The length of the key for the key\-value pair\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the key\.  
 **Key**  <a name="aad-key"></a>

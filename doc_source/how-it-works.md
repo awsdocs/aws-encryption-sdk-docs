@@ -77,11 +77,9 @@ The SDK provides methods that decrypt an encrypted message and return plaintext 
 
    To indicate the source of the [data keys](concepts.md#DEK) that were used to encrypt your data, your request specifies a cryptographic materials manager \(CMM\) or a master key provider\. \(If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with the specified master key provider\.\)
 
-1. The decryption method extracts the encrypted data key from the encrypted message\. Then, it asks the cryptographic materials manager \(CMM\) for a data key to decrypt the encrypted data\.
+1. The decryption method asks the CMM for cryptographic materials to decrypt the encrypted message\. It passes in information from the message header, including the encrypted data keys\.
 
-1. The CMM asks its master key provider for a master key that can decrypt the encrypted data key\. 
-
-1. The CMM uses the master key to decrypt the encrypted data key\. Then, it returns the plaintext data key to the decryption method\.
+1. To get decryption materials, the Default CMM asks its master key provider for a master key that can decrypt the encrypted data key\. It uses the master key to decrypt the encrypted data key\. Then, it returns the decryption materials \(including the plaintext data key\) to the decryption method\. Other CMMs might use different techniques to get the decryption materials\.
 
 1. The decryption method uses the plaintext data key to decrypt the data, then discards the plaintext data key\. 
 

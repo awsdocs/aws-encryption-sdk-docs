@@ -5,7 +5,7 @@
 | --- |
 |  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming Languages](programming-languages.md)\.  | 
 
-Regardless of which type of [body data](message-format.md#body-structure) is used to form the message body \(non\-framed or framed\), you must provide additional authenticated data \(AAD\) to the [AES\-GCM algorithm](algorithms-reference.md) for each cryptographic operation\. For more information about AAD, see the definition section in [the Galois/Counter Mode of Operation \(GCM\) specification](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/gcm/gcm-spec.pdf)\.
+You must provide additional authenticated data \(AAD\) to the [AES\-GCM algorithm](algorithms-reference.md) for each cryptographic operation\. This is true for both framed and non\-framed [body data](message-format.md#body-structure)\. For more information about AAD, see the definition section in [the Galois/Counter Mode of Operation \(GCM\) specification](http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/gcm/gcm-spec.pdf)\.
 
 The following table describes the fields that form the body AAD\. The bytes are appended in the order shown\.
 

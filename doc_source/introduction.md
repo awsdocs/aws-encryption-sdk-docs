@@ -33,13 +33,13 @@ If you're looking for more information about the AWS Encryption SDK and client\-
 + For information about how this SDK works, see [How the SDK Works](how-it-works.md)\.
 + For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
 + For detailed technical information, see the [AWS Encryption SDK Reference](reference.md)\.
-+ For help with questions about using the AWS Encryption SDK, read and post on the [AWS Key Management Service \(KMS\) Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=182) that the AWS Encryption SDK shares with KMS\.
++ For answers to your questions about using the AWS Encryption SDK, read and post on the [AWS Crypto Tools Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=302)\.
 
 For information about implementations of the AWS Encryption SDK in different programming languages\.
-+ **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadocs](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/awslabs/aws-encryption-sdk-java) repository on GitHub\.
++ **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/awslabs/aws-encryption-sdk-java) repository on GitHub\.
 + **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](http://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/awslabs/aws-encryption-sdk-python) repository on GitHub\.
 + **Command Line Interface**: See [AWS Encryption SDK Command Line Interface](crypto-cli.md), [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/) for the AWS Encryption CLI, and the [aws\-encryption\-sdk\-cli](https://github.com/awslabs/aws-encryption-sdk-cli/) repository on GitHub\.
 
-If you have questions or comments about this guide, let us know\! Use the feedback links in the lower right corner of this page\.
+If you have questions or comments about this guide, let us know\! Choose the feedback link in the lower\-right corner of the page or the GitHub link in the upper\-right corner of the page\. You can also file an issue in the [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs/) GitHub repository for this guide\.
 
-The AWS Encryption SDK is provided for free under the Apache license\.
+The AWS Encryption SDK is provided free of charge under the Apache license\.
