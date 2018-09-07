@@ -41,9 +41,9 @@ and examples in each programming language to help you get started.
 ## Where is the code?
 We are developing the AWS Encryption SDK in the following open source projects on GitHub. 
 
-* Java - [aws-encryption-sdk-java](https://github.com/awslabs/aws-encryption-sdk-java)
+* Java - [aws-encryption-sdk-java](https://github.com/aws/aws-encryption-sdk-java)
 * Python -
-[aws-encryption-sdk-python](https://github.com/awslabs/aws-encryption-sdk-python)
+[aws-encryption-sdk-python](https://github.com/aws/aws-encryption-sdk-python)
 * Command-line interface - [aws-encryption-sdk-cli](https://github.com/awslabs/aws-encryption-sdk-cli)
 
 ## Who is the audience?
