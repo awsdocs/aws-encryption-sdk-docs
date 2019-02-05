@@ -18,7 +18,7 @@ This example uses the AWS Encryption CLI to encrypt the contents of the `hello.t
 
 When you run an encrypt command on a file, the AWS Encryption CLI gets the contents of the file, generates a unique [data key](concepts.md#DEK), encrypts the file contents under the data key, and then writes the [encrypted message](concepts.md#message) to a new file\. 
 
-The first command saves the [Amazon Resource Name \(ARN\)](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
+The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
 
 The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--master-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the master key represented by the CMK ARN\. 
 
@@ -209,7 +209,7 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-The first command saves the [Amazon Resource Name \(ARN\)](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
+The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
 
 The second command encrypts the content of files in the `TestDir` directory and writes the files of encrypted content to the `TestEnc` directory\. If the `TestEnc` directory doesn't exist, the command fails\. Because the input location is a directory, the `--recursive` parameter is required\. 
 
@@ -345,7 +345,7 @@ These examples show you how to pipe input to commands \(stdin\) and write output
 This example pipes a plaintext string to an encrypt command and saves the encrypted message in a variable\. Then, it pipes the encrypted message in the variable to a decrypt command, which writes its output to the pipeline \(stdout\)\. 
 
 The example consists of three commands:
-+ The first command saves the [Amazon Resource Name \(ARN\)](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
++ The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
 
 ------
 #### [ Bash ]
@@ -501,7 +501,7 @@ PS C:\> aws-encryption-cli --encrypt --input D:\Logs\Finance.log `
 
 This command decrypts the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. 
 
-When you decrypt data that was encrypted under AWS KMS CMKs, you cannot tell AWS KMS to use a particular CMK to decrypt the data\. The **key** attribute of the `--master-keys` parameter is not valid in a decrypt command with the `aws-kms` provider\. The AWS Encryption CLI can use any of the CMKs that were used to encrypt the data, provided that the AWS credentials you are using have permission to call the [Decrypt API](http://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the master key\. For more information, see [ Authentication and Access Control for AWS KMS](http://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
+When you decrypt data that was encrypted under AWS KMS CMKs, you cannot tell AWS KMS to use a particular CMK to decrypt the data\. The **key** attribute of the `--master-keys` parameter is not valid in a decrypt command with the `aws-kms` provider\. The AWS Encryption CLI can use any of the CMKs that were used to encrypt the data, provided that the AWS credentials you are using have permission to call the [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the master key\. For more information, see [ Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
 
 ------
 #### [ Bash ]
@@ -537,7 +537,7 @@ When you compress and encrypt files, be sure to compress before you encrypt\. Pr
 **Warning**  
 Be careful when compressing data that includes both secrets and data that might be controlled by a malicious actor\. The final size of the compressed data might inadvertently reveal sensitive information about its contents\.
 
-You can find the complete scripts in the Examples directory of the [aws\-encryption\-sdk\-cli repository](https://github.com/awslabs/aws-encryption-sdk-cli/) in GitHub\.
+You can find the complete scripts in the Examples directory of the [aws\-encryption\-sdk\-cli repository](https://github.com/aws/aws-encryption-sdk-cli/) in GitHub\.
 
 ------
 #### [ PowerShell ]

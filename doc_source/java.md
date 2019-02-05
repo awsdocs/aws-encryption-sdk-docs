@@ -1,6 +1,6 @@
 # AWS Encryption SDK for Java<a name="java"></a>
 
-This topic explains how to install and use the AWS Encryption SDK for Java\. For details about programming with the SDK, see the [aws\-encryption\-sdk\-java](https://github.com/awslabs/aws-encryption-sdk-java) repository on GitHub and the [Javadoc](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
+This topic explains how to install and use the AWS Encryption SDK for Java\. For details about programming with the SDK, see the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java) repository on GitHub and the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
 
 **Topics**
 + [Prerequisites](#java-prerequisites)
@@ -35,7 +35,7 @@ Although you don't need the AWS SDK for Java to use the AWS Encryption SDK for J
 You can install the AWS Encryption SDK for Java in the following ways\.
 
 **Manually**  
-To install the AWS Encryption SDK for Java, clone or download the [aws\-encryption\-sdk\-java GitHub repository](https://github.com/awslabs/aws-encryption-sdk-java)\.
+To install the AWS Encryption SDK for Java, clone or download the [aws\-encryption\-sdk\-java GitHub repository](https://github.com/aws/aws-encryption-sdk-java)\.
 
 **Using Apache Maven**  
 The AWS Encryption SDK for Java is available through [Apache Maven](https://maven.apache.org/) with the following dependency definition\.  
@@ -48,4 +48,4 @@ The AWS Encryption SDK for Java is available through [Apache Maven](https://mave
 </dependency>
 ```
 
-After you install the SDK, get started by looking at the [example Java code](java-example-code.md) in this guide and the [Javadoc on GitHub](https://awslabs.github.io/aws-encryption-sdk-java/javadoc/)\.
+After you install the SDK, get started by looking at the [example Java code](java-example-code.md) in this guide and the [Javadoc on GitHub](https://aws.github.io/aws-encryption-sdk-java/javadoc/)\.

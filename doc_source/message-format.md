@@ -91,9 +91,7 @@ The key provider identifier\. It is used to indicate the provider of the encrypt
 The length of the key provider information\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the key provider information\.  
 **Key Provider Information**  <a name="data-key-provider-info"></a>
 The key provider information\. It is determined by the key provider\.  
-When AWS KMS is the key provider, the following are true:  
-+ This value contains the Amazon Resource Name \(ARN\) of the AWS KMS customer master key \(CMK\)\.
-+ This value is always the full CMK ARN, regardless of which key identifier \(key ID, alias, etc\.\) was specified when calling the master key provider\.  
+When AWS KMS is the master key provider or you are using a KMS keyring, this value contains the Amazon Resource Name \(ARN\) of the AWS KMS customer master key \(CMK\)\.  
 **Encrypted Data Key Length**  <a name="data-key-length"></a>
 The length of the encrypted data key\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the encrypted data key\.  
 **Encrypted Data Key**  <a name="data-key"></a>

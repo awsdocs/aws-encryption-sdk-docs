@@ -1,5 +1,10 @@
 # Data Key Caching Details<a name="data-caching-details"></a>
 
+
+|  | 
+| --- |
+|   The AWS Encryption SDK for C is a preview release\. The code and the documentation are subject to change\.  | 
+
 Most applications can use the default implementation of data key caching without writing custom code\. This section describes the default implementation and some details about options\. 
 
 **Topics**
@@ -13,71 +18,74 @@ Most applications can use the default implementation of data key caching without
 
 When you use data key caching in a request to encrypt or decrypt data, the AWS Encryption SDK first searches the cache for a data key that matches the request\. If it finds a valid match, it uses the cached data key to encrypt the data\. Otherwise, it generates a new data key, just as it would without the cache\. 
 
+Data key caching is not used for data of unknown size, such as streamed data\. This allows the caching CMM to properly enforce the [maximum bytes threshold](thresholds.md)\. To avoid this behavior, add the message size to the encryption request\. 
+
 In addition to a cache, data key caching uses a [caching cryptographic materials manager](#caching-cmm) \(caching CMM\)\. The caching CMM is a specialized [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) that interacts with a [cache](#simplecache) and an underlying [CMM](concepts.md#crypt-materials-manager) or [master key provider](concepts.md#master-key-provider)\. The caching CMM caches the data keys that its underlying CMM \(or master key provider\) returns\. The caching CMM also enforces cache security thresholds that you set\. 
 
-To prevent the wrong data key from being selected from the cache, each caching CMM requires that several properties of each cached data key match the materials request, as follows: 
-+ For encryption material requests, the cached entry and the request must have the same [algorithm suite](concepts.md#crypto-algorithm), [encryption context](#caching-encryption-context) \(even when empty\), and partition name \(a string that identifies the caching CMM\)\. 
-+ For decryption material requests, the cached entry and the request must have the same [algorithm suite](concepts.md#crypto-algorithm), [encryption context](#caching-encryption-context) \(even when empty\), and partition name \(a string that identifies the caching CMM\)\.
+To prevent the wrong data key from being selected from the cache, all compatible caching CMMs require that the following properties of the cached cryptographic materials match the materials request\.
++ [Algorithm suite](concepts.md#crypto-algorithm)
++ [Encryption context](#caching-encryption-context) \(even when empty\)
++ Partition name \(a string that identifies the caching CMM\)
++ \(Decryption only\) Encrypted data keys
 
 **Note**  
-The AWS Encryption SDK caches data keys only when the [algorithm suite](concepts.md#crypto-algorithm) uses a [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function)\.  
-Data key caching is not used for data of unknown size, such as streamed data\. This allows the caching CMM to properly enforce the [maximum bytes threshold](thresholds.md)\. To avoid this behavior, add the data length to the encryption request\. 
+The AWS Encryption SDK caches data keys only when the [algorithm suite](concepts.md#crypto-algorithm) uses a [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function)\.
 
 The following workflows show how a request to encrypt data is processed with and without data key caching\. They show how the caching components that you create, including the cache and the caching CMM, are used in the process\.
 
 ### Encrypt Data without Caching<a name="workflow-wo-cache"></a>
 
-To generate a data key without caching:
+To get encryption materials without caching:
 
 1. An application asks the AWS Encryption SDK to encrypt data\. 
 
-   The request specifies a cryptographic materials manager \(CMM\) or master key provider\. If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with the master key provider you specified\.
+   The request specifies a cryptographic materials manager \(CMM\) or master key provider\. In Java and Python, if you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with your master key provider\. In C, you must specify a CMM\.
 
-1. The AWS Encryption SDK asks the CMM for a data key to encrypt the data \(get cryptographic materials\)\.
+1. The AWS Encryption SDK asks the CMM for encryption materials \(get cryptographic materials\)\.
 
-1. The CMM asks its master key provider for [master keys](concepts.md#master-key) \(or objects that represent master keys\)\. Then, it uses the master keys to generate a new [data key](concepts.md#DEK)\. This might involve a call to a cryptographic service, such as AWS Key Management Service \(AWS KMS\)\. The CMM returns plaintext and encrypted copies of the data key to the AWS Encryption SDK\.
+1. The CMM asks its [keyring](concepts.md#keyring) \(C\) or [master key provider](concepts.md#master-key-provider) \(Java and Python\) for cryptographic materials\. This might involve a call to a cryptographic service, such as AWS Key Management Service \(AWS KMS\)\. The CMM returns the encryption materials to the AWS Encryption SDK\.
 
-1. The AWS Encryption SDK uses the plaintext data key to encrypt the data and it returns an [encrypted message](concepts.md#message) to the user\.
+1. The AWS Encryption SDK uses the plaintext data key to encrypt the data\. It stores the encrypted data and encrypted data keys in an [encrypted message](concepts.md#message), which it returns to the user\.
 
 ![\[Encrypt data without caching\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/encrypt-workflow-no-cache.png)
 
 ### Encrypt Data with Caching<a name="workflow-with-cache"></a>
 
-To generate a data key with data key caching:
+To get encryption materials with data key caching:
 
 1. An application asks the AWS Encryption SDK to encrypt data\. 
 
-   The request specifies a [caching cryptographic materials manager \(caching CMM\)](#caching-cmm) that is associated with a default cryptographic materials manager \(CMM\) or a master key provider\. If you specify a master key provider, the SDK creates a default CMM for you\.
+   The request specifies a [caching cryptographic materials manager \(caching CMM\)](#caching-cmm) that is associated with a underlying cryptographic materials manager \(CMM\) or a master key provider\. In Java and Python, if you specify a master key provider, the SDK creates a default CMM for you\. In C, you must specify an underlying CMM\.
 
-1. The SDK asks the specified caching CMM for a data key to encrypt the data \(get cryptographic materials\)\.
+1. The SDK asks the specified caching CMM for encryption materials\.
 
-1. The caching CMM requests a data key from the cache\. 
+1. The caching CMM requests encryption materials from the cache\.
 
-   1. If the cache finds a match, it updates the age and use values of the matched cache entry, and returns the cached data key to the caching CMM\. 
+   1. If the cache finds a match, it updates the age and use values of the matched cache entry, and returns the cached encryption materials to the caching CMM\. 
 
       If the cache entry conforms to its [security thresholds](thresholds.md), the caching CMM returns it to the SDK\. Otherwise, it tells the cache to evict the entry and proceeds as though there was no match\.
 
    1. If the cache cannot find a valid match, the caching CMM asks its underlying CMM to generate a new data key\. 
 
-      The CMM gets master keys \(or objects that represent master keys\) from its master key provider and it uses them to generate a new data key\. This might involve a call to a service, such as AWS Key Management Service\. The CMM returns the plaintext and encrypted copies of the data key to the caching CMM\. 
+      The underlying CMM gets the cryptographic materials from its keyring \(C\) or master key provider \(Java and Python\)\. This might involve a call to a service, such as AWS Key Management Service\. The underlying CMM returns the plaintext and encrypted copies of the data key to the caching CMM\. 
 
-      The caching CMM saves the new data key in the cache\.
+      The caching CMM saves the new encryption materials in the cache\.
 
-1. The caching CMM returns plaintext and encrypted copies of the data key to the AWS Encryption SDK\.
+1. The caching CMM returns the encryption materials to the AWS Encryption SDK\.
 
-1. The AWS Encryption SDK uses the data key to encrypt the data and it returns an [encrypted message](concepts.md#message) to the user\.
+1. The AWS Encryption SDK uses the plaintext data key to encrypt the data\. It stores the encrypted data and encrypted data keys in an [encrypted message](concepts.md#message), which it returns to the user\.
 
 ![\[Encrypt data with data key caching\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/encrypt-workflow-with-cache.png)
 
 ## Creating a Cryptographic Materials Cache<a name="simplecache"></a>
 
-The AWS Encryption SDK defines the requirements for a cryptographic materials cache used in data key caching\. It also provides *LocalCryptoMaterialsCache*, a configurable, in\-memory, [least recently used \(LRU\) cache](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_.28LRU.29), and a null cryptographic materials cache for testing\.
+The AWS Encryption SDK defines the requirements for a cryptographic materials cache used in data key caching\. It also provides a local cache, which is a configurable, in\-memory, [least recently used \(LRU\) cache](https://en.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_.28LRU.29)\. To create an instance of the local cache, use the `LocalCryptoMaterialsCache` constructor in Java and Python or the `aws_cryptosdk_materials_cache_local_new` constructor in C\.
 
-LocalCryptoMaterialsCache includes logic for basic cache management, including adding, evicting, and matching cached entries, and maintaining the cache\. You don't need to write any custom cache management logic\. You can use LocalCryptoMaterialsCache as is, customize it, or substitute any compatible cache\. 
+The local cache includes logic for basic cache management, including adding, evicting, and matching cached entries, and maintaining the cache\. You don't need to write any custom cache management logic\. You can use the local cache as is, customize it, or substitute any compatible cache\. 
 
-When you create a LocalCryptoMaterialsCache, you set its *capacity*, that is, the maximum number of entries that the cache can hold\. This setting helps you to design an efficient cache with limited data key reuse\.
+When you create a local cache, you set its *capacity*, that is, the maximum number of entries that the cache can hold\. This setting helps you to design an efficient cache with limited data key reuse\.
 
-The AWS Encryption SDK also provides a *null cryptographic materials cache* \(NullCryptoMaterialsCache\)\. The NullCryptoMaterialsCache returns a miss for all get operations and does not respond to put operations\. You can use the NullCryptoMaterialsCache in testing or to temporarily disable caching in an application that includes caching code\. 
+The AWS Encryption SDK in Java and Python also provide a *null cryptographic materials cache* \(NullCryptoMaterialsCache\)\. The NullCryptoMaterialsCache returns a miss for all `GET` operations and does not respond to `PUT` operations\. You can use the NullCryptoMaterialsCache in testing or to temporarily disable caching in an application that includes caching code\. 
 
 In the AWS Encryption SDK, each cryptographic materials cache is associated with a [caching cryptographic materials manager](#caching-cmm) \(caching CMM\)\. The caching CMM gets data keys from the cache, puts data keys in the cache, and enforces [security thresholds](thresholds.md) that you set\. When you create a caching CMM, you specify the cache that it uses and the underlying CMM or master key provider that generates the data keys that it caches\.
 
@@ -86,14 +94,12 @@ In the AWS Encryption SDK, each cryptographic materials cache is associated with
 To enable data key caching, you create a [cache](#simplecache) and a *caching cryptographic materials manager* \(caching CMM\)\. Then, in your requests to encrypt or decrypt data, you specify a caching CMM, instead of a standard [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) or [master key provider](concepts.md#master-key-provider) \.
 
 There are two types of CMMs\. Both get data keys \(and related cryptographic material\), but in different ways, as follows:
-+ A CMM is associated with a master key provider\. When the SDK asks the CMM for data keys \(get encryption materials\), the CMM gets master keys \(or objects that represent master keys\) from its master key provider\. Then, it uses the master keys to generate, encrypt, or decrypt the data keys\.
++ A CMM is associated with a keyring \(C\) or a master key provider \(Java and Python\)\. When the SDK asks the CMM for encryption or decryption materials, the CMM gets the materials from its keyring or master key provider\. In Java and Python, the CMM uses the master keys to generate, encrypt, or decrypt the data keys\. In C, the keyring generates, encrypts, and returns the cryptographic materials\.
 
    
-+ A caching CMM is associated with one cache, such as a [LocalCryptoMaterialsCache](#simplecache), and a CMM or master key provider\. \(If you specify a master key provider, the SDK creates a default CMM for the master key provider\.\) When the SDK asks the caching CMM for data keys, the caching CMM tries to get them from the cache\. If it cannot find a valid, matching data key, the caching CMM asks its underlying CMM for the data keys\. Then, it caches those data keys before returning them to the caller\. 
++ A caching CMM is associated with one cache, such as a [local cache](#simplecache), and a CMM \(all languages\) or master key provider \(Java and Python only\)\. When the SDK asks the caching CMM for cryptographic materials, the caching CMM tries to get them from the cache\. If it cannot find a match, the caching CMM asks its underlying CMM for the materials\. Then, it caches the new cryptographic materials before returning them to the caller\. 
 
 The caching CMM also enforces [security thresholds](thresholds.md) that you set for each cache entry\. Because the security thresholds are set in and enforced by the caching CMM, you can use any compatible cache, even if the cache is not designed for sensitive material\.
-
-For details about creating and managing CMMs and caching CMMs in your application, see the SDK for your [programming language](programming-languages.md)\. 
 
 ## What Is in a Data Key Cache Entry?<a name="cache-entries"></a>
 

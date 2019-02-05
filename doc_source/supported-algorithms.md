@@ -1,10 +1,10 @@
 # Supported Algorithm Suites in the AWS Encryption SDK<a name="supported-algorithms"></a>
 
-An *algorithm suite* is a collection of cryptographic algorithms and related values\. Cryptographic systems use the algorithm implemenation to generate the ciphertext message\.
+An *algorithm suite* is a collection of cryptographic algorithms and related values\. Cryptographic systems use the algorithm implementation to generate the ciphertext message\.
 
 The AWS Encryption SDK algorithm suite uses the Advanced Encryption Standard \(AES\) algorithm in Galois/Counter Mode \(GCM\), known as AES\-GCM, to encrypt raw data\. The SDK supports 256\-bit, 192\-bit, and 128\-bit encryption keys\. The length of the initialization vector \(IV\) is always 12 bytes; the length of the authentication tag is always 16 bytes\.
 
-The SDK implements AES\-GCM in one of three ways\. By default, the SDK uses AES\-GCM with an HMAC\-based extract\-and\-expand key derivation function \([HKDF](https://en.wikipedia.org/wiki/HKDF)\), signing, and a 256\-bit encryption key\.
+The SDK supports several different implementations of AES\-GCM\. By default, the SDK uses AES\-GCM with an HMAC\-based extract\-and\-expand key derivation function \([HKDF](https://en.wikipedia.org/wiki/HKDF)\), signing, and a 256\-bit encryption key\.
 
 ## Recommended: AES\-GCM with Key Derivation and Signing<a name="recommended-algorithms"></a>
 
@@ -27,10 +27,10 @@ The following table lists the variations of the recommended algorithm suites\.
 
 ## Other Supported Algorithm Suites<a name="other-algorithms"></a>
 
-The AWS Encryption SDK supports the alternate algorithm suites for backward compatibility, although we do not recommend them\. If you cannot use an algorithm suite with HKDF and signing, we recommend an algorithm suite with HKDF over one that lacks both elements\.
+The AWS Encryption SDK supports the following alternate algorithm suites for backward compatibility\. In general, we do not recommend these algorithm suites\. However, we recognize that using an algorithm suite with key derivation, but without signing, is appropriate in some cases\. We discourage the use of any algorithm suite that lacks both key derivation and signing\.
 
 **AES\-GCM with Key Derivation Only**  
-This algorithm suite uses a key derivation function, but lacks the ECDSA signature that provides authenticity and nonrepudiation\. Use this suite when the users who encrypt data and those who decrypt it are equally trusted\.
+This algorithm suite uses a key derivation function, but lacks the ECDSA signature that provides authenticity and non\-repudiation\. Use this suite when the users who encrypt data and those who decrypt it are equally trusted\.
 
 **AES\-GCM without Key Derivation or Signing**  
 This algorithm suite uses the data encryption key as the AES\-GCM encryption key, instead of using a key derivation function to derive a unique key\. We discourage using this suite to generate ciphertext, but the SDK supports it for compatibility reasons\.

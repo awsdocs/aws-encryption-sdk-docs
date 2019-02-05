@@ -1,7 +1,7 @@
 # AWS Encryption SDK Developer Guide
 
 -----
-*****Copyright &copy; 2018 Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
+*****Copyright &copy; 2019 Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
 Amazon's trademarks and trade dress may not be used in 
@@ -24,19 +24,24 @@ Amazon's trademarks and trade dress may not be used in
       + [AWS Encryption SDK for Java Example Code](java-example-code.md)
    + [AWS Encryption SDK for Python](python.md)
       + [AWS Encryption SDK for Python Example Code](python-example-code.md)
+   + [AWS Encryption SDK for C](c-language.md)
+      + [Installing the AWS Encryption SDK for C](c-language-installation.md)
+      + [Using the AWS Encryption SDK for C](c-language-using.md)
+      + [Choosing a Keyring](choose-keyring.md)
+      + [AWS Encryption SDK for C Examples](c-examples.md)
    + [AWS Encryption SDK Command Line Interface](crypto-cli.md)
       + [Installing the AWS Encryption SDK Command Line Interface](crypto-cli-install.md)
       + [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)
       + [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)
       + [AWS Encryption SDK CLI Syntax and Parameter Reference](crypto-cli-reference.md)
 + [Data Key Caching](data-key-caching.md)
-   + [How to Implement Data Key Caching](implement-caching.md)
+   + [How to Use Data Key Caching](implement-caching.md)
    + [Setting Cache Security Thresholds](thresholds.md)
    + [Data Key Caching Details](data-caching-details.md)
    + [Data Key Caching Example](sample-cache-example.md)
       + [Data Key Caching Example in Java](sample-cache-example-java.md)
       + [Data Key Caching Example in Python](sample-cache-example-python.md)
-      + [LocalCryptoMaterialsCache Example AWS CloudFormation Template](sample-cache-example-cloudformation.md)
+      + [local cache Example AWS CloudFormation Template](sample-cache-example-cloudformation.md)
 + [Frequently Asked Questions](faq.md)
 + [AWS Encryption SDK Reference](reference.md)
    + [AWS Encryption SDK Message Format Reference](message-format.md)

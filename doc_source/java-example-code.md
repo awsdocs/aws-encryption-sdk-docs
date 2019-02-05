@@ -11,9 +11,11 @@ The following examples show you how to use the AWS Encryption SDK for Java to en
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. 
 
-This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](http://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
+This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help finding the Amazon Resource name \(ARN\) of an existing CMK, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\.
 
-To find the Amazon Resource name \(ARN\) of an existing CMK, go to the [**Encryption keys** section of the AWS Management Console](https://console.aws.amazon.com/iam/home#encryptionKeys), select the region, and then click the CMK alias\. You can also use the AWS KMS [ListKeys](http://docs.aws.amazon.com/kms/latest/APIReference/API_ListKeys.html) operation\. For details, see [Viewing Keys](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html) in the AWS Key Management Service Developer Guide\. 
+When you call `encryptString`, the AWS Encryption SDK returns the [encrypted message](concepts.md#message), which includes the ciphertext, the encrypted data keys, and the encryption context, if you use it\. When you call `getResult` on the returned object, the AWS Encryption SDK returns a base\-64\-encoded string version of the [encrypted message](message-format.md)\.
+
+Similarly, when you call `decryptString` in this example, the `decryptResult` object contains the encrypted message\. Before returning the plaintext, verify that the CMK ID and the encryption context in the encrypted message are the ones that you expect\.
 
 ```
 /*
@@ -171,7 +173,7 @@ public class FileStreamingExample {
         // Create an encryption context to identify this ciphertext
         Map<String, String> context = Collections.singletonMap("Example", "FileStreaming");
 
-        // Because the file might be to large to load into memory, we stream the data, instead of 
+        // Because the file might be too large to load into memory, we stream the data, instead of 
         //loading it all at once.
         FileInputStream in = new FileInputStream(srcFile);
         CryptoInputStream<JceMasterKey> encryptingStream = crypto.createEncryptingStream(masterKey, in, context);

@@ -9,9 +9,9 @@ The AWS Encryption SDK uses *envelope encryption* to protect your data and the c
 
 ## Symmetric Key Encryption<a name="symmetric-key-encryption"></a>
 
-To encrypt data, the AWS Encryption SDK provides raw data, known as *plaintext data*, and a data key to an encryption algorithm\. The encryption algorithm uses those inputs to encrypt the data\. Then, the AWS Encryption SDK returns an [encrypted message](concepts.md#message) that includes the encrypted data and an encrypted copy of the data key\. 
+To encrypt data, the AWS Encryption SDK submits an encryption key, known as a *data key* and the plaintext data that you provide to an encryption algorithm\. The encryption algorithm uses those inputs to encrypt the data\. Then, the AWS Encryption SDK returns an [encrypted message](concepts.md#message) that includes the encrypted data, an encrypted copy of the data key, and the [encryption context](concepts.md#encryption-context), if you used one\. 
 
-To decrypt the encrypted message, the AWS Encryption SDK provides the encrypted message to a decryption algorithm that uses those inputs to return the plaintext data\.
+To decrypt the encrypted message, the AWS Encryption SDK submits the data key and the encrypted message that the SDK returned to a decryption algorithm\. The decryption algorithm uses those inputs to return the plaintext data\.
 
 Because the same data key is used to encrypt and decrypt the data, the operations are known as *symmetric key* encryption and decryption\. The following figure shows symmetric key encryption and decryption in the AWS Encryption SDK\.
 
@@ -19,7 +19,7 @@ Because the same data key is used to encrypt and decrypt the data, the operation
 
 ## Envelope Encryption<a name="envelope-encryption"></a>
 
-The security of your encrypted data depends on protecting the data key that can decrypt it\. One accepted best practice for protecting the data key is to encrypt it\. To do this, you need another encryption key, known as a [master key](concepts.md#master-key)\. This practice of using a master key to encrypt data keys is known as *envelope encryption*\. Some of the benefits of envelope encryption include the following\.
+The security of your encrypted data depends in part on protecting the data key that can decrypt it\. One accepted best practice for protecting the data key is to encrypt it\. To do this, you need another encryption key, known as a [master key](concepts.md#master-key)\. This practice of using a master key to encrypt data keys is known as *envelope encryption*\. Some of the benefits of envelope encryption include the following\.
 
 **Protecting Data Keys**  
 When you encrypt a data key, you don't have to worry about where to store it because the data key is inherently protected by encryption\. You can safely store the encrypted data key with the encrypted data\. The AWS Encryption SDK does this for you\. It saves the encrypted data and the encrypted data key together in an [encrypted message](concepts.md#message)\.
@@ -28,7 +28,7 @@ When you encrypt a data key, you don't have to worry about where to store it bec
 Encryption operations can be time\-consuming, particularly when the data being encrypted are large objects\. Instead of reencrypting raw data multiple times with different keys, you can reencrypt only the data keys that protect the raw data\. 
 
 **Combining the Strengths of Multiple Algorithms**  
-In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than assymetric or *public key encryption*\. But, public key algorithms provide inherent separation of roles and easier key management\. You might want to combine the strengths of each\. For example, you might encrypt raw data with symmetric key encryption, and then encrypt the data key with public key encryption\.
+In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But, public key algorithms provide inherent separation of roles and easier key management\. You might want to combine the strengths of each\. For example, you might encrypt raw data with symmetric key encryption, and then encrypt the data key with public key encryption\.
 
 The AWS Encryption SDK uses envelope encryption\. It encrypts your data with a data key\. Then, it encrypts the data key with a master key\. The AWS Encryption SDK returns the encrypted data and the encrypted data keys in a single encrypted message, as shown in the following diagram\. 
 
@@ -41,45 +41,48 @@ When you use envelope encryption, you must protect your master keys from unautho
 + Use a [hardware security module \(HSM\)](https://en.wikipedia.org/wiki/Hardware_security_module) such as those offered by [AWS CloudHSM](https://aws.amazon.com/cloudhsm/)\.
 + Use your existing key management tools\.
 
-If you don't have a key management system, we recommend AWS KMS\. The AWS Encryption SDK integrates with AWS KMS to help you protect and use your master keys\. You can also use the AWS Encryption SDK with other master key providers, including custom ones that you define\. Even if you don't use AWS, you can still use this AWS Encryption SDK\.
+If you don't have a key management system, we recommend AWS KMS\. The AWS Encryption SDK integrates with AWS KMS to help you protect and use your master keys\. You can also use the AWS Encryption SDK with other [keyrings](concepts.md#keyring) and[ master key providers](concepts.md#master-key-provider), including custom ones that you define\. Even if you don't use AWS, you can still use this AWS Encryption SDK\.
 
 ## AWS Encryption SDK Encryption Workflows<a name="encryption-workflows"></a>
 
 The workflows in this section explain how the SDK encrypts data and decrypts [encrypted messages](concepts.md#message)\. They show how the SDK uses the components that you create, including the [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\), [master key provider](concepts.md#master-key-provider), and [master key](concepts.md#master-key), to respond to encryption and decryption requests from your application\.
 
+**Note**  
+The AWS Encryption SDK in C is a preview release\. The code and the documentation are subject to change\.
+
 ### How the SDK Encrypts Data<a name="encrypt-workflow"></a>
 
 The SDK provides methods that encrypt strings, byte arrays, and byte streams\. For code examples showing calls to encrypt and decrypt strings and byte streams in each supported programming languages, see the examples in the [Programming Languages](programming-languages.md) section\.
 
-1. Your application passes plaintext data to one of the encryption methods\. 
+1. Your application passes plaintext data to one of the encryption methods\. We also recommend that you pass in an optional, non\-secret [encryption context](concepts.md#encryption-context)\. 
 
-   To indicate the source of the [data keys](concepts.md#DEK) that you want to use to encrypt your data, your request specifies a cryptographic materials manager \(CMM\) or a master key provider\. \(If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with your chosen master key provider\.\)
+1. The encryption method asks the [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) for encryption materials\. The CMM is a component that assembles the data keys, signing keys, and other encryption materials\. 
 
-1. The encryption method asks the CMM for data keys \(and related cryptographic material\)\.
+   In the AWS Encryption SDK for Java and Python, you can specify a CMM or a master key provider\. If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with your chosen master key provider\. In the AWS Encryption SDK for C, you must specify a CMM and a [keyring](concepts.md#keyring)\.
 
-1. The CMM gets a [master key](concepts.md#master-key) from its master key provider\.
-**Note**  
-If you are using AWS Key Management Service \(AWS KMS\), the KMS master key object that is returned identifies the CMK, but the actual CMK never leaves the AWS KMS service\.
+1. The CMM requests encryption materials from the [keyring](concepts.md#keyring) in the session \(C\) or the master keys specified by the [master key provider](concepts.md#master-key-provider) \(Java and Python\)\. The response includes a plaintext data key and the same data key encrypted under the master keys\. The CMM returns these encryption materials to the encryption method\.
 
-1. The CMM asks the master key to generate a data key\. The master key returns two copies of the data key, one in plaintext and one encrypted under the master key\. 
+1. The encryption method uses the plaintext data key to encrypt the data, and then discards the plaintext data key\. If you provided an encryption context, the encryption method also cryptographically binds the encryption context to the encrypted data\.
 
-1. The CMM returns the plaintext and encrypted data keys to the encryption method\.
-
-1. The encryption method uses the plaintext data key to encrypt the data, and then discards the plaintext data key\.
-
-1. The encryption method returns an [encrypted message](concepts.md#message) that contains the encrypted data and the encrypted data key\.
+1. The encryption method returns an [encrypted message](concepts.md#message) that contains the encrypted data, the encrypted data key, and other metadata, including the encryption context, if one was used\.
 
 ### How the SDK Decrypts an Encrypted Message<a name="decrypt-workflow"></a>
 
-The SDK provides methods that decrypt an encrypted message and return plaintext strings, byte arrays, or byte streams\. For code examples in each supported programming languages, see the examples in the [Programming Languages](programming-languages.md) section\.
+The SDK provides methods that decrypt the [encrypted message](concepts.md#message) and return plaintext strings, byte arrays, or byte streams\. For code examples in each supported programming languages, see the examples in the [Programming Languages](programming-languages.md) section\.
 
-1. Your application passes an encrypted message to a decryption method\.
+You must use the same master key provider and keyring to decrypt that you used to encrypt, or a compatible one\.
 
-   To indicate the source of the [data keys](concepts.md#DEK) that were used to encrypt your data, your request specifies a cryptographic materials manager \(CMM\) or a master key provider\. \(If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with the specified master key provider\.\)
+1. Your application passes an [encrypted message](concepts.md#message) to a decryption method\.
 
-1. The decryption method asks the CMM for cryptographic materials to decrypt the encrypted message\. It passes in information from the message header, including the encrypted data keys\.
+   In Java and Python, to indicate the source of the [data keys](concepts.md#DEK) that were used to encrypt your data, your request specifies a cryptographic materials manager \(CMM\) or a master key provider\. \(If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with the specified master key provider\.\)
 
-1. To get decryption materials, the Default CMM asks its master key provider for a master key that can decrypt the encrypted data key\. It uses the master key to decrypt the encrypted data key\. Then, it returns the decryption materials \(including the plaintext data key\) to the decryption method\. Other CMMs might use different techniques to get the decryption materials\.
+   In C, you pass in a session that includes the CMM and the [keyring](concepts.md#keyring) that you are using\.
+
+1. The decryption method asks the CMM for cryptographic materials to decrypt the encrypted message\. It passes in information from the encrypted message, including the encrypted data keys\.
+
+1. In Java and Python, to get decryption materials, the Default CMM asks its master key provider for a master key that can decrypt one of the encrypted data keys\. Other CMMs might use different techniques to get the decryption materials\. In C, the CMM asks the keyring for decryption materials\. The keyring uses its master keys to decrypt one of the encrypted data keys\. 
+
+   The response includes the decryption materials, including the plaintext data key\.
 
 1. The decryption method uses the plaintext data key to decrypt the data, then discards the plaintext data key\. 
 

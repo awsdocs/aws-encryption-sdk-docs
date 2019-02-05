@@ -7,9 +7,9 @@
 
 The AWS Encryption SDK supplies the [initialization vectors](https://en.wikipedia.org/wiki/Initialization_vector) \(IVs\) that are required by all supported [algorithm suites](algorithms-reference.md)\. The SDK uses frame sequence numbers to construct an IV so that no two frames in the same message can have the same IV\. 
 
-Each IV is constructed from two big\-endian byte arrays concatenated in the following order:
-+ 64 bytes: 0 \(reserved for future use\)
-+ 32 bytes: Frame sequence number\. For the header authentication tag, this value is all zeroes\.
+Each 96\-bit \(12\-byte\) IV is constructed from two big\-endian byte arrays concatenated in the following order:
++ 64 bits: 0 \(reserved for future use\)
++ 32 bits: Frame sequence number\. For the header authentication tag, this value is all zeroes\.
 
 Before the introduction of [data key caching](data-key-caching.md), the AWS Encryption SDK always used a new data key to encrypt each message, and it generated all IVs randomly\. Randomly generated IVs were cryptographically safe because data keys were never reused\. When the SDK introduced data key caching, which intentionally reuses data keys, we changed the way the SDK generates IVs\. 
 

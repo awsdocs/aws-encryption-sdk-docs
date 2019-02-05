@@ -35,7 +35,7 @@ The length of the data key\. The SDK supports 256\-bit, 192\-bit, and 128\-bit k
 The mode used with the encryption algorithm\. For all algorithm suites, the SDK uses Galois/Counter Mode \(GCM\)\.
 
 **IV Length**  
-The length of the initialization vector \(IV\) used with AES\-GCM\.
+The length of the initialization vector \(IV\) used with AES\-GCM\. For more information about the IVs that the AWS Encryption SDK uses, see the [Initialization Vector Reference](IV-reference.md)\.
 
 **Authentication Tag Length**  
 The length of the authentication tag used with AES\-GCM\.
@@ -45,7 +45,7 @@ The HMAC\-based extract\-and\-expand key derivation function \(HKDF\) used to de
 + The hash function used is either SHA\-384 or SHA\-256, as specified by the algorithm ID\.
 + For the extract step:
   + No salt is used\. Per the RFC, this means that the salt is set to a string of zeros\. The string length is equal to the length of the hash function output; that is, 48 bytes for SHA\-384 and 32 bytes for SHA\-256\.
-  + The input keying material is the data key received from the master key provider\.
+  + The input keying material is the data key received from the keyring or master key provider\.
 + For the expand step:
   + The input pseudorandom key is the output from the extract step\.
   + The input info is a concatenation of the algorithm ID followed by the message ID\.

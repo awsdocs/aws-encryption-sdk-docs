@@ -1,6 +1,6 @@
 # AWS Encryption SDK CLI Syntax and Parameter Reference<a name="crypto-cli-reference"></a>
 
-This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For example, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
+This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For example, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
 **Topics**
 + [AWS Encryption CLI Syntax](#crypto-cli-syntax)
@@ -94,7 +94,7 @@ Identifies the [master key provider](concepts.md#master-key-provider)\. The form
 **region**  
 Identifies the AWS Region of an AWS KMS CMK\. This attribute is valid only for AWS KMS CMKs\. It is used only when the **key** identifier does not specify a region; otherwise, it is ignored\. When it is used, it overrides the default region in the AWS CLI named profile\.   
 **profile**  
-Identifies an AWS CLI [named profile](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The region in the profile is used only when the key identifier does not specify a region and there is no **region** attribute in the command\. 
+Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The region in the profile is used only when the key identifier does not specify a region and there is no **region** attribute in the command\. 
 
 **\-\-input \(\-i\)**  
 Specifies the location of the data to encrypt or decrypt\. This parameter is required\. The value can be a path to a file or directory, or a file name pattern\. If you are piping input to the command \(stdin\), use `-`\.  
@@ -154,7 +154,7 @@ Suppresses warning messages, such as the message that appears when you overwrite
 ## Advanced Parameters<a name="cli-advanced-parameters"></a>
 
 \-\-algorithm  
-Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This parameter is optional and valid only in encrypt commands\. By default, the AWS Encryption CLI uses the default algorithm suite for the AWS Encryption SDK, which is AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. This algorithm suite is recommended for most encryption operations\. For a list of alternate values, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
+Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This parameter is optional and valid only in encrypt commands\. By default, the AWS Encryption CLI uses the default algorithm suite for the AWS Encryption SDK, which is AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. This algorithm suite is recommended for most encryption operations\. For a list of valid values, see the values for the `algorithm` parameter in [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/index.html#execution)\.
 
 \-\-frame\-length  
 Creates output with specified frame length\. Enter a value in bytes\. This parameter is optional and valid only in encrypt commands\.

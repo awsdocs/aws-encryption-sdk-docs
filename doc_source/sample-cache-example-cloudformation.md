@@ -1,4 +1,4 @@
-# LocalCryptoMaterialsCache Example AWS CloudFormation Template<a name="sample-cache-example-cloudformation"></a>
+# local cache Example AWS CloudFormation Template<a name="sample-cache-example-cloudformation"></a>
 
 This AWS CloudFormation template sets up all the necessary AWS resources to replicate this example\.
 

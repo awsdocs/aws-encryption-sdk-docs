@@ -1,6 +1,6 @@
 # How to Use the AWS Encryption SDK Command Line Interface<a name="crypto-cli-how-to"></a>
 
-This topic explains how to use the parameters in the AWS Encryption CLI\. For examples, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
+This topic explains how to use the parameters in the AWS Encryption CLI\. For examples, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
 
 **Topics**
 + [How to Encrypt and Decrypt Data](#crypto-cli-e-d-intro)
@@ -64,7 +64,7 @@ In an encrypt command, each `--master-keys` parameter value must include at leas
 ```
 aws-encryption-cli --encrypt --master-keys key=1234abcd-12ab-34cd-56ef-1234567890ab key=1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d
 ```
-In encrypt commands that use AWS KMS CMKs, the value of **key** can be the CMK ID, its [Amazon Resource Name \(ARN\)](http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn), an alias name, or alias ARN\. For example, this encrypt command uses an alias ARN in the value of the **key** attribute\.   
+In encrypt commands that use AWS KMS CMKs, the value of **key** can be the CMK ID, its [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn), an alias name, or alias ARN\. For example, this encrypt command uses an alias ARN in the value of the **key** attribute\.   
 
 ```
 aws-encryption-cli --encrypt --master-keys key=arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias
@@ -81,7 +81,7 @@ The **provider** attribute identifies the [master key provider](concepts.md#mast
 ```
 --master-keys key=12345 provider=my_custom_provider
 ```
-For more information about using custom \(non\-AWS KMS\) master key providers, see the **Advanced Configuration** topic in the [README](https://github.com/awslabs/aws-encryption-sdk-cli/blob/master/README.rst) file for the [AWS Encryption SDK CLI](https://github.com/awslabs/aws-encryption-sdk-cli/) repository\.
+For more information about using custom \(non\-AWS KMS\) master key providers, see the **Advanced Configuration** topic in the [README](https://github.com/aws/aws-encryption-sdk-cli/blob/master/README.rst) file for the [AWS Encryption SDK CLI](https://github.com/aws/aws-encryption-sdk-cli/) repository\.
 
 **Region: Specify an AWS Region**  
 Use the **region** attribute to specify the AWS Region of an AWS KMS CMK\. This attribute is valid only in encrypt commands and only when the master key provider is AWS KMS\.   
@@ -90,10 +90,10 @@ Use the **region** attribute to specify the AWS Region of an AWS KMS CMK\. This 
 --encrypt --master-keys key=alias/primary-key region=us-east-2
 ```
 AWS Encryption CLI commands use the AWS Region that is specified in the **key** attribute value if it includes a region, such as an ARN\. if the **key** value specifies a AWS Region, the **region** attribute is ignored\.  
-The **region** attribute takes precedence over other region specifications\. If you don't use a region attribute, AWS Encryption CLI commands uses the AWS Region specified in your AWS CLI [named profile](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html), if any, or your default profile\.
+The **region** attribute takes precedence over other region specifications\. If you don't use a region attribute, AWS Encryption CLI commands uses the AWS Region specified in your AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html), if any, or your default profile\.
 
 **Profile: Specify a Named Profile**  
-Use the **profile** attribute to specify an AWS CLI [named profile](http://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. Named profiles can include credentials and an AWS Region\. This attribute is valid only when the master key provider is AWS KMS\.   
+Use the **profile** attribute to specify an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. Named profiles can include credentials and an AWS Region\. This attribute is valid only when the master key provider is AWS KMS\.   
 
 ```
 --master-keys key=alias/primary-key profile=admin-1
@@ -192,7 +192,7 @@ An *encryption context* is a type of arbitrary, non\-secret *additional authenti
 
 **In an Encrypt Command**
 
-The encryption context that you specify in an encrypt command, along with any additional encryption context that the encryption components add, is cryptographically bound to the encrypted data\. It is also included \(in plaintext\) in the [encrypted message](concepts.md#encryption-context) that the command returns\. If you are using an AWS KMS customer master key \(CMK\), the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\. 
+The encryption context that you specify in an encrypt command, along with any additional pairs that the [CMM](concepts.md#crypt-materials-manager) adds, is cryptographically bound to the encrypted data\. It is also included \(in plaintext\) in the [encrypted message](concepts.md#encryption-context) that the command returns\. If you are using an AWS KMS customer master key \(CMK\), the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\. 
 
 The following example shows a encryption context with three `name=value` pairs\.
 

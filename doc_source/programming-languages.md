@@ -5,4 +5,5 @@ The AWS Encryption SDK is available for the following programming languages\. Fo
 **Topics**
 + [Java](java.md)
 + [Python](python.md)
++ [C](c-language.md)
 + [Command Line Interface](crypto-cli.md)

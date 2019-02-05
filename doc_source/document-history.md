@@ -10,11 +10,12 @@ This topic describes significant updates to the *AWS Encryption SDK Developer Gu
 
 The following table describes significant changes to this documentation since November 2017\. In addition to major changes listed here, we also update the documentation frequently to improve the descriptions and examples, and to address the feedback that you send to us\. To be notified about significant changes, use the link in the upper right corner to subscribe to the RSS feed\.
 
-**Latest documentation update:** June 8, 2018 \(minor\)
+**Latest documentation update:** February 5, 2019
 
 | Change | Description | Date | 
 | --- |--- |--- |
-| [New release](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) | Added documentation of the new [command line interface](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) for the AWS Encryption SDK\. | November 20, 2017 | 
+| [Preview release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) | Added documentation of the preview release of the [AWS Encryption SDK for C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html)\. | February 5, 2019 | 
+| [New release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) | Added documentation of the [command line interface](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) for the AWS Encryption SDK\. | November 20, 2017 | 
 
 ## Earlier Updates<a name="earlier-updates"></a>
 
