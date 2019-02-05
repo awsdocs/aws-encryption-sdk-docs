@@ -19,7 +19,9 @@ application. It can be used on any type of data. The `encrypt`
 method returns a single, portable formatted message that is easy to store and manage. 
 
 It is available in [Java](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/java.html),
-[Python](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/python.html), and a [command-line
+[Python](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/python.html),
+[C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) (as a preview
+release), and a [command-line
 interface](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) that runs on Linux, macOS and Windows.
 
 
@@ -44,6 +46,7 @@ We are developing the AWS Encryption SDK in the following open source projects o
 * Java - [aws-encryption-sdk-java](https://github.com/aws/aws-encryption-sdk-java)
 * Python -
 [aws-encryption-sdk-python](https://github.com/aws/aws-encryption-sdk-python)
+* C (preview) - [aws-encryption-sdk-c](https://github.com/awslabs/aws-encryption-sdk-c)
 * Command-line interface - [aws-encryption-sdk-cli](https://github.com/awslabs/aws-encryption-sdk-cli)
 
 ## Who is the audience?
