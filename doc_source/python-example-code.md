@@ -6,6 +6,7 @@ The following examples show you how to use the AWS Encryption SDK for Python to 
 + [Strings](#python-example-strings)
 + [Byte Streams](#python-example-streams)
 + [Byte Streams with Multiple Master Key Providers](#python-example-multiple-providers)
++ [Using Data Key Caching to Encrypt Messages](#python-example-caching)
 
 ## Encrypting and Decrypting Strings<a name="python-example-strings"></a>
 
@@ -181,7 +182,7 @@ def cycle_file(source_plaintext_filename):
 
 ## Encrypting and Decrypting Byte Streams with Multiple Master Key Providers<a name="python-example-multiple-providers"></a>
 
-The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses a CMK in [AWS KMS](https://aws.amazon.com/kms/) and an RSA key pair as the master keys\.
+The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses an AWS KMS customer master key \(CMK\) and an RSA key pair as the master keys\.
 
 ```
 """
@@ -322,4 +323,70 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
         for pair in encryptor.header.encryption_context.items()
     )
     return ciphertext_filename, cycled_kms_plaintext_filename, cycled_static_plaintext_filename
+```
+
+## Using Data Key Caching to Encrypt Messages<a name="python-example-caching"></a>
+
+The following example shows how to use [data key caching](data-key-caching.md) in the AWS Encryption SDK for Python\. It is designed to show you how to configure an instance of the [local cache](data-caching-details.md#simplecache) \(LocalCryptoMaterialsCache\) with the required capacity value and an instance of the [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) with [cache security thresholds](thresholds.md)\. 
+
+This very basic example creates a function that encrypts a fixed string\. It lets you specify a AWS KMS customer master key, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data Key Caching Example in Python](sample-cache-example-python.md)\.
+
+Although it is optional, this example also uses an [encryption context](concepts.md#encryption-context) as additional authenticated data\. When you decrypt data that was encrypted with an encryption context, be sure that your application verifies that the encryption context is the one that you expect before returning the plaintext data to your caller\. An encryption context is a best practice element of any encryption or decryption operation, but it plays a special role in data key caching\. For details, see [Encryption Context: How to Select Cache Entries](data-caching-details.md#caching-encryption-context)\.
+
+```
+# Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License"). You
+# may not use this file except in compliance with the License. A copy of
+# the License is located at
+#
+# http://aws.amazon.com/apache2.0/
+#
+# or in the "license" file accompanying this file. This file is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+# ANY KIND, either express or implied. See the License for the specific
+# language governing permissions and limitations under the License.
+"""Example of encryption with data key caching."""
+import aws_encryption_sdk
+
+
+def encrypt_with_caching(kms_cmk_arn, max_age_in_cache, cache_capacity):
+    """Encrypts a string using an AWS KMS customer master key (CMK) and data key caching.
+
+    :param str kms_cmk_arn: Amazon Resource Name (ARN) of the KMS customer master key
+    :param float max_age_in_cache: Maximum time in seconds that a cached entry can be used
+    :param int cache_capacity: Maximum number of entries to retain in cache at once
+    """
+    # Data to be encrypted
+    my_data = "My plaintext data"
+
+    # Security thresholds
+    #   Max messages (or max bytes per) data key are optional
+    MAX_ENTRY_MESSAGES = 100
+
+    # Create an encryption context
+    encryption_context = {"purpose": "test"}
+
+    # Create a master key provider for the KMS customer master key (CMK)
+    key_provider = aws_encryption_sdk.KMSMasterKeyProvider(key_ids=[kms_cmk_arn])
+
+    # Create a local cache
+    cache = aws_encryption_sdk.LocalCryptoMaterialsCache(cache_capacity)
+
+    # Create a caching CMM
+    caching_cmm = aws_encryption_sdk.CachingCryptoMaterialsManager(
+        master_key_provider=key_provider,
+        cache=cache,
+        max_age=max_age_in_cache,
+        max_messages_encrypted=MAX_ENTRY_MESSAGES,
+    )
+
+    # When the call to encrypt data specifies a caching CMM,
+    # the encryption operation uses the data key cache specified
+    # in the caching CMM
+    encrypted_message, _header = aws_encryption_sdk.encrypt(
+        source=my_data, materials_manager=caching_cmm, encryption_context=encryption_context
+    )
+
+    return encrypted_message
 ```

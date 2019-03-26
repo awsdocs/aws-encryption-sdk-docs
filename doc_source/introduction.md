@@ -39,9 +39,9 @@ For information about implementations of the AWS Encryption SDK in different pro
 
 **Note**  
 The AWS Encryption SDK in C is a preview release\. The code and the documentation are subject to change\.
-+ **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java) repository on GitHub\.
-+ **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python) repository on GitHub\.
-+ **C**: See [AWS Encryption SDK for C](c-language.md) and the [aws\-encryption\-sdk\-c](https://github.com/awslabs/aws-encryption-sdk-c/) repository on GitHub\.
++ **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
++ **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\.
++ **C**: See [AWS Encryption SDK for C](c-language.md), the AWS Encryption SDK [C documentation](https://awslabs.github.io/aws-encryption-sdk-c/html/), and the [aws\-encryption\-sdk\-c](https://github.com/awslabs/aws-encryption-sdk-c/) repository on GitHub\.
 + **Command Line Interface**: See [AWS Encryption SDK Command Line Interface](crypto-cli.md), [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/) for the AWS Encryption CLI, and the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 If you have questions or comments about this guide, let us know\! Choose the feedback link in the lower\-right corner of the page or the GitHub link in the upper\-right corner of the page\. You can also file an issue in the [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs/) GitHub repository for this guide\.

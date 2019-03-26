@@ -31,9 +31,10 @@ For help creating a CMK, see [Creating Keys](https://docs.aws.amazon.com/kms/lat
 The first part of this example uses a KMS keyring with one CMK to encrypt a plaintext string\. 
 
 Step 1: Construct the keyring\.  
-Create a KMS keyring and configure it with the Amazon Resource Name \(ARN\) of an AWS KMS CMK\. The keyring in this example is configured with one CMK, but you can configure a KMS keyring with multiple CMKs, including CMKs in different AWS Regions and different accounts\.  
+Create a KMS keyring for encryption\. The keyring in this example is configured with one CMK, but you can configure a KMS keyring with multiple CMKs, including CMKs in different AWS Regions and different accounts\.   
+When you specify an AWS KMS CMK for a keyring, you must use the Amazon Resource Name \(ARN\) of the CMK\. In an encryption keyring, you can specify the key ARN or alias ARN\. In a decryption keyring, you must use the key ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.  
 When you create a keyring with multiple CMKs, you specify the CMK that is used to generate and encrypt the plaintext data key, and an optional array of additional CMKs that encrypt the same plaintext data key\. In this case, we specify only the generator CMK\.   
-Before running this code, replace the example CMK ARN with a valid one\.  
+Before running this code, replace the example key ARN with a valid one\.  
 
 ```
 const char * key_arn = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";    
@@ -43,7 +44,7 @@ struct aws_cryptosdk_keyring *kms_keyring =
 ```
 
 Step 2: Create a CMM\.  
-Create a [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) that uses the keyring\. This example uses the default CMM provided in the SDK, but you can use any supported CMM\. It also uses the default allocator provided by the [AWS C Common library](https://github.com/awslabs/aws-c-common)\.   
+Create a [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) that uses the keyring\. This example uses the default CMM provided in the SDK, but you can use any supported CMM\. It also uses the default allocator provided by the [AWS C Common library](https://github.com/awslabs/aws-c-common/)\.   
 After you create a CMM with the keyring, you can release your reference to the keyring using the method that the SDK provides\. The CMM retains a reference to the keyring object during its lifetime, and references to the CMM and keyring objects are released when you destroy the CMM\. This pattern helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
 
 ```
@@ -143,6 +144,7 @@ The second part of this example decrypts an encrypted message that contains the 
 Step 1: Construct the keyring\.  
 When you decrypt data in AWS KMS, you pass in the [encrypted message](concepts.md#message) that the encrypt API returned\. The [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) doesn't take a CMK as input\. Instead, AWS KMS uses the same CMK to decrypt the ciphertext that it used to encrypt it\. However, the AWS Encryption SDK lets you specify a KMS keyring with CMKs on encrypt and decrypt\.  
 On decrypt, you can configure a keyring with only the CMKs that you want to use to decrypt the encrypted message\. For example, you might want to create a keyring with only the CMK that is used by a particular role in your organization\. The AWS Encryption SDK will never use a CMK unless it appears in the decryption keyring\. If the SDK can't decrypt the encrypted data keys by using the CMKs in the keyring that you provide, either because none of CMKs in the keyring were used to encrypt any of the data keys, or because the caller doesn't have permission to use the CMKs in the keyring to decrypt, the decrypt call fails\.  
+When you specify an AWS KMS CMK for a decryption keyring, you must use the key ARN\. Alias ARNs are permitted only in encryption keyrings\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\.  
 In this example, we specify a keyring that is configured with the same CMK that was used to encrypt the string\. Before running this code, replace the example CMK ARN with a valid one\.  
 
 ```
@@ -153,7 +155,7 @@ struct aws_cryptosdk_keyring *kms_keyring =
 ```
 
 Step 2: Create a CMM\.  
-Create a [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) that uses the keyring\. This example uses the default CMM provided in the SDK, but you can use any supported CMM\. It also uses the default allocator provided by the [AWS C Common library](https://github.com/awslabs/aws-c-common)\.   
+Create a [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) that uses the keyring\. This example uses the default CMM provided in the SDK, but you can use any supported CMM\. It also uses the default allocator provided by the [AWS C Common library](https://github.com/awslabs/aws-c-common/)\.   
 After you use the keyring to create a CMM, you can release your reference to the keyring using the method that the SDK provides\. The CMM retains a reference to the keyring object during its lifetime, and both objects are released when you destroy the CMM\. This pattern helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
 
 ```

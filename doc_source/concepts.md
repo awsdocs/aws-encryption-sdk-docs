@@ -76,23 +76,31 @@ If you specify an algorithm suite, we recommend an algorithm suite that uses a [
 
 ## Encryption Context<a name="encryption-context"></a>
 
-To improve the security of your cryptographic operations, include an encryption context in all requests to encrypt data\. Using a encryption context is optional, but it is a cryptographic best practice that we recommend\.
+To improve the security of your cryptographic operations, include an [encryption context](https://docs.aws.amazon.com/crypto/latest/userguide/cryptography-concepts.html#define-encryption-context) in all requests to encrypt data\. Using an encryption context is optional, but it is a cryptographic best practice that we recommend\.
 
-An *encryption context* is a set of name–value pairs that contain arbitrary, non\-secret additional authenticated data\. The encryption context can contain any data you choose, but it typically consists of data that is useful in logging and tracking, such as data about the file type, purpose, or ownership\. 
+An *encryption context* is a set of name–value pairs that contain arbitrary, non\-secret additional authenticated data\. The encryption context can contain any data you choose, but it typically consists of data that is useful in logging and tracking, such as data about the file type, purpose, or ownership\. When you encrypt data, the encryption context is cryptographically bound to the encrypted data so that the same encryption context is required to decrypt the data\. The AWS Encryption SDK includes the encryption context in plaintext in the header of the [encrypted message](#message) that it returns\.
 
-When you encrypt data, the encryption context that you specify, and a public signing key pair that the cryptographic materials manager \(CMM\) might add, is cryptographically bound to the encrypted data so that the same encryption context is required to decrypt the data\. The AWS Encryption SDK includes the encryption context in plaintext in the header of the [encrypted message](#message) that it returns\.
+The encryption context that the AWS Encryption SDK uses consists of the encryption context that you specify and a public key pair that the [cryptographic materials manager](#crypt-materials-manager) \(CMM\) adds\. Specifically, whenever you use an [encryption algorithm with signing](algorithms-reference.md), the CMM adds a name\-value pair to the encryption context that consists of a reserved name, `aws-crypto-public-key`, and a value that represents the public verification key\. The `aws-crypto-public-key` name in the encryption context is reserved by the AWS Encryption SDK and cannot be used as a name in any other pair in the encryption context\. For details, see [AAD](message-format.md#header-aad) in the *Message Format Reference*\.
 
-To decrypt the data, you pass in the encrypted message\. Because the AWS Encryption SDK can extract the encryption context from the encrypted message, you are not required to provide the encryption context separately\. However, the encryption context can help you to confirm that you are decrypting the right encrypted message\. 
+The following example encryption context consists of two encryption context pairs specified in the request and the public key pair that the CMM adds\.
+
+```
+"Purpose"="Test", "Department"="IT", aws-crypto-public-key=<public key>
+```
+
+To decrypt the data, you pass in the encrypted message\. Because the AWS Encryption SDK can extract the encryption context from the encrypted message header, you are not required to provide the encryption context separately\. However, the encryption context can help you to confirm that you are decrypting the correct encrypted message\. 
 + In the [AWS Encryption SDK Command Line Interface](crypto-cli.md) \(CLI\), if you provide an encryption context in a decrypt command, the CLI verifies that the values are present in the encryption context of the encrypted message before it returns the plaintext data\. 
 
    
-+ In other languages, the decrypt response includes the encryption context along with the plaintext data\. The decrypt function in your application should always verify that the encryption context in the decrypt response includes the values you expect before it returns the plaintext data\.
++ In other languages, the decrypt response includes the encryption context and the plaintext data\. The decrypt function in your application should always verify that the encryption context in the decrypt response includes the encryption context in the encrypt request \(or a subset\) before it returns the plaintext data\.
 
 When choosing an encryption context, remember that it is not a secret\. The encryption context is displayed in plaintext in the header of the [encrypted message](#message) that the SDK returns\. If you are using AWS Key Management Service, the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\.
 
 For examples of verifying an encryption context in your code, see:
 + Java: [Strings](java-example-code.md#java-example-strings), [Byte Streams](java-example-code.md#java-example-streams)
-+ C: [Encrypting and Decrypting Strings](c-examples.md#c-example-strings)
++ Python: [Using Data Key Caching to Encrypt Messages](python-example-code.md#python-example-caching)
++ C: [Encrypting and Decrypting Strings](c-examples.md#c-example-strings) 
++ CLI: All [AWS Encryption SDK CLI examples](crypto-cli-examples.md) include an encryption context\. 
 
 ## Encrypted Message<a name="message"></a>
 

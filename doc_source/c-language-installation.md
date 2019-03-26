@@ -21,7 +21,7 @@ If you don't use hardware security modules \(HSMs\) or another encryption key ma
 
 The AWS Encryption SDK for C requires the following libraries:
 + [OpenSSL](https://www.openssl.org/) 1\.0\.2 or greater, including 1\.1\.0 or later — The AWS Encryption SDK uses the encryption algorithms and other cryptographic primitives in the OpenSSL cryptography library\. The SDK doesn't define or create any cryptographic primitives\.
-+ [aws\-c\-common](https://github.com/awslabs/aws-c-common) 0\.3\.0 or later — This library defines general\-purpose tools and structures that the AWS Encryption SDK for C uses\. It's installed automatically when you install the AWS SDK for C\+\+\.
++ [aws\-c\-common](https://github.com/awslabs/aws-c-common/) 0\.3\.0 or later — This library defines general\-purpose tools and structures that the AWS Encryption SDK for C uses\. It's installed automatically when you install the AWS SDK for C\+\+\.
 **Note**  
 The preferred version of the `aws-c-common` library is installed automatically when you install the AWS SDK for C\+\+\. If you're installing the SDK for C\+\+, don't install the `aws-c-common` library separately\. 
 
@@ -101,7 +101,7 @@ These instructions install the AWS Encryption SDK for C on an Amazon EC2 instanc
    sudo yum install -y openssl-devel git gcc
    ```
 
-   Next, to download and install the [aws\-c\-common](https://github.com/awslabs/aws-c-common) library, change to your preferred build directory, and run the following commands\.
+   Next, to download and install the [aws\-c\-common](https://github.com/awslabs/aws-c-common/) library, change to your preferred build directory, and run the following commands\.
 
    ```
    git clone https://github.com/awslabs/aws-c-common.git

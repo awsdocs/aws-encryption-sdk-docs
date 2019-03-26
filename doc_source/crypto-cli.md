@@ -4,7 +4,7 @@ The AWS Encryption SDK Command Line Interface \(AWS Encryption CLI\) enables you
 
 Like all implementations of the AWS Encryption SDK, the AWS Encryption CLI offers advanced data protection features\. These include [envelope encryption](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/how-it-works.html#envelope-encryption), additional authenticated data \(AAD\), and secure, authenticated, symmetric key [algorithm suites](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/supported-algorithms.html), such as 256\-bit AES\-GCM with key derivation and signing\. 
 
-The AWS Encryption CLI is built on the [AWS Encryption SDK for Python](https://github.com/aws/aws-encryption-sdk-python) and is supported on Linux, macOS, and Windows\. You can run commands and scripts to encrypt and decrypt your data in your preferred shell on Linux or macOS, in a Command Prompt window \(cmd\.exe\) on Windows, and in a PowerShell console on any system\. 
+The AWS Encryption CLI is built on the [AWS Encryption SDK for Python](https://github.com/aws/aws-encryption-sdk-python/) and is supported on Linux, macOS, and Windows\. You can run commands and scripts to encrypt and decrypt your data in your preferred shell on Linux or macOS, in a Command Prompt window \(cmd\.exe\) on Windows, and in a PowerShell console on any system\. 
 
 All language\-specific implementations of the AWS Encryption SDK, including the AWS Encryption CLI, are interoperable\. For example, you can encrypt data with the [AWS Encryption SDK for Java](java.md) and decrypt it with the AWS Encryption CLI\. 
 

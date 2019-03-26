@@ -4,6 +4,8 @@ This code sample creates a basic implementation of data key caching with a [loca
 
 The code creates two instances of a local cache; one for data producers that are encrypting data and another for data consumers \(Lambda functions\) that are decrypting data\. For implementation details, see the [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/) for the AWS Encryption SDK\.
 
+For a verify simple example that focuses on the basic elements of data key caching, see [Using Data Key Caching to Encrypt Messages](python-example-code.md#python-example-caching)\.
+
 ## Producer<a name="producer-python"></a>
 
 The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to an [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each region\. 
