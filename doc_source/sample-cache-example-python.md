@@ -1,14 +1,14 @@
 # Data Key Caching Example in Python<a name="sample-cache-example-python"></a>
 
-This code sample creates a basic implementation of data key caching with a [local cache](data-caching-details.md#simplecache) in Python\. For details about the Python implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Python](python.md)\.
+This code example creates a basic implementation of data key caching with a [local cache](data-caching-details.md#simplecache) in Python\. For details about the Python implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Python](python.md)\.
 
 The code creates two instances of a local cache; one for data producers that are encrypting data and another for data consumers \(Lambda functions\) that are decrypting data\. For implementation details, see the [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/) for the AWS Encryption SDK\.
 
-For a verify simple example that focuses on the basic elements of data key caching, see [Using Data Key Caching to Encrypt Messages](python-example-code.md#python-example-caching)\.
+For a very simple example that focuses on the basic elements of data key caching, see [Using Data Key Caching to Encrypt Messages](python-example-code.md#python-example-caching)\.
 
 ## Producer<a name="producer-python"></a>
 
-The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to an [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each region\. 
+The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to an [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each AWS Region\. 
 
 The code defines a [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) and associates it with a [local cache](data-caching-details.md#simplecache) and an underlying KMS [master key provider](concepts.md#master-key-provider)\. The caching CMM caches the data keys \(and [related cryptographic materials](data-caching-details.md#cache-entries)\) from the master key provider\. It also interacts with the cache on behalf of the SDK and enforces security thresholds that you set\. 
 
@@ -36,7 +36,7 @@ import boto3
 
 
 class MultiRegionRecordPusher(object):
-    """Pushes data to Kinesis Streams in multiple regions."""
+    """Pushes data to Kinesis Streams in multiple Regions."""
     CACHE_CAPACITY = 100
     MAX_ENTRY_AGE_SECONDS = 300.0
     MAX_ENTRY_MESSAGES_ENCRYPTED = 100
@@ -48,7 +48,7 @@ class MultiRegionRecordPusher(object):
         # Set up KMSMasterKeyProvider with cache
         _key_provider = KMSMasterKeyProvider()
 
-        # Add MasterKey and Kinesis client for each region
+        # Add MasterKey and Kinesis client for each Region
         for region in regions:
             self._kinesis_clients.append(boto3.client('kinesis', region_name=region))
             regional_master_key = KMSMasterKey(
@@ -85,7 +85,7 @@ class MultiRegionRecordPusher(object):
             encryption_context=encryption_context
         )
 
-        # Put records to Kinesis stream in all regions
+        # Put records to Kinesis stream in all Regions
         for client in self._kinesis_clients:
             client.put_record(
                 StreamName=self._stream_name,
@@ -96,7 +96,7 @@ class MultiRegionRecordPusher(object):
 
 ## Consumer<a name="consumer-python"></a>
 
-The data consumer is an [AWS Lambda](https://aws.amazon.com/lambda/) function that is triggered by [Kinesis](https://aws.amazon.com/kinesis/) events\. It decrypts and deserializes each record, and writes the plaintext record to a [DynamoDB](https://aws.amazon.com/dynamodb/) table in the same region\.
+The data consumer is an [AWS Lambda](https://aws.amazon.com/lambda/) function that is triggered by [Kinesis](https://aws.amazon.com/kinesis/) events\. It decrypts and deserializes each record, and writes the plaintext record to a [DynamoDB](https://aws.amazon.com/dynamodb/) table in the same Region\.
 
 Like the producer code, the consumer code enables data key caching by using a caching cryptographic materials manager \(caching CMM\) in calls to the `decrypt` method\. 
 

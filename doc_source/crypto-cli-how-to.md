@@ -214,7 +214,7 @@ aws-encryption-cli --decrypt --encryption-context dept=IT ...
 
 An encryption context is an important part of your security strategy\. However, when choosing an encryption context, remember that its values are not secret\. Do not include any confidential data in the encryption context\.
 
-**To specify an encryption context:**
+**To specify an encryption context**
 + In an **encrypt** command, use the `--encryption-context` parameter with one or more `name=value` pairs\. Use a space to separate each pair\. 
 
   ```

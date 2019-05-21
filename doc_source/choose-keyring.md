@@ -1,23 +1,18 @@
 # Choosing a Keyring<a name="choose-keyring"></a>
 
-
-|  | 
-| --- |
-|   The AWS Encryption SDK for C is a preview release\. The code and the documentation are subject to change\.  | 
-
 The AWS Encryption SDK for C uses *keyrings* to help it perform [envelope encryption](https://docs.aws.amazon.com/crypto/latest/userguide/cryptography-concepts.html#define-envelope-encryption)\. A keyring is used to generate, encrypt, and decrypt data keys\. The keyring that you use determines the source of the unique data keys that protect each message, and the wrapping keys that encrypt that data key\. You can use the keyrings that the SDK provides or write your own compatible custom keyrings\. 
 
 You can use each keyring individually or combine keyrings into a [multi\-keyring](#use-multi-keyring)\. Although most keyrings can generate, encrypt, and decrypt data keys, you might create a keyring that performs only one particular operation, such as a keyring that only generates data keys, and use that keyring in combination with others\.
 
-You specify a keyring for encrypting and decrypting data\. 
+You specify a keyring for encrypting and decrypting data: 
 + On encrypt, the keyring generates a unique plaintext data key\. Then, each of the wrapping keys in the keyring encrypts the same plaintext data key\. The keyring returns the plaintext data key and one encrypted data key for each wrapping key in the keyring\. The SDK uses the plaintext data key to encrypt the data, and it returns an [encrypted message](concepts.md#message) that includes the encrypted data and the encrypted data keys\.
 
    
 + On decrypt, the keyring that you specify must contain at least one wrapping key that can decrypt one of the encrypted data keys in the encrypted message\. Otherwise, the attempt to decrypt will fail\.
 
-We recommend that you use a keyring that protects your master keys and performs cryptographic operations within a secure boundary, such as the KMS keyring, which uses [AWS Key Management Service](https://docs.aws.amazon.com/kms/latest/developerguide/) \(AWS KMS\) [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) that never leave AWS KMS unencrypted\. You can also write a keyring that uses master keys that are stored in your hardware security modules \(HSMs\) or protected by other master key services\. 
+We recommend that you use a keyring that protects your wrapping keys and performs cryptographic operations within a secure boundary, such as the KMS keyring, which uses [AWS Key Management Service](https://docs.aws.amazon.com/kms/latest/developerguide/) \(AWS KMS\) [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) that never leave AWS KMS unencrypted\. You can also write a keyring that uses wrapping keys that are stored in your hardware security modules \(HSMs\) or protected by another master key service\. 
 
-This topic explains how to use the keyring feature of the AWS Encryption SDK\. For details about programming with the AWS Encryption SDK, see the [C examples](c-examples.md), the [examples](https://github.com/awslabs/aws-encryption-sdk-c/tree/master/examples) in the aws\-encryption\-sdk\-c repository on GitHub, and the [C API documentation](https://awslabs.github.io/aws-encryption-sdk-c/html/)\.
+This topic explains how to use the keyring feature of the AWS Encryption SDK\. For details about programming with the AWS Encryption SDK, see the [C examples](c-examples.md), the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) on GitHub, and the [C API documentation](https://aws.github.io/aws-encryption-sdk-c/html/)\.
 
 **Topics**
 + [Keyring Compatibility](#keyring-compatibility)
@@ -28,7 +23,7 @@ This topic explains how to use the keyring feature of the AWS Encryption SDK\. F
 
 ## Keyring Compatibility<a name="keyring-compatibility"></a>
 
-Although the Java, Python, and C implementations of the AWS Encryption SDK have some architectural differences, they are designed to be fully compatible\. You can encrypt your data using one programming language implementation and decrypt it with any other language implementation\. However, you must use the same or corresponding master keys to encrypt and decrypt your data keys\. 
+Although the Java, Python, and C implementations of the AWS Encryption SDK have some architectural differences, they're designed to be fully compatible\. You can encrypt your data using one programming language implementation and decrypt it with any other language implementation\. However, to be successful, you need to use a master key or master key provider in Java or Python that is compatible with the keyring in C\. Also, to decrypt the data, the master key or keyring must have access to one of the wrapping keys that was used to encrypt the data keys\.
 
 The following table shows which master keys and master key providers are compatible with the keyrings provided in the AWS Encryption SDK in C\. 
 
@@ -45,7 +40,7 @@ When decrypting, the Java and Python implementations behave like the [KMS Discov
 
 ## KMS Keyring<a name="use-kms-keyring"></a>
 
-A KMS keyring uses AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) to generate, encrypt, and decrypt data keys\. AWS KMS protects your master keys and performs cryptographic operations within the FIPS boundary\. We recommend that you use the KMS keyring, or a keyring with similar security properties, whenever possible\.
+A KMS keyring uses AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) to generate, encrypt, and decrypt data keys\. AWS KMS protects your CMKs and performs cryptographic operations within the FIPS boundary\. We recommend that you use the KMS keyring, or a keyring with similar security properties, whenever possible\.
 
 To use the CMKs in a KMS keyring, the caller must have the permission to perform the AWS KMS API calls required for each type of keyring operation, such as generating data keys, encrypting, or decrypting\. The required permissions are listed in the description of each type of KMS keyring\. For information about setting and changing AWS KMS permissions, see [Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html) in the *AWS Key Management Service Developer Guide*\.
 
@@ -101,7 +96,7 @@ struct aws_cryptosdk_keyring *kms_decrypt_keyring =
        Aws::Cryptosdk::KmsKeyring::Builder().Build(CMK_1, {CMK_2, CMK_3});
 ```
 
-Unlike an encryption keyring that uses all of the specified CMKs, you can decrypt an encrypted message using a decryption keyring that includes CMKs unrelated to the encrypted message, and CMKs that the caller doesn't have permission to use\. If a Decrypt call to AWS KMS fails, such as when the caller doesn't have the required permission, the AWS Encryption SDK just skips to the next encrypted data key\. 
+Unlike an encryption keyring that uses all of the specified CMKs, you can decrypt an encrypted message using a decryption keyring that includes CMKs unrelated to the encrypted message, and CMKs that the caller doesn't have permission to use\. If a decrypt call to AWS KMS fails, such as when the caller doesn't have the required permission, the AWS Encryption SDK just skips to the next encrypted data key\. 
 
 ### Using a KMS Discovery Keyring<a name="kms-keyring-discovery"></a>
 
@@ -127,7 +122,7 @@ When you use a KMS Discovery keyring in a multi\-keyring, it has no effect on en
 
 Instead of using a KMS keyring that specifies particular CMKs, or a KMS Discovery keyring that can use any CMK, you might want to use a KMS Regional Discovery keyring that limits the AWS Encryption SDK to CMKs in a particular AWS Region\. 
 
-For example, the following code creates a KMS Regional Discovery keyring for the US West \(Oregon\) Region \(us\-west\-2\)\. To view this keyring, and the `create_kms_client` method, in a working example, see [kms\_discovery\.cpp](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/kms_discovery.cpp)\.
+For example, the following code creates a KMS Regional Discovery keyring for the US West \(Oregon\) Region \(us\-west\-2\)\. To view this keyring, and the `create_kms_client` method, in a working example, see [kms\_discovery\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/kms_discovery.cpp)\.
 
 ```
 struct aws_cryptosdk_keyring *kms_regional_keyring = Aws::Cryptosdk::KmsKeyring::Builder()
@@ -148,11 +143,11 @@ Use a Raw AES keyring when you need to provide the wrapping key and encrypt the 
 
 To identify the wrapping key, the Raw AES keyring uses a namespace and name that you provide\. These are equivalent to the `Provider ID` and `Key ID` fields in the AWS Encryption SDK for Java and Python\. These values are not secret; they appear in plaintext in the header of the [encrypted message](concepts.md#message) that the AWS Encryption SDK returns\. However, they are critical\. You must use the same namespace and name for a key in your decryption keyring that you used for that key in your encryption keyring\. If the namespace and name are not an exact, case\-sensitive match, the AWS Encryption SDK will not recognize that the wrapping keys are the same, even if the bytes are identical, and it will not be able to decrypt the encrypted data keys\.
 
-For an example of how to use a Raw AES keyring, see [raw\_aes\_keyring\.c](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c)\.
+For an example of how to use a Raw AES keyring, see [raw\_aes\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c)\.
 
 ## Raw RSA Keyring<a name="use-raw-rsa-keyring"></a>
 
-The Raw RSA keyring performs asymmetric encryption and decryption of data keys in local memory with wrapping and unwrapping keys that you specify\. The encryption function encrypts the data key under the RSA public key\. The decryption function decrypts the data key using the private key\. You can select from among the several [RSA padding modes](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/include/aws/cryptosdk/cipher.h)\.
+The Raw RSA keyring performs asymmetric encryption and decryption of data keys in local memory with wrapping and unwrapping keys that you specify\. The encryption function encrypts the data key under the RSA public key\. The decryption function decrypts the data key using the private key\. You can select from among the several [RSA padding modes](https://github.com/aws/aws-encryption-sdk-c/blob/master/include/aws/cryptosdk/cipher.h)\.
 
 A Raw RSA keyring that encrypts and decrypts must include an asymmetric public key and private key pair\. But, you can create a Raw RSA encryption keyring with only a public key or a Raw RSA decryption keyring with only a private key\. And, you can include any Raw RSA keyring in a [multi\-keyring](#use-multi-keyring)\. The Raw RSA keyring is equivalent to and interoperates with the [JceMasterKey](https://aws.github.io/aws-encryption-sdk-java/javadoc/com/amazonaws/encryptionsdk/jce/JceMasterKey.html) in the AWS Encryption SDK for Java and the [RawMasterKey](https://aws-encryption-sdk-python.readthedocs.io/en/latest/generated/aws_encryption_sdk.key_providers.raw.html#aws_encryption_sdk.key_providers.raw.RawMasterKey) in the AWS Encryption SDK for Python when they are used with asymmetric encryption keys\. You can encrypt data with one implementation and decrypt the data with any other implementation using the same wrapping key\.
 
@@ -160,7 +155,7 @@ Use a Raw RSA keyring when you want to use an asymmetric key pair and provide th
 
 To identify the key pair, the Raw RSA keyring uses a namespace and name that you provide\. These values are not secret; they appear in plaintext in the header of the [encrypted message](concepts.md#message) that the AWS Encryption SDK returns\. However, they are critical\. If you use the same key pair in an encryption keyring and a decryption keyring, be sure to use the same namespace and name for the key pair in both keyrings\. If the namespace and name are not an exact, case\-sensitive match, the AWS Encryption SDK will not recognize that the asymmetric keys are a pair, and it will not be able to decrypt the encrypted data keys\.
 
-When constructing a Raw RSA keyring, be sure to provide the *contents* of the PEM file that includes each key as a null\-terminated C\-string, not as a path or file name\. For an example of how to use a Raw RSA keyring, see [raw\_rsa\_keyring\.c](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/raw_rsa_keyring.c)\.
+When constructing a Raw RSA keyring, be sure to provide the *contents* of the PEM file that includes each key as a null\-terminated C\-string, not as a path or file name\. For an example of how to use a Raw RSA keyring, see [raw\_rsa\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_rsa_keyring.c)\.
 
 ## Creating a Multi\-Keyring<a name="use-multi-keyring"></a>
 
@@ -173,10 +168,10 @@ When decrypting, the AWS Encryption SDK uses the keyrings to try to decrypt one 
 To create a multi\-keyring, first instantiate the child keyrings\. In this example, we use a KMS keyring and a Raw AES keyring, but you can combine any supported keyrings in a multi\-keyring\.
 
 ```
-// Define a KMS keyring. For details, see [string\.cpp](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/string.cpp).
+// Define a KMS keyring. For details, see [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp).
 struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(example_CMK);
 
-// Define a Raw AES keyring. For details, see [raw\_aes\_keyring\.c](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c).
+// Define a Raw AES keyring. For details, see [raw\_aes\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c).
 struct aws_cryptosdk_keyring *aes_keyring = aws_cryptosdk_raw_aes_keyring_new(
         alloc, wrapping_key_namespace, wrapping_key_name, wrapping_key, AWS_CRYPTOSDK_AES256);
 ```
@@ -196,4 +191,4 @@ The result is a multi\-keyring that includes the KMS keyring as the generator ke
 int aws_cryptosdk_multi_keyring_add_child(struct aws_cryptosdk_keyring *multi, struct aws_cryptosdk_keyring *child);
 ```
 
-Now, you can use the multi\-keyring to encrypt and decrypt data\. For a complete example of how to build and use a multi\-keyring, see [multi\_keyring\.cpp](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/multi_keyring.cpp)\.
+Now, you can use the multi\-keyring to encrypt and decrypt data\. For a complete example of how to build and use a multi\-keyring, see [multi\_keyring\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/multi_keyring.cpp)\.

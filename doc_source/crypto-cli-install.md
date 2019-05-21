@@ -8,13 +8,13 @@ This topic explains how to install the AWS Encryption CLI\. For detailed informa
 
 ## Installing the Prerequisites<a name="crypto-cli-prerequisites"></a>
 
-The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To use the AWS Encryption CLI, you need Python and **pip**, the Python package management tool\. Python and **pip** are available on all supported platforms\.
+The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To use the AWS Encryption CLI, you need Python and `pip`, the Python package management tool\. Python and `pip` are available on all supported platforms\.
 
 Before you install the AWS Encryption CLI, be sure that you have the following prerequisites\.
 
 **Python**  
 The AWS Encryption CLI requires Python 2\.7, or Python 3\.4 or later\. Python is included in most Linux and macOS installations, although you might need to upgrade to one of the required versions\. However, you have to install Python on Windows, if it is not already installed\. To download Python, see [Python downloads](https://www.python.org/downloads/)\.  
-To determine whether Python is installed, at the command line, type:  
+To determine whether Python is installed, at the command line, type the following\.  
 
 ```
 python
@@ -34,8 +34,8 @@ PS C:\> dir HKCU:\Software\Python\PythonCore\version\InstallPath
 ```
 
 **pip**  
-**pip** is the Python package manager\. To install the AWS Encryption CLI and its dependencies, you need **pip** 8\.1 or later\.   
-For help installing or upgrading **pip**, see [Installation](https://pip.pypa.io/en/latest/installing/) in the **pip** documentation\.
+`pip` is the Python package manager\. To install the AWS Encryption CLI and its dependencies, you need `pip` 8\.1 or later\.   
+For help installing or upgrading `pip`, see [Installation](https://pip.pypa.io/en/latest/installing/) in the `pip` documentation\.
 
 **AWS Command Line Interface**  
 The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) with the AWS Encryption CLI\. If you are using a different [master key provider](concepts.md#master-key-provider), the AWS CLI is not required\.  
@@ -43,11 +43,11 @@ To use AWS KMS CMKs with the AWS Encryption CLI, you need to [install](https://d
 
 ## Installing the AWS Encryption CLI<a name="install-sdk-cli"></a>
 
-Use **pip** to install the AWS Encryption CLI and the Python [cryptography library](https://cryptography.io/en/latest/) that it requires\. 
+Use `pip` to install the AWS Encryption CLI and the Python [cryptography library](https://cryptography.io/en/latest/) that it requires\. 
 
-The AWS Encryption CLI requires the **cryptography** library on all platforms\. All versions of **pip** install and build the **cryptography** library on Windows and OS X\. 
+The AWS Encryption CLI requires the **cryptography** library on all platforms\. All versions of `pip` install and build the **cryptography** library on Windows and OS X\. 
 
-On Linux, **pip** 8\.1 and later installs and builds the **cryptography** library\. If you are using an earlier version of **pip** and your Linux environment doesn't have the tools needed to build the **cryptography** library, you must install them\. For more information, see [Building cryptography on Linux](https://cryptography.io/en/latest/installation/#building-cryptography-on-linux)\.
+On Linux, `pip` 8\.1 and later installs and builds the **cryptography** library\. If you are using an earlier version of `pip` and your Linux environment doesn't have the tools needed to build the **cryptography** library, you must install them\. For more information, see [Building cryptography on Linux](https://cryptography.io/en/latest/installation/#building-cryptography-on-linux)\.
 
 **To install the latest version**  
 
@@ -71,4 +71,4 @@ aws-encryption-sdk-cli/1.1.0 aws-encryption-sdk/1.3.2
 
 To install the version of the AWS Encryption CLI currently in development, see the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
-For more details about using **pip** to install and upgrade Python packages, see the [pip documentation](https://pip.pypa.io/en/stable/quickstart/)\.
+For more details about using `pip` to install and upgrade Python packages, see the [pip documentation](https://pip.pypa.io/en/stable/quickstart/)\.

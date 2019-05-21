@@ -10,6 +10,9 @@ All language\-specific implementations of the AWS Encryption SDK, including the 
 
 This topic introduces the AWS Encryption CLI, explains how to install and use it, and provides several examples to help you get started\. For a quick start, see [How to Encrypt and Decrypt Your Data with the AWS Encryption CLI](http://aws.amazon.com/blogs/security/how-to-encrypt-and-decrypt-your-data-with-the-aws-encryption-cli/) in the AWS Security Blog\. For more detailed information, see [Read The Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/), and join us in developing the AWS Encryption CLI in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
+**Performance**  
+The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. Each time you run the CLI, you start a new instance of the Python runtime\. To improve performance, whenever possible, use a single command instead of a series of independent commands\. For example, run one command that processes the files in a directory recursively instead of running separate commands for each file\.
+
 **Topics**
 + [Installing the CLI](crypto-cli-install.md)
 + [How to Use the CLI](crypto-cli-how-to.md)

@@ -1,13 +1,8 @@
 # AWS Encryption SDK for C Examples<a name="c-examples"></a>
 
-
-|  | 
-| --- |
-|   The AWS Encryption SDK for C is a preview release\. The code and the documentation are subject to change\.  | 
-
 The following examples show you how to use the AWS Encryption SDK for C to encrypt and decrypt data\. 
 
-When you install and build the AWS Encryption SDK for C, the source code for these and other examples are included in the `examples` subdirectory, and they are compiled and built into the `build` directory\. You can also find them in the [examples](https://github.com/awslabs/aws-encryption-sdk-c/tree/master/examples) subdirectory of the [aws\-encryption\-sdk\-c](https://github.com/awslabs/aws-encryption-sdk-c/) repository on GitHub\. 
+When you install and build the AWS Encryption SDK for C, the source code for these and other examples are included in the `examples` subdirectory, and they are compiled and built into the `build` directory\. You can also find them in the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) subdirectory of the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
 
 **Topics**
 + [Encrypting and Decrypting Strings](#c-example-strings)
@@ -20,7 +15,7 @@ This example features the KMS [keyring](concepts.md#keyring), a type of keyring 
 
 For help creating a CMK, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help finding the Amazon Resource Name \(ARN\) of an existing CMK, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\.
 
-**See the complete code sample**: [string\.cpp](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/examples/string.cpp)
+**See the complete code sample**: [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp)
 
 **Topics**
 + [Encrypt a String](#c-example-string-encrypt)
@@ -43,33 +38,20 @@ struct aws_cryptosdk_keyring *kms_keyring =
        Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn);
 ```
 
-Step 2: Create a CMM\.  
-Create a [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) that uses the keyring\. This example uses the default CMM provided in the SDK, but you can use any supported CMM\. It also uses the default allocator provided by the [AWS C Common library](https://github.com/awslabs/aws-c-common/)\.   
-After you create a CMM with the keyring, you can release your reference to the keyring using the method that the SDK provides\. The CMM retains a reference to the keyring object during its lifetime, and references to the CMM and keyring objects are released when you destroy the CMM\. This pattern helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
-
-```
-struct aws_allocator *alloc = aws_default_allocator();
-
-struct aws_cryptosdk_cmm *cmm = aws_cryptosdk_default_cmm_new(alloc, kms_keyring);
-
-// When you add the keyring to the CMM, release the keyring object
-aws_cryptosdk_keyring_release(kms_keyring);
-```
-
-Step 3: Create a session\.  
-Create a session using the allocator, a mode enumerator, and the CMM\.  
+Step 2: Create a session\.  
+Create a session using the allocator, a mode enumerator, and the keyring\.  
 Every session requires a mode: either `AWS_CRYPTOSDK_ENCRYPT` to encrypt or `AWS_CRYPTOSDK_DECRYPT` to decrypt\. To change the mode of an existing session, use the `aws_cryptosdk_session_reset` method\.  
-After you create a session with the CMM, you can release your reference to the CMM using the method that the SDK provides\. The session retains a reference to the CMM and keyring objects during its lifetime, and references to all three objects are released when you destroy the session\. This pattern helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
+After you create a session with the keyring, you can release your reference to the keyring using the method that the SDK provides\. The session retains a reference to the keyring object during its lifetime\. References to the keyring and session objects are released when you destroy the session\. This [reference counting](c-language-using.md#c-language-using-release) technique helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
 
 ```
 struct aws_cryptosdk_session *session = 
-       aws_cryptosdk_session_new_from_cmm(alloc, AWS_CRYPTOSDK_ENCRYPT, cmm);
+       aws_cryptosdk_session_new_from_keyring(alloc, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
 
-// When you add the CMM to the session, release the CMM object
-aws_cryptosdk_cmm_release(cmm);
+// When you add the keyring to the session, release the keyring object
+aws_cryptosdk_keyring_release(kms_keyring);
 ```
 
-Step 4: Set the size of the plaintext data\.  
+Step 3: Set the size of the plaintext data\.  
 Use the `aws_cryptosdk_session_set_message_size` method to tell the SDK the exact size of the plaintext string\. This method call isn't necessary when decrypting, because the SDK gets the ciphertext length from the [encrypted message](concepts.md#message)\.  
 
 ```
@@ -79,7 +61,7 @@ const size_t plaintext_len_input = strlen(plaintext_input);
 aws_cryptosdk_session_set_message_size(session, plaintext_len_input)
 ```
 
-Step 5: Set the encryption context\.  
+Step 4: Set the encryption context\.  
 An [encryption context](concepts.md#encryption-context) is arbitrary, non\-secret additional authenticated data\. When you provide an encryption context on encrypt, the AWS Encryption SDK cryptographically binds the encryption context to the ciphertext so that the same encryption context is required to decrypt the data\. Using an encryption context is optional, but we recommend it as a best practice\.  
 First, create a hash table that includes the encryption context strings\.  
 
@@ -97,7 +79,7 @@ AWS_STATIC_STRING_FROM_LITERAL(enc_ctx_value2, "MyCryptoCorp");
 aws_hash_table_put(my_enc_ctx, enc_ctx_key1, (void *)enc_ctx_value1, &was_created)
 aws_hash_table_put(my_enc_ctx, enc_ctx_key2, (void *)enc_ctx_value2, &was_created)
 ```
-Get a mutable pointer to the encryption context in the session\. Then, use the `aws_cryptosdk_enc_ctx_clone` function to copy the encryption context into the session\. We keep the copy in `my_enc_ctx` so we can validate the value after decrypting the data\.  
+Get a mutable pointer to the encryption context in the session\. Then, use the `aws_cryptosdk_enc_ctx_clone` function to copy the encryption context into the session\. Keep the copy in `my_enc_ctx` so you can validate the value after decrypting the data\.  
 The encryption context is part of the session, not a parameter passed to the session process function\. This guarantees that the same encryption context is used for every segment of a message, even if the session process function is called multiple times to encrypt the entire message\.  
 
 ```
@@ -106,7 +88,7 @@ struct aws_hash_table *session_enc_ctx = aws_cryptosdk_session_get_enc_ctx_ptr_m
 aws_cryptosdk_enc_ctx_clone(alloc, session_enc_ctx, my_enc_ctx)
 ```
 
-Step 6: Encrypt the string\.  
+Step 5: Encrypt the string\.  
 To encrypt the plaintext string, use the `aws_cryptosdk_session_process` method with the session in encryption mode\.  
 When encrypting, the plaintext fields are input fields; the ciphertext fields are output fields\. When the processing is complete, the `ciphertext_output` field contains the [encrypted message](concepts.md#message), including the actual ciphertext, encrypted data keys, and the encryption context\. You can decrypt this encrypted message by using the AWS Encryption SDK in any supported programming language\.  
 
@@ -123,7 +105,7 @@ aws_cryptosdk_session_process(session,
                               &plaintext_consumed_output)
 ```
 
-Step 7: Clean up the session\.  
+Step 6: Clean up the session\.  
 The final steps verify that the session processing is complete and that all of the plaintext is processed\. Then, they destroy the session, including the references to the CMM and the keyring\.  
 If you prefer, instead of destroying the session, you can reuse the session with the same keyring and CMM to decrypt the string, or to encrypt or decrypt other messages\. To use the session for decrypting, use the `aws_cryptosdk_session_reset` method to change the mode to `AWS_CRYPTOSDK_DECRYPT`\.  
 
@@ -154,32 +136,19 @@ struct aws_cryptosdk_keyring *kms_keyring =
         Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn);
 ```
 
-Step 2: Create a CMM\.  
-Create a [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) that uses the keyring\. This example uses the default CMM provided in the SDK, but you can use any supported CMM\. It also uses the default allocator provided by the [AWS C Common library](https://github.com/awslabs/aws-c-common/)\.   
-After you use the keyring to create a CMM, you can release your reference to the keyring using the method that the SDK provides\. The CMM retains a reference to the keyring object during its lifetime, and both objects are released when you destroy the CMM\. This pattern helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
-
-```
-struct aws_allocator *alloc = aws_default_allocator();
-
-struct aws_cryptosdk_cmm *cmm = aws_cryptosdk_default_cmm_new(alloc, kms_keyring);
-
-// When you add the keyring to the CMM, release the keyring object
-aws_cryptosdk_keyring_release(kms_keyring);
-```
-
-Step 3: Create a session\.  
-Create a session using the allocator and the CMM\. To configure the session for decryption, configure the session with the `AWS_CRYPTOSDK_DECRYPT` mode\.   
-After you create a session with a CMM, you can release your reference to the CMM using the method that the SDK provides\. The session retains a reference to the CMM and keyring objects during its lifetime, and all three objects are released when you destroy the session\. This pattern helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
+Step 2: Create a session\.  
+Create a session using the allocator and the keyring\. To configure the session for decryption, configure the session with the `AWS_CRYPTOSDK_DECRYPT` mode\.   
+After you create a session with a keyring, you can release your reference to the keyring using the method that the SDK provides\. The session retains a reference to the keyring object during its lifetime, and both the session and keyring are released when you destroy the session\. This reference counting technique helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
 
 ```
 struct aws_cryptosdk_session *session =
-	aws_cryptosdk_session_new_from_cmm(alloc, AWS_CRYPTOSDK_DECRYPT, cmm);
+	aws_cryptosdk_session_new_from_keyring(alloc, AWS_CRYPTOSDK_DECRYPT, kms_keyring);
 
-// When you add the CMM to the session, release the CMM object
-aws_cryptosdk_cmm_release(cmm);
+// When you add the keyring to the session, release the keyring object
+aws_cryptosdk_keyring_release(kms_keyring);
 ```
 
-Step 4: Decrypt the string\.  
+Step 3: Decrypt the string\.  
 To decrypt the string, use the `aws_cryptosdk_session_process` method with the session that is configured for decryption\.   
 When decrypting, the ciphertext fields are input fields and the plaintext fields are output fields\. The `ciphertext_input` field holds the [encrypted message](message-format.md) that the encrypt method returned\. When the processing is complete, the `plaintext_output` field contains the plaintext \(decrypted\) string\.  
 
@@ -195,7 +164,7 @@ aws_cryptosdk_session_process(session,
                               &ciphertext_consumed_output)
 ```
 
-Step 6: Confirm that the process is complete\.  
+Step 4: Confirm that the process is complete\.  
 After decrypting, the code runs `aws_cryptosdk_session_is_done`, which confirms that the session processing is complete and that the signature has been verified\. If it returns FALSE, the code destroys the session to prevent memory leaks\. Also, if any ciphertext remains in the buffer, the example stops\.  
 Be sure that the session is done, especially on decrypt\. The entire plaintext might be returned before the signature is verified\.  
 
@@ -208,7 +177,7 @@ if (!aws_cryptosdk_session_is_done(session)) {
 if (ciphertext_consumed != ciphertext_len) abort();
 ```
 
-Step 7: Verify the encryption context\.  
+Step 5: Verify the encryption context\.  
 Be sure that the actual encryption context — the one that was used to decrypt the message — contains the encryption context that you provided when encrypting the message\. The actual encryption context might include extra pairs, because the [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) can add pairs to the provided encryption context before encrypting the message\.  
 In the AWS Encryption SDK in C, you are not required to provide an encryption context when decrypting because the encryption context is included in the encrypted message that the SDK returns\. But, before it returns the plaintext message, your decrypt function should verify that all pairs in the provided encryption context appear in the encryption context that was used to decrypt the message\.  
 First, get a read\-only pointer to the hash table in the session\. This hash table contains the encryption context that was used to decrypt the message\.   

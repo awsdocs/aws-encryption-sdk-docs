@@ -1,10 +1,5 @@
 # Data Key Caching Details<a name="data-caching-details"></a>
 
-
-|  | 
-| --- |
-|   The AWS Encryption SDK for C is a preview release\. The code and the documentation are subject to change\.  | 
-
 Most applications can use the default implementation of data key caching without writing custom code\. This section describes the default implementation and some details about options\. 
 
 **Topics**
@@ -91,7 +86,7 @@ In the AWS Encryption SDK, each cryptographic materials cache is associated with
 
 ## Creating a Caching Cryptographic Materials Manager<a name="caching-cmm"></a>
 
-To enable data key caching, you create a [cache](#simplecache) and a *caching cryptographic materials manager* \(caching CMM\)\. Then, in your requests to encrypt or decrypt data, you specify a caching CMM, instead of a standard [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) or [master key provider](concepts.md#master-key-provider) \.
+To enable data key caching, you create a [cache](#simplecache) and a *caching cryptographic materials manager* \(caching CMM\)\. Then, in your requests to encrypt or decrypt data, you specify a caching CMM, instead of a standard [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) or [master key provider](concepts.md#master-key-provider)\.
 
 There are two types of CMMs\. Both get data keys \(and related cryptographic material\), but in different ways, as follows:
 + A CMM is associated with a keyring \(C\) or a master key provider \(Java and Python\)\. When the SDK asks the CMM for encryption or decryption materials, the CMM gets the materials from its keyring or master key provider\. In Java and Python, the CMM uses the master keys to generate, encrypt, or decrypt the data keys\. In C, the keyring generates, encrypts, and returns the cryptographic materials\.
@@ -124,7 +119,7 @@ The entries that are added to a data key cache as a result of a decryption opera
 
 You can specify an encryption context in any request to encrypt data\. However, the encryption context plays a special role in data key caching\. It lets you create subgroups of data keys in your cache, even when the data keys originate from the same caching CMM\.
 
-An [encryption context](concepts.md#encryption-context) is a set of key\-value pairs that contain arbitrary nonsecret data\. During encryption, the encryption context is cryptographically bound to the encrypted data so that the same encryption context is required to decrypt the data\. In the AWS Encryption SDK, the encryption context is stored in the [encrypted message](concepts.md#message) along with the encrypted data and data keys\. 
+An [encryption context](concepts.md#encryption-context) is a set of key\-value pairs that contain arbitrary nonsecret data\. During encryption, the encryption context is cryptographically bound to the encrypted data so that the same encryption context is required to decrypt the data\. In the AWS Encryption SDK, the encryption context is stored in the [encrypted message](concepts.md#message) with the encrypted data and data keys\. 
 
 When you use a data key cache, you can also use the encryption context to select particular cached data keys for your encryption operations\. The encryption context is saved in the cache entry with the data key \(it's part of the cache entry ID\)\. Cached data keys are reused only when their encryption contexts match\. If you want to reuse certain data keys for an encryption request, specify the same encryption context\. If you want to avoid those data keys, specify a different encryption context\. 
 

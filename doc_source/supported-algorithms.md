@@ -2,7 +2,7 @@
 
 An *algorithm suite* is a collection of cryptographic algorithms and related values\. Cryptographic systems use the algorithm implementation to generate the ciphertext message\.
 
-The AWS Encryption SDK algorithm suite uses the Advanced Encryption Standard \(AES\) algorithm in Galois/Counter Mode \(GCM\), known as AES\-GCM, to encrypt raw data\. The SDK supports 256\-bit, 192\-bit, and 128\-bit encryption keys\. The length of the initialization vector \(IV\) is always 12 bytes; the length of the authentication tag is always 16 bytes\.
+The AWS Encryption SDK algorithm suite uses the Advanced Encryption Standard \(AES\) algorithm in Galois/Counter Mode \(GCM\), known as AES\-GCM, to encrypt raw data\. The SDK supports 256\-bit, 192\-bit, and 128\-bit encryption keys\. The length of the initialization vector \(IV\) is always 12 bytes\. The length of the authentication tag is always 16 bytes\.
 
 The SDK supports several different implementations of AES\-GCM\. By default, the SDK uses AES\-GCM with an HMAC\-based extract\-and\-expand key derivation function \([HKDF](https://en.wikipedia.org/wiki/HKDF)\), signing, and a 256\-bit encryption key\.
 

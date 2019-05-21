@@ -41,27 +41,27 @@ def cycle_string(key_arn, source_plaintext, botocore_session=None):
     :type botocore_session: botocore.session.Session
     """
 
-    # Create a KMS master key provider
+    # Create a KMS master key provider.
     kms_kwargs = dict(key_ids=[key_arn])
     if botocore_session is not None:
         kms_kwargs['botocore_session'] = botocore_session
     master_key_provider = aws_encryption_sdk.KMSMasterKeyProvider(**kms_kwargs)
 
-    # Encrypt the plaintext source data
+    # Encrypt the plaintext source data.
     ciphertext, encryptor_header = aws_encryption_sdk.encrypt(
         source=source_plaintext,
         key_provider=master_key_provider
     )
     print('Ciphertext: ', ciphertext)
 
-    # Decrypt the ciphertext
+    # Decrypt the ciphertext.
     cycled_plaintext, decrypted_header = aws_encryption_sdk.decrypt(
         source=ciphertext,
         key_provider=master_key_provider
     )
 
     # Verify that the "cycled" (encrypted, then decrypted) plaintext is identical to the source
-    # plaintext
+    # plaintext.
     assert cycled_plaintext == source_plaintext
 
     # Verify that the encryption context used in the decrypt operation includes all key pairs from
@@ -136,7 +136,7 @@ def cycle_file(source_plaintext_filename):
     :param str source_plaintext_filename: Filename of file to encrypt
     """
 
-    # Create a static random master key provider
+    # Create a static random master key provider.
     key_id = os.urandom(8)
     master_key_provider = StaticRandomMasterKeyProvider()
     master_key_provider.add_master_key(key_id)
@@ -144,7 +144,7 @@ def cycle_file(source_plaintext_filename):
     ciphertext_filename = source_plaintext_filename + '.encrypted'
     cycled_plaintext_filename = source_plaintext_filename + '.decrypted'
 
-    # Encrypt the plaintext source data
+    # Encrypt the plaintext source data.
     with open(source_plaintext_filename, 'rb') as plaintext, open(ciphertext_filename, 'wb') as ciphertext:
         with aws_encryption_sdk.stream(
             mode='e',
@@ -154,7 +154,7 @@ def cycle_file(source_plaintext_filename):
             for chunk in encryptor:
                 ciphertext.write(chunk)
 
-    # Decrypt the ciphertext
+    # Decrypt the ciphertext.
     with open(ciphertext_filename, 'rb') as ciphertext, open(cycled_plaintext_filename, 'wb') as plaintext:
         with aws_encryption_sdk.stream(
             mode='d',
@@ -165,11 +165,11 @@ def cycle_file(source_plaintext_filename):
                 plaintext.write(chunk)
 
     # Verify that the "cycled" (encrypted, then decrypted) plaintext is identical to the source 
-    # plaintext
+    # plaintext.
     assert filecmp.cmp(source_plaintext_filename, cycled_plaintext_filename)
 
     # Verify that the encryption context used in the decrypt operation includes all key pairs from
-    # the encrypt operation
+    # the encrypt operation.
         #
     # In production, always use a meaningful encryption context. In this sample, we omit the
     # encryption context (no key pairs).
@@ -305,7 +305,7 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
                 plaintext.write(chunk)
 
     # Verify that the "cycled" (encrypted, then decrypted) plaintext is identical to the source 
-    # plaintext
+    # plaintext.
     assert filecmp.cmp(source_plaintext_filename, cycled_kms_plaintext_filename)
     assert filecmp.cmp(source_plaintext_filename, cycled_static_plaintext_filename)
 

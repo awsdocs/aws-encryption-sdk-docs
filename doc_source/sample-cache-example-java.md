@@ -2,11 +2,11 @@
 
 This code sample creates a basic implementation of data key caching with a [local cache](data-caching-details.md#simplecache) in Java\. For details about the Java implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Java](java.md)\.
 
-The code creates two instances of a local cache; one for data producers that are encrypting data and another for data consumers \(Lambda functions\) that are decrypting data\. For implementation details, see the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
+The code creates two instances of a local cache: one for data producers that are encrypting data and another for data consumers \(AWS Lambda functions\) that are decrypting data\. For implementation details, see the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
 
 ## Producer<a name="producer-java"></a>
 
-The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to a [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each region\. 
+The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to a [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each AWS Region\. 
 
 The code defines a [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) and associates it with a [local cache](data-caching-details.md#simplecache) and an underlying KMS [master key provider](concepts.md#master-key-provider)\. The caching CMM caches the data keys \(and [related cryptographic materials](data-caching-details.md#cache-entries)\) from the master key provider\. It also interacts with the cache on behalf of the SDK and enforces security thresholds that you set\. 
 
@@ -51,7 +51,7 @@ import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
 import com.amazonaws.util.json.Jackson;
 
 /**
- * Pushes data to Kinesis Streams in multiple regions.
+ * Pushes data to Kinesis Streams in multiple Regions.
  */
 public class MultiRegionRecordPusher {
     private static long MAX_ENTRY_AGE_MILLISECONDS = 300000;
@@ -63,8 +63,8 @@ public class MultiRegionRecordPusher {
     private AwsCrypto crypto_;
 
     /**
-     * Creates an instance of this object with Kinesis clients for all target regions
-     * and a cached key provider containing KMS master keys in all target regions.
+     * Creates an instance of this object with Kinesis clients for all target Regions
+     * and a cached key provider containing KMS master keys in all target Regions.
      */
     public MultiRegionRecordPusher(final Region[] regions, final String kmsAliasName, final String streamName){
         streamName_ = streamName;
@@ -125,7 +125,7 @@ public class MultiRegionRecordPusher {
         );
         byte[] encryptedData = result.getResult();
 
-        // Put records to Kinesis stream in all regions
+        // Put records to Kinesis stream in all Regions
         for (AmazonKinesis regionalKinesisClient : kinesisClients_) {
             regionalKinesisClient.putRecord(
                 streamName_,
@@ -139,7 +139,7 @@ public class MultiRegionRecordPusher {
 
 ## Consumer<a name="consumer-java"></a>
 
-The data consumer is an [AWS Lambda](https://aws.amazon.com/lambda/) function that is triggered by [Kinesis](https://aws.amazon.com/kinesis/) events\. It decrypts and deserializes each record, and writes the plaintext record to a [DynamoDB](https://aws.amazon.com/dynamodb/) table in the same region\.
+The data consumer is an [AWS Lambda](https://aws.amazon.com/lambda/) function that is triggered by [Kinesis](https://aws.amazon.com/kinesis/) events\. It decrypts and deserializes each record, and writes the plaintext record to an [Amazon DynamoDB](https://aws.amazon.com/dynamodb/) table in the same Region\.
 
 Like the producer code, the consumer code enables data key caching by using a caching cryptographic materials manager \(caching CMM\) in calls to the `decryptData` method\. 
 

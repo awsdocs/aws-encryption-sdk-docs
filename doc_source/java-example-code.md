@@ -13,7 +13,7 @@ The following example shows you how to use the AWS Encryption SDK to encrypt and
 
 This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help finding the Amazon Resource name \(ARN\) of an existing CMK, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\.
 
-When you call `encryptString`, the AWS Encryption SDK returns the [encrypted message](concepts.md#message), which includes the ciphertext, the encrypted data keys, and the encryption context, if you use it\. When you call `getResult` on the returned object, the AWS Encryption SDK returns a base\-64\-encoded string version of the [encrypted message](message-format.md)\.
+When you call `encryptString`, the AWS Encryption SDK returns the [encrypted message](concepts.md#message)\. This includes the ciphertext, the encrypted data keys, and the encryption context, if you use it\. When you call `getResult` on the returned object, the AWS Encryption SDK returns a base\-64\-encoded string version of the [encrypted message](message-format.md)\.
 
 Similarly, when you call `decryptString` in this example, the `decryptResult` object contains the encrypted message\. Before returning the plaintext, verify that the CMK ID and the encryption context in the encrypted message are the ones that you expect\.
 
@@ -142,7 +142,7 @@ import com.amazonaws.util.IOUtils;
 
 /**
  * <p>
- * Encrypts and then decrypts a file under a random key.
+ * Encrypts and then decrypts a file under a random key
  * 
  * <p>
  * Arguments:
@@ -161,7 +161,7 @@ public class FileStreamingExample {
         srcFile = args[0];
 
         // In this example, we generate a random key. In practice, 
-        // you would get a key from an existing store
+        // you would get a key from an existing store.
         SecretKey cryptoKey = retrieveEncryptionKey();
 
         // Create a JCE master key provider using the random key and an AES-GCM encryption algorithm 

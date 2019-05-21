@@ -1,11 +1,6 @@
 # Installing the AWS Encryption SDK for C<a name="c-language-installation"></a>
 
-
-|  | 
-| --- |
-|   The AWS Encryption SDK for C is a preview release\. The code and the documentation are subject to change\.  | 
-
-This topic explains how to install the AWS Encryption SDK for C on all supported platforms\. If you're having trouble with your installation, file an issue on the [aws\-encryption\-sdk\-c](https://github.com/awslabs/aws-encryption-sdk-c/issues) repository or use the** Feedback** link in the lower\-right corner of this page\.
+This topic explains how to install the AWS Encryption SDK for C on all supported platforms\. If you're having trouble with your installation, file an issue on the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/issues) repository or use the** Feedback** link in the lower\-right corner of this page\.
 
 Before you begin, decide whether you want to use [AWS Key Management Service](https://docs.aws.amazon.com/kms/latest/developerguide/) \(AWS KMS\) to generate and protect the encryption keys that protect your data\. Otherwise, you need to provide master keys that you generate and protect\. If you use AWS KMS, you need to install the AWS SDK for C\+\+\. 
 
@@ -20,8 +15,8 @@ If you don't use hardware security modules \(HSMs\) or another encryption key ma
 ## Required Libraries<a name="c-build-dependencies"></a>
 
 The AWS Encryption SDK for C requires the following libraries:
-+ [OpenSSL](https://www.openssl.org/) 1\.0\.2 or greater, including 1\.1\.0 or later — The AWS Encryption SDK uses the encryption algorithms and other cryptographic primitives in the OpenSSL cryptography library\. The SDK doesn't define or create any cryptographic primitives\.
-+ [aws\-c\-common](https://github.com/awslabs/aws-c-common/) 0\.3\.0 or later — This library defines general\-purpose tools and structures that the AWS Encryption SDK for C uses\. It's installed automatically when you install the AWS SDK for C\+\+\.
++ [OpenSSL](https://www.openssl.org/) 1\.0\.2 or greater, including 1\.1\.0 or later – The AWS Encryption SDK uses the encryption algorithms and other cryptographic primitives in the OpenSSL cryptography library\. The SDK doesn't define or create any cryptographic primitives\.
++ [aws\-c\-common](https://github.com/awslabs/aws-c-common/) 0\.3\.0 or later – This library defines general\-purpose tools and structures that the AWS Encryption SDK for C uses\. It's installed automatically when you install the AWS SDK for C\+\+\.
 **Note**  
 The preferred version of the `aws-c-common` library is installed automatically when you install the AWS SDK for C\+\+\. If you're installing the SDK for C\+\+, don't install the `aws-c-common` library separately\. 
 
@@ -29,8 +24,8 @@ To build the SDK, you need:
 + A C compiler for your platform\.
 + [CMake](https://cmake.org/) 3\.9 or later\.
 
-To use the AWS Encryption SDK for C with AWS KMS, you need the following\.
-+ [AWS SDK for C\+\+](https://docs.aws.amazon.com/sdk-for-cpp/latest/developer-guide/) 1\.7\.36 or later — The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS KMS\. To use AWS KMS to protect your encryption keys, and to run many of the examples in this guide and in the repository, install the SDK for C\+\+\. This C\+\+ SDK requires a C\+\+ compiler and the `curl` tool\. 
+To use the AWS Encryption SDK for C with AWS KMS, you need the following:
++ [AWS SDK for C\+\+](https://docs.aws.amazon.com/sdk-for-cpp/latest/developer-guide/) 1\.7\.36 or later – The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS KMS\. To use AWS KMS to protect your encryption keys, and to run many of the examples in this guide and in the repository, install the SDK for C\+\+\. This C\+\+ SDK requires a C\+\+ compiler and the `curl` tool\. 
 
 ## Required Permissions<a name="c-language-permissions"></a>
 
@@ -50,27 +45,27 @@ Use the following procedure to install the required components and build the AWS
 ------
 #### [ Amazon Linux ]
 
-These instructions install the AWS Encryption SDK for C on an Amazon EC2 instance with Amazon Linux 1\. 
+These instructions install the AWS Encryption SDK for C on an Amazon Elastic Compute Cloud \(Amazon EC2\) instance with Amazon Linux 1\. 
 
 1. 
 
 **Install CMake 3\.9 or later\.**
 
-   [Download and install CMake](https://cmake.org/download/) 3\.9 or greater\. Then, confirm that `CMake` is in your path\. Don't use the older version of CMake that `yum` installs\. 
+   [Download and install CMake](https://cmake.org/download/) 3\.9 or later\. Then, confirm that `CMake` is in your path\. Don't use the earlier version of CMake that `yum` installs\. 
 
 1. 
 
-**Install the dependent libraries,**
+**Install the dependent libraries\.**
 
    These instructions install the tools that the AWS Encryption SDK requires, including the `aws-c-common` library, which includes many of the basic functions that the AWS Encryption SDK for C uses\.
 
-   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option A\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
+   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option **A**\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
 
    Run option **A** or **B**, but not both\.
 
-   **Option A: Install with AWS SDK for C\+\+** \(for AWS KMS\)\.
+   **Option A: Install with AWS SDK for C\+\+ \(for AWS KMS\)**\.
 
-   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/awslabs/aws-encryption-sdk-c/tree/master/examples) in the aws\-encryption\-sdk\-c repository\.
+   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the `aws-encryption-sdk-c` repository\.
 
    Run the following commands to download and install the dependent libraries for the AWS Encryption SDK and SDK for C\+\+\.
 
@@ -117,7 +112,7 @@ These instructions install the AWS Encryption SDK for C on an Amazon EC2 instanc
    Change to your preferred directory\. Then, run the following commands to install and build the AWS Encryption SDK for C\. 
 
    ```
-   git clone https://github.com/awslabs/aws-encryption-sdk-c.git
+   git clone https://github.com/aws/aws-encryption-sdk-c.git
    mkdir build-aws-encryption-sdk-c && cd build-aws-encryption-sdk-c
    cmake -DBUILD_SHARED_LIBS=ON ../aws-encryption-sdk-c
    make && sudo make install ; cd ..
@@ -144,13 +139,13 @@ These instructions install the AWS Encryption SDK in standard directories in `/u
 
    These instructions install the tools that the AWS Encryption SDK requires, including the `aws-c-common` library, which includes many of the basic functions that the AWS Encryption SDK for C uses\.
 
-   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option A\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
+   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option **A**\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
 
    Run option **A** or **B**, but not both\.
 
    **Option A: Install with AWS SDK for C\+\+** \(for AWS KMS\)\.
 
-   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/awslabs/aws-encryption-sdk-c/tree/master/examples) in the aws\-encryption\-sdk\-c repository\.
+   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the `aws-encryption-sdk-c` repository\.
 
    Run the following commands to download and install the dependent libraries for the AWS Encryption SDK and SDK for C\+\+\.
 
@@ -183,7 +178,7 @@ These instructions install the AWS Encryption SDK in standard directories in `/u
    Change to your preferred directory\. Then, run the following commands to install and build the AWS Encryption SDK for C\. These commands specify the location of the OpenSSL library, because HomeBrew doesn't install it in the default location\.
 
    ```
-   git clone https://github.com/awslabs/aws-encryption-sdk-c.git
+   git clone https://github.com/aws/aws-encryption-sdk-c.git
    mkdir build-aws-encryption-sdk-c && cd build-aws-encryption-sdk-c
    cmake -DBUILD_SHARED_LIBS=ON -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl\@1.1 ../aws-encryption-sdk-c
    make && sudo make install ; cd ..
@@ -196,17 +191,17 @@ These instructions install the AWS Encryption SDK for C on Ubuntu\.
 
 1. 
 
-**Install dependent libraries**
+**Install dependent libraries\.**
 
    These instructions install the tools that the AWS Encryption SDK requires, including the `aws-c-common` library, which includes many of the basic functions that the AWS Encryption SDK for C uses\.
 
-   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option A\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
+   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option **A**\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
 
    Run option **A** or **B**, but not both\.
 
    **Option A: Install with AWS SDK for C\+\+** \(for AWS KMS\)\.
 
-   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/awslabs/aws-encryption-sdk-c/tree/master/examples) in the aws\-encryption\-sdk\-c repository\.
+   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the `aws-encryption-sdk-c` repository\.
 
    Run the following commands to download and install the dependent libraries for the AWS Encryption SDK and SDK for C\+\+\.
 
@@ -253,7 +248,7 @@ These instructions install the AWS Encryption SDK for C on Ubuntu\.
    Run the following commands to install and build the AWS Encryption SDK for C\. 
 
    ```
-   git clone https://github.com/awslabs/aws-encryption-sdk-c.git
+   git clone https://github.com/aws/aws-encryption-sdk-c.git
    mkdir build-aws-encryption-sdk-c && cd build-aws-encryption-sdk-c
    cmake -DBUILD_SHARED_LIBS=ON ../aws-encryption-sdk-c
    make && sudo make install ; cd ..
@@ -268,7 +263,7 @@ The following instructions install the AWS Encryption SDK and its dependencies\.
 
 **Install the dependent libraries\.**
 
-   These commands install the [vcpkg](https://github.com/Microsoft/vcpkg) library manager\. Then, use vcpkg to install `curl` and OpenSSL\.
+   These commands install the [vcpkg](https://github.com/Microsoft/vcpkg) library manager\. Then, use `vcpkg` to install `curl` and OpenSSL\.
 
    ```
    mkdir install && mkdir build && cd build
@@ -283,13 +278,13 @@ The following instructions install the AWS Encryption SDK and its dependencies\.
 
    These instructions install the tools that the AWS Encryption SDK requires, including the `aws-c-common` library, which includes many of the basic functions that the AWS Encryption SDK for C uses\.
 
-   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option A\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
+   If you plan to use a [KMS keyring](choose-keyring.md#use-kms-keyring), or run the [examples](c-examples.md) in the AWS Encryption SDK for C that use the KMS keyring, use installation option **A**\. This option installs the AWS SDK for C\+\+, which is required for the AWS Encryption SDK to interact with AWS Key Management Service \(AWS KMS\)\. Installing the SDK for C\+\+ automatically installs the `aws-c-common` library for you\.
 
    Run option **A** or **B**, but not both\.
 
    **Option A: With AWS SDK for C\+\+** for AWS KMS
 
-   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/awslabs/aws-encryption-sdk-c/tree/master/examples) in the aws\-encryption\-sdk\-c repository\.
+   The AWS SDK for C\+\+ is required to use the AWS Encryption SDK for C with AWS KMS\. It is also required for many of the [examples](c-examples.md) in this guide and the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the `aws-encryption-sdk-c` repository\.
 
    The following commands install only the AWS KMS modules of the SDK for C\+\+\. If you are using other libraries in the SDK for C\+\+, you can omit the `-DBUILD_ONLY="kms"` parameter, but it might take an extended amount of time to install\.
 
@@ -322,7 +317,7 @@ The following instructions install the AWS Encryption SDK and its dependencies\.
    Change to your preferred directory\. Then, run the following commands to install and build the AWS Encryption SDK for C\. 
 
    ```
-   git clone https://github.com/awslabs/aws-encryption-sdk-c.git
+   git clone https://github.com/aws/aws-encryption-sdk-c.git
    mkdir build-aws-encryption-sdk-c && cd build-aws-encryption-sdk-c
    cmake -DCMAKE_INSTALL_PREFIX=%cd%\..\..\install -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DCMAKE_TOOLCHAIN_FILE=%cd%\..\vcpkg\scripts\buildsystems\vcpkg.cmake -G Ninja ..\aws-encryption-sdk-c
    cmake --build . && cmake --build . --target install && cd ..
@@ -334,4 +329,4 @@ The following instructions install the AWS Encryption SDK and its dependencies\.
 
 After you install the SDK, you can start building and using it\. This guide includes topics that help you to [understand keyrings](c-language-using.md#using-c-sdk), [choose a keyring](choose-keyring.md), learn the basic [programming patterns](c-language-using.md#c-language-using-pattern), and work through a [simple example](c-examples.md#c-example-strings)\. 
 
-For help compiling and building your applications, see the [README file](https://github.com/awslabs/aws-encryption-sdk-c/blob/master/README.md) in the `aws-encryption-sdk-c` repository\. 
+For help compiling and building your applications, see the [README file](https://github.com/aws/aws-encryption-sdk-c/blob/master/README.md) in the `aws-encryption-sdk-c` repository\. 

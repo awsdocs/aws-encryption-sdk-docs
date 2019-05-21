@@ -1,6 +1,6 @@
 # AWS Encryption SDK CLI Syntax and Parameter Reference<a name="crypto-cli-reference"></a>
 
-This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For example, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
+This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For examples, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
 **Topics**
 + [AWS Encryption CLI Syntax](#crypto-cli-syntax)
@@ -87,14 +87,14 @@ The `--master-keys` parameter is required in encrypt commands\. It is required i
 **key**  
 Identifies the master key\. The format is a **key**=ID pair\.   
 The **key** attribute is required in all encrypt commands\. When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a CMK ID or Amazon Resource Name \(ARN\), an alias, or an alias ARN\.   
-The key attribute is required in decrypt commands when the master key provider is not AWS KMS\. The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS CMK\.   
+The **key** attribute is required in decrypt commands when the master key provider is not AWS KMS\. The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS CMK\.   
 You can specify multiple **key** attributes in each `--master-keys` parameter value\. However, any **provider**, **region**, and **profile** attributes apply to all master keys in the parameter value\. To specify master keys with different attribute values, use multiple `--master-keys` parameters in the command\.   
 **provider**  
 Identifies the [master key provider](concepts.md#master-key-provider)\. The format is a **provider**=ID pair\. The default value, **aws\-kms**, represents AWS KMS\. This attribute is required only when the master key provider is not AWS KMS\.  
 **region**  
-Identifies the AWS Region of an AWS KMS CMK\. This attribute is valid only for AWS KMS CMKs\. It is used only when the **key** identifier does not specify a region; otherwise, it is ignored\. When it is used, it overrides the default region in the AWS CLI named profile\.   
+Identifies the AWS Region of an AWS KMS CMK\. This attribute is valid only for AWS KMS CMKs\. It is used only when the **key** identifier does not specify a Region; otherwise, it is ignored\. When it is used, it overrides the default Region in the AWS CLI named profile\.   
 **profile**  
-Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The region in the profile is used only when the key identifier does not specify a region and there is no **region** attribute in the command\. 
+Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The Region in the profile is used only when the key identifier does not specify a Region and there is no **region** attribute in the command\. 
 
 **\-\-input \(\-i\)**  
 Specifies the location of the data to encrypt or decrypt\. This parameter is required\. The value can be a path to a file or directory, or a file name pattern\. If you are piping input to the command \(stdin\), use `-`\.  
