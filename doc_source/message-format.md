@@ -98,7 +98,7 @@ The length of the encrypted data key\. It is a 2\-byte value interpreted as a 16
 The encrypted data key\. It is the data encryption key encrypted by the key provider\.
 
 **Content Type**  <a name="header-content-type"></a>
-The type of encrypted content, either non\-framed or framed\.  
+The type of encrypted content, either nonframed or framed\.  
 Non\-framed content is not broken into parts; it is a single encrypted blob\. Non\-framed content is type 1, encoded as the byte `01` in hexadecimal notation\.  
 Framed content is broken into equal\-length parts; each part is encrypted separately\. Framed content is type 2, encoded as the byte `02` in hexadecimal notation\.
 
@@ -109,7 +109,7 @@ A reserved sequence of 4 bytes\. This value must be 0\. It is encoded as the byt
 The length of the initialization vector \(IV\)\. It is a 1\-byte value interpreted as an 8\-bit unsigned integer that specifies the number of bytes that contain the IV\. This value is determined by the IV bytes value of the [algorithm](algorithms-reference.md) that generated the message\.
 
 **Frame Length**  <a name="header-frame-length"></a>
-The length of each frame of framed content\. It is a 4\-byte value interpreted as a 32\-bit unsigned integer that specifies the number of bytes that form each frame\. When the content is non\-framed—that is, when the value of the content type field is 1—this value must be 0\.
+The length of each frame of framed content\. It is a 4\-byte value interpreted as a 32\-bit unsigned integer that specifies the number of bytes that form each frame\. When the content is nonframed—that is, when the value of the content type field is 1—this value must be 0\.
 
 **Header Authentication**  <a name="header-authentication"></a>
 The header authentication is determined by the [algorithm](algorithms-reference.md) that generated the message\. The header authentication is calculated over the entire header\. It consists of an IV and an authentication tag\. The bytes are appended in the order shown\.    
@@ -122,7 +122,7 @@ The authentication value for the header\. It is used to authenticate the entire 
 
 ## Body Structure<a name="body-structure"></a>
 
-The message body contains the encrypted data, called the *ciphertext*\. The structure of the body depends on the content type \(non\-framed or framed\)\. The following sections describe the format of the message body for each content type\.
+The message body contains the encrypted data, called the *ciphertext*\. The structure of the body depends on the content type \(nonframed or framed\)\. The following sections describe the format of the message body for each content type\.
 
 **Topics**
 + [Non\-Framed Data](#body-no-framing)
@@ -130,7 +130,7 @@ The message body contains the encrypted data, called the *ciphertext*\. The stru
 
 ### Non\-Framed Data<a name="body-no-framing"></a>
 
-Non\-framed data is encrypted in a single blob with a unique IV and [body AAD](body-aad-reference.md)\. The following table describes the fields that form non\-framed data\. The bytes are appended in the order shown\.
+Non\-framed data is encrypted in a single blob with a unique IV and [body AAD](body-aad-reference.md)\. The following table describes the fields that form nonframed data\. The bytes are appended in the order shown\.
 
 
 **Non\-Framed Body Structure**  

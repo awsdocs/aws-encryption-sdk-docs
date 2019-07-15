@@ -1,6 +1,6 @@
 # AWS Encryption SDK for Python<a name="python"></a>
 
-This topic explains how to install and use the AWS Encryption SDK for Python\. For details about programming with the SDK, see the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub and the [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/) for the AWS Encryption SDK for Python\.
+This topic explains how to install and use the AWS Encryption SDK for Python\. For details about programming with the AWS Encryption SDK for Python, see the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\. For API documentation, see [Read the Docs](https://aws-encryption-sdk-python.readthedocs.io/en/latest/)\.
 
 **Topics**
 + [Prerequisites](#python-prerequisites)

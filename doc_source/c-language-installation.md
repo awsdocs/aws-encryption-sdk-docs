@@ -8,8 +8,7 @@ If you don't use hardware security modules \(HSMs\) or another encryption key ma
 
 **Topics**
 + [Required Libraries](#c-build-dependencies)
-+ [Required Permissions](#c-language-permissions)
-+ [Install the AWS Encryption SDK for C](#c-language-how-to-install)
++ [Intall the AWS Encryption SDK for C](#c-language-how-to-install)
 + [Compile and Build](#c-language-compile)
 
 ## Required Libraries<a name="c-build-dependencies"></a>
@@ -27,18 +26,7 @@ To build the SDK, you need:
 To use the AWS Encryption SDK for C with AWS KMS, you need the following:
 + [AWS SDK for C\+\+](https://docs.aws.amazon.com/sdk-for-cpp/latest/developer-guide/) 1\.7\.36 or later – The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS KMS\. To use AWS KMS to protect your encryption keys, and to run many of the examples in this guide and in the repository, install the SDK for C\+\+\. This C\+\+ SDK requires a C\+\+ compiler and the `curl` tool\. 
 
-## Required Permissions<a name="c-language-permissions"></a>
-
-The AWS Encryption SDK for C doesn't require an AWS account and it doesn't depend on any AWS service\. 
-
-However, to use an AWS Key Management Service \(AWS KMS\) [customer master key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) in a [KMS keyring](choose-keyring.md#use-kms-keyring), you need an AWS account and the following minimum permissions on the AWS KMS [customer master key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) that you use in your keyring\. If you're running the AWS Encryption SDK in an Amazon Elastic Compute Cloud \(Amazon EC2\) instance, you can include these permissions in an [instance profile](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html)\.
-+ [kms:Encrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html)
-+ [kms:Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html)
-+ [kms:GenerateDataKey](https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey.html)
-
-For detailed information about permissions for AWS KMS customer master keys, see [Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html) in the *AWS Key Management Service Developer Guide*\.
-
-## Install the AWS Encryption SDK for C<a name="c-language-how-to-install"></a>
+## Intall the AWS Encryption SDK for C<a name="c-language-how-to-install"></a>
 
 Use the following procedure to install the required components and build the AWS Encryption SDK for C on your preferred platform\.
 
@@ -327,6 +315,6 @@ The following instructions install the AWS Encryption SDK and its dependencies\.
 
 ## Compile and Build<a name="c-language-compile"></a>
 
-After you install the SDK, you can start building and using it\. This guide includes topics that help you to [understand keyrings](c-language-using.md#using-c-sdk), [choose a keyring](choose-keyring.md), learn the basic [programming patterns](c-language-using.md#c-language-using-pattern), and work through a [simple example](c-examples.md#c-example-strings)\. 
+After you install the SDK, you can start building and using it\. This guide includes topics that help you to [understand keyrings](choose-keyring.md#using-keyrings), [choose a keyring](choose-keyring.md), learn the basic [programming patterns](c-language-using.md#c-language-using-pattern), and work through a [simple example](c-examples.md#c-example-strings)\. 
 
 For help compiling and building your applications, see the [README file](https://github.com/aws/aws-encryption-sdk-c/blob/master/README.md) in the `aws-encryption-sdk-c` repository\. 

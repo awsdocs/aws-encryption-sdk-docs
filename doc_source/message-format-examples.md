@@ -8,12 +8,12 @@
 The following topics show examples of the AWS Encryption SDK message format\. Each example shows the raw bytes, in hexadecimal notation, followed by a description of what those bytes represent\.
 
 **Topics**
-+ [Non\-Framed Data](#example-non-framed)
++ [Non\-Framed Data](#example-nonframed)
 + [Framed Data](#example-framed)
 
-## Non\-Framed Data<a name="example-non-framed"></a>
+## Non\-Framed Data<a name="example-nonframed"></a>
 
-The following example shows the message format for non\-framed data\.
+The following example shows the message format for nonframed data\.
 
 ```
 +--------+
@@ -87,10 +87,10 @@ FDD01BD9 B0979082 099FDBFC F7B13548
 3CC686D7 F3CF7C7A CCC52639 122A1495
 71F18A46 80E2C43F A34C0E58 11D05114
 2A363C2A E11397
-01                                         Content Type (1, non-framed data)
+01                                         Content Type (1, nonframed data)
 00000000                                   Reserved
 0C                                         IV Length (12)
-00000000                                   Frame Length (0, non-framed data)
+00000000                                   Frame Length (0, nonframed data)
 734C1BBE 032F7025 84CDA9D0                 IV
 2C82BB23 4CBF4AAB 8F5C6002 622E886C        Authentication Tag
 +------+

@@ -34,7 +34,7 @@ The AWS Encryption SDK uses envelope encryption\. It encrypts your data with a d
 
 ![\[Envelope encryption with the AWS Encryption SDK\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/envelope-encryption.png)
 
-If you have multiple master keys, each of them can encrypt the plaintext data key\. Then, the AWS Encryption SDK returns an encrypted message that contains the encrypted data and the collection of encrypted data keys\. Any one of the master keys can decrypt one of the encrypted data keys, which can then decrypt the data\. 
+If you have multiple master keys or wrapping keys, each of them can encrypt the plaintext data key\. Then, the AWS Encryption SDK returns an encrypted message that contains the encrypted data and the collection of encrypted data keys\. Any one of the master keys can decrypt one of the encrypted data keys, which can then decrypt the data\. 
 
 When you use envelope encryption, you must protect your master keys from unauthorized access\. You can do this in one of the following ways:
 + Use a web service designed for this purpose, such as [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\.
@@ -45,7 +45,7 @@ If you don't have a key management system, we recommend AWS KMS\. The AWS Encryp
 
 ## AWS Encryption SDK Encryption Workflows<a name="encryption-workflows"></a>
 
-The workflows in this section explain how the SDK encrypts data and decrypts [encrypted messages](concepts.md#message)\. They show how the SDK uses the components that you create, including a [master key provider](concepts.md#master-key-provider) and [master key](concepts.md#master-key) \(Java and Python\) or [keyring](concepts.md#keyring) \(C\) to respond to encryption and decryption requests from your application\.
+The workflows in this section explain how the SDK encrypts data and decrypts [encrypted messages](concepts.md#message)\. They show how the SDK uses the components that you create, including a [master key provider](concepts.md#master-key-provider) and [master key](concepts.md#master-key) \(Java and Python\) or [keyring](concepts.md#keyring) \(C or JavaScript\) to respond to encryption and decryption requests from your application\.
 
 ### How the SDK Encrypts Data<a name="encrypt-workflow"></a>
 
@@ -71,13 +71,11 @@ You must use the same master key provider and keyring to decrypt that you used t
 
 1. Your application passes an [encrypted message](concepts.md#message) to a decryption method\.
 
-   In Java and Python, to indicate the source of the [data keys](concepts.md#DEK) that were used to encrypt your data, your request specifies a cryptographic materials manager \(CMM\) or a master key provider\. If you specify a master key provider, the AWS Encryption SDK creates a default CMM that interacts with the specified master key provider\.
-
-   In C, you pass in a session that includes the CMM and the [keyring](concepts.md#keyring) that you are using\.
+   To indicate the source of the [data keys](concepts.md#DEK) that were used to encrypt your data, your request specifies a cryptographic materials manager \(CMM\), or a master key provider or keyring\. If you specify a master key provider or keyring, the AWS Encryption SDK creates a default CMM for you\.
 
 1. The decryption method asks the CMM for cryptographic materials to decrypt the encrypted message\. It passes in information from the encrypted message, including the encrypted data keys\.
 
-1. In Java and Python, to get decryption materials, the Default CMM asks its master key provider for a master key that can decrypt one of the encrypted data keys\. Other CMMs might use different techniques to get the decryption materials\. In C, the CMM asks the keyring for decryption materials\. The keyring uses its master keys to decrypt one of the encrypted data keys\. 
+1. In Java and Python, to get decryption materials, the Default CMM asks its master key provider for a master key that can decrypt one of the encrypted data keys\. Other CMMs might use different techniques to get the decryption materials\. In C and JavaScript, the CMM asks the keyring for decryption materials\. The keyring uses its wrapping keys to decrypt one of the encrypted data keys\. 
 
    The response includes the decryption materials, including the plaintext data key\.
 

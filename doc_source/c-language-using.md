@@ -2,34 +2,13 @@
 
 This topic explains some of the features of the AWS Encryption SDK for C that are not supported in other programming language implementations\. 
 
-For details about programming with the AWS Encryption SDK, see the [C examples](c-examples.md), the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) on GitHub, and the [C API documentation](https://aws.github.io/aws-encryption-sdk-c/html/)\.
+For details about programming with the AWS Encryption SDK for C, see the [C examples](c-examples.md), the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) on GitHub, and the [AWS Encryption SDK for C API documentation](https://aws.github.io/aws-encryption-sdk-c/html/)\.
 
-See also: [Choosing a Keyring](choose-keyring.md)
+See also: [Using Keyrings](choose-keyring.md)
 
 **Topics**
-+ [Using Keyrings](#using-c-sdk)
 + [Patterns for Encrypting and Decrypting Data](#c-language-using-pattern)
 + [Reference Counting](#c-language-using-release)
-
-## Using Keyrings<a name="using-c-sdk"></a>
-
-One of the most important tasks you perform when using the AWS Encryption SDK for C is selecting and configuring a keyring\. A [keyring](concepts.md#keyring) generates, encrypts, and decrypts data keys\. Each keyring is typically associated with a wrapping key or a service that provides and protects wrapping keys\. You can use the keyrings that the AWS Encryption SDK provides, or write your own compatible custom keyrings\. For help in choosing a keyring, see [Choosing a Keyring](choose-keyring.md)\. 
-
-The keyrings in the AWS Encryption SDK for C make it easier for you to determine which wrapping keys are used to encrypt and decrypt your data\. Keyrings take the place of master key providers in the Java and Python implementations of the AWS Encryption SDK\. Despite this architectural difference, all of the language implementations are fully interoperable\. However, the keyring and master key provider must be configured with the same or corresponding wrapping keys\. For details, see [Keyring Compatibility](choose-keyring.md#keyring-compatibility)\.
-
-You instantiate and configure your keyring, but you don't interact with it directly\. The [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) in your session interacts with the keyring for you\. 
-
-When you encrypt data, the CMM asks the keyring for encryption materials\. The keyring returns a plaintext key and a copy of that key encrypted by each of its wrapping keys\. The AWS Encryption SDK uses the plaintext key to encrypt the data and stores the encrypted data keys with the data in the [encrypted message](concepts.md#message) that it returns\.
-
-![\[Encrypting with a keyring\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/keyring-encrypt.png)
-
-When you decrypt data, the CMM passes in the encryption keys from the encrypted message and asks the keyring to decrypt any one of them\. The keyring uses its wrapping keys to decrypt one of the encrypted data keys and returns a plaintext key\. The AWS Encryption SDK uses the plaintext key to decrypt the data\.
-
-![\[Decrypting with a keyring\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/keyring-decrypt.png)
-
-You can use a single keyring or also combine keyrings of the same type or a different type into a [multi\-keyring](choose-keyring.md#use-multi-keyring)\. When you encrypt data, the multi\-keyring returns a copy of the data key encrypted by all of the wrapping keys in all of the keyrings that comprise the multi\-keyring\. You can decrypt the data using a keyring configured with any one of the wrapping keys in the multi\-keyring\.
-
-For help selecting and configuring your keyrings, see [Choosing a Keyring](choose-keyring.md)\.
 
 ## Patterns for Encrypting and Decrypting Data<a name="c-language-using-pattern"></a>
 
@@ -37,11 +16,10 @@ When you use the AWS Encryption SDK for C, you follow a pattern similar to this:
 
 1\. Create a keyring\.  
 Configure your [keyring](concepts.md#keyring) with the wrapping keys that you want to use to encrypt your data keys\. This example uses a [KMS keyring](choose-keyring.md#use-kms-keyring) with one AWS KMS customer master key \(CMK\), but you can use any type of keyring in its place\.  
-When you specify an AWS KMS CMK for a keyring, you must use the Amazon Resource Name \(ARN\) of the CMK\. In an encryption keyring, you can specify the key ARN or alias ARN\. In a decryption keyring, you must use the key ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.  
+When you specify an AWS KMS CMK for a keyring in the AWS Encryption SDK for C, you must use the Amazon Resource Name \(ARN\) of the CMK\. In an encryption keyring, you can specify the key ARN or alias ARN\. In a decryption keyring, you must use the key ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.  
 
 ```
 const char * KEY_ARN = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"    
-
 struct aws_cryptosdk_keyring *kms_keyring = 
        Aws::Cryptosdk::KmsKeyring::Builder().Build(KEY_ARN);
 ```

@@ -27,7 +27,7 @@ The first part of this example uses a KMS keyring with one CMK to encrypt a plai
 
 Step 1: Construct the keyring\.  
 Create a KMS keyring for encryption\. The keyring in this example is configured with one CMK, but you can configure a KMS keyring with multiple CMKs, including CMKs in different AWS Regions and different accounts\.   
-When you specify an AWS KMS CMK for a keyring, you must use the Amazon Resource Name \(ARN\) of the CMK\. In an encryption keyring, you can specify the key ARN or alias ARN\. In a decryption keyring, you must use the key ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.  
+When you specify an AWS KMS CMK for a keyring in the AWS Encryption SDK for C, you must use the Amazon Resource Name \(ARN\) of the CMK\. In an encryption keyring, you can specify the key ARN or alias ARN\. In a decryption keyring, you must use the key ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.  
 When you create a keyring with multiple CMKs, you specify the CMK that is used to generate and encrypt the plaintext data key, and an optional array of additional CMKs that encrypt the same plaintext data key\. In this case, we specify only the generator CMK\.   
 Before running this code, replace the example key ARN with a valid one\.  
 
@@ -90,7 +90,7 @@ aws_cryptosdk_enc_ctx_clone(alloc, session_enc_ctx, my_enc_ctx)
 
 Step 5: Encrypt the string\.  
 To encrypt the plaintext string, use the `aws_cryptosdk_session_process` method with the session in encryption mode\.  
-When encrypting, the plaintext fields are input fields; the ciphertext fields are output fields\. When the processing is complete, the `ciphertext_output` field contains the [encrypted message](concepts.md#message), including the actual ciphertext, encrypted data keys, and the encryption context\. You can decrypt this encrypted message by using the AWS Encryption SDK in any supported programming language\.  
+When encrypting, the plaintext fields are input fields; the ciphertext fields are output fields\. When the processing is complete, the `ciphertext_output` field contains the [encrypted message](concepts.md#message), including the actual ciphertext, encrypted data keys, and the encryption context\. You can decrypt this encrypted message by using the AWS Encryption SDK for any supported programming language\.  
 
 ```
 // Gets the length of the plaintext that the session processed
@@ -179,7 +179,7 @@ if (ciphertext_consumed != ciphertext_len) abort();
 
 Step 5: Verify the encryption context\.  
 Be sure that the actual encryption context — the one that was used to decrypt the message — contains the encryption context that you provided when encrypting the message\. The actual encryption context might include extra pairs, because the [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\) can add pairs to the provided encryption context before encrypting the message\.  
-In the AWS Encryption SDK in C, you are not required to provide an encryption context when decrypting because the encryption context is included in the encrypted message that the SDK returns\. But, before it returns the plaintext message, your decrypt function should verify that all pairs in the provided encryption context appear in the encryption context that was used to decrypt the message\.  
+In the AWS Encryption SDK for C, you are not required to provide an encryption context when decrypting because the encryption context is included in the encrypted message that the SDK returns\. But, before it returns the plaintext message, your decrypt function should verify that all pairs in the provided encryption context appear in the encryption context that was used to decrypt the message\.  
 First, get a read\-only pointer to the hash table in the session\. This hash table contains the encryption context that was used to decrypt the message\.   
 
 ```

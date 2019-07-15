@@ -24,7 +24,7 @@ For example, you can encrypt data under multiple AWS Key Management Service \(AW
 **A Formatted Message that Stores Encrypted Data Keys with the Encrypted Data**  
 The AWS Encryption SDK stores the encrypted data and encrypted data key together in an [encrypted message](concepts.md#message) that uses a defined data format\. This means you don't need to keep track of or protect the data keys that encrypt your data because the AWS Encryption SDK does it for you\.
 
-With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java or Python\) or a keyring \(C\) that determines which master keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
+With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java or Python\) or a keyring \(C or JavaScript\) that determines which master keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
 
 ## Where to find more information<a name="intro-see-also"></a>
 
@@ -36,10 +36,13 @@ If you're looking for more information about the AWS Encryption SDK and client\-
 + For answers to your questions about using the AWS Encryption SDK, read and post on the [AWS Crypto Tools Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=302)\.
 
 For information about implementations of the AWS Encryption SDK in different programming languages\.
-+ **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
-+ **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\.
 + **C**: See [AWS Encryption SDK for C](c-language.md), the AWS Encryption SDK [C documentation](https://aws.github.io/aws-encryption-sdk-c/html/), and the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
 + **Command Line Interface**: See [AWS Encryption SDK Command Line Interface](crypto-cli.md), [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/) for the AWS Encryption CLI, and the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
++ **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
++ **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\.
++ **JavaScript**: See [AWS Encryption SDK for JavaScript](javascript.md) and the [aws\-encryption\-sdk\-javascript](https://github.com/awslabs/aws-encryption-sdk-javascript/) repository on GitHub\. 
+**Note**  
+The AWS Encryption SDK for JavaScript is a beta release\. The code and the documentation are subject to change\.
 
 If you have questions or comments about this guide, let us know\! Choose the feedback link in the lower\-right corner of the page or the GitHub link in the upper\-right corner of the page\. You can also file an issue in the [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs/) GitHub repository for this guide\.
 

@@ -14,6 +14,7 @@ The following table describes significant changes to this documentation since No
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Preview release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/javascript.html) | Added and updated documentation of the public beta release of the [AWS Encryption SDK for JavaScript](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/javascript.html)\. | June 21, 2019 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) | Added and updated documentation for the general availability release of the [AWS Encryption SDK for C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html)\. | May 16, 2019 | 
 | [Preview release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) | Added documentation of the preview release of the [AWS Encryption SDK for C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html)\. | February 5, 2019 | 
 | [New release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) | Added documentation of the [command line interface](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) for the AWS Encryption SDK\. | November 20, 2017 | 
@@ -28,6 +29,6 @@ The following table describes significant changes to the *AWS Encryption SDK Dev
 | Change | Description | Date | 
 | --- | --- | --- | 
 | New release |  Added the [Data Key Caching](data-key-caching.md) chapter for the new feature\. Added the [AWS Encryption SDK Initialization Vector Reference](IV-reference.md) topic that explains that the SDK changed from generating random IVs to constructing deterministic IVs\. Added the [Concepts in the AWS Encryption SDK](concepts.md) topic to explain concepts, including the new cryptographic materials manager\.  | July 31, 2017 | 
-| Update |  Expanded the [Message Format Reference](message-format.md) documentation into a new [AWS Encryption SDK Reference](reference.md) section\. Added a section about the AWS Encryption SDK's [Supported Algorithm Suites](supported-algorithms.md)\.  | March 21, 2017 | 
+| Update |  Expanded the [Message Format Reference](message-format.md) documentation into a new [AWS Encryption SDK Reference](reference.md) section\. Added a section about the AWS Encryption SDK [Supported Algorithm Suites](supported-algorithms.md)\.  | March 21, 2017 | 
 | New release | The AWS Encryption SDK now supports the [Python](python.md) programming language, in addition to [Java](java.md)\. | March 21, 2017 | 
 | Initial release | Initial release of the AWS Encryption SDK and this documentation\. | March 22, 2016 | 

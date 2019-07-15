@@ -189,7 +189,7 @@ public class LambdaDecryptAndWrite {
 
     /**
      * Because the cache is used only for decryption, the code doesn't set
-     * the max bytes or max message security thresholds that are are enforced
+     * the max bytes or max message security thresholds that are enforced
      * only on on data keys used for encryption.  
      */
     public LambdaDecryptAndWrite() {

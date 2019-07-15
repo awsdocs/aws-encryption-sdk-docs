@@ -6,7 +6,7 @@
 + [How is each data key generated, encrypted, and decrypted?](#key-generation)
 + [How do I keep track of the data keys that were used to encrypt my data?](#track-keys)
 + [How does the AWS Encryption SDK store encrypted data keys with their encrypted data?](#store-encrypted-keys)
-+ [How much overhead does the AWS Encryption SDK's message format add to my encrypted data?](#overhead)
++ [How much overhead does the AWS Encryption SDK message format add to my encrypted data?](#overhead)
 + [Can I use my own master key provider?](#own-provider)
 + [Can I encrypt data under more than one master key?](#multiple-master-keys)
 + [Which data types can I encrypt with the AWS Encryption SDK?](#data-types)
@@ -21,7 +21,7 @@ The AWS Encryption SDK provides an encryption library that optionally integrates
 You can also use the AWS Encryption SDK with no AWS integration by defining a custom master key provider\.
 
 **How is the AWS Encryption SDK different from the Amazon S3 encryption client?**  <a name="s3-encryption-client"></a>
-The Amazon S3 encryption client in the [AWS SDK for Java](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/index.html?com/amazonaws/services/s3/AmazonS3EncryptionClient.html), [AWS SDK for Ruby](https://docs.aws.amazon.com/sdkforruby/api/Aws/S3/Encryption/Client.html), and [AWS SDK for \.NET](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/index.html?page=S3/TS3EncryptionS3EncryptionClient.html) provides encryption and decryption for data that you store in Amazon Simple Storage Service \(Amazon S3\)\. These clients are tightly coupled to Amazon S3 and are intended for use only with data stored there\.  
+The Amazon S3 encryption client in the AWS SDKs provides encryption and decryption for data that you store in Amazon Simple Storage Service \(Amazon S3\)\. These clients are tightly coupled to Amazon S3 and are intended for use only with data stored there\.  
 The AWS Encryption SDK provides encryption and decryption for data that you can store anywhere\. The AWS Encryption SDK and the Amazon S3 encryption client are not compatible because they produce ciphertexts with different data formats\.
 
 **Which cryptographic algorithms are supported by the AWS Encryption SDK, and which one is the default?**  <a name="supported-algorithms-faq"></a>
@@ -33,7 +33,7 @@ For implementation details about the supported algorithms, see [Algorithms Refer
 In previous releases, the AWS Encryption SDK randomly generated a unique IV value for each encryption operation\. The SDK now uses a deterministic method to construct a different IV value for each frame so that every IV is unique within its message\. The SDK stores the IV in the encrypted message that it returns\. For more information, see [AWS Encryption SDK Message Format Reference](message-format.md)\.
 
 **How is each data key generated, encrypted, and decrypted?**  <a name="key-generation"></a>
-The method depends on the master key provider and the implementation of its master keys\. When AWS KMS is the master key provider, the SDK uses the AWS KMS [GenerateDataKey](https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey.html) API operation to generate each data key in both plaintext and encrypted forms\. It uses the [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation to decrypt the data key\. AWS KMS encrypts and decrypts the data key by using the customer master key \(CMK\) that you specified when configuring the master key provider\.
+The method depends on the master key provider or keyring and its implementation of its master keys or wrapping keys\. When AWS KMS is the master key provider, the AWS Encryption SDK uses the AWS KMS [GenerateDataKey](https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey.html) API operation to generate each data key in both plaintext and encrypted forms\. It uses the [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation to decrypt the data key\. AWS KMS encrypts and decrypts the data key by using the customer master key \(CMK\) that you specified when configuring the master key provider or keyring\.
 
 **How do I keep track of the data keys that were used to encrypt my data?**  <a name="track-keys"></a>
 The AWS Encryption SDK does this for you\. When you encrypt data, the SDK encrypts the data key and stores the encrypted key along with the encrypted data in the [encrypted message](concepts.md#message) that it returns\. When you decrypt data, the AWS Encryption SDK extracts the encrypted data key from the encrypted message, decrypts it, and then uses it to decrypt the data\.
@@ -41,7 +41,7 @@ The AWS Encryption SDK does this for you\. When you encrypt data, the SDK encryp
 **How does the AWS Encryption SDK store encrypted data keys with their encrypted data?**  <a name="store-encrypted-keys"></a>
 The encryption operations in the AWS Encryption SDK return an [encrypted message](concepts.md#message), a single data structure that contains the encrypted data and its encrypted data keys\. The message format consists of at least two parts: a *header* and a *body*\. In some cases, the message format consists of a third part known as a *footer*\. The message header contains the encrypted data keys and information about how the message body is formed\. The message body contains the encrypted data\. The message footer contains a signature that authenticates the message header and message body\. For more information, see [AWS Encryption SDK Message Format Reference](message-format.md)\.
 
-**How much overhead does the AWS Encryption SDK's message format add to my encrypted data?**  <a name="overhead"></a>
+**How much overhead does the AWS Encryption SDK message format add to my encrypted data?**  <a name="overhead"></a>
 The amount of overhead added by the AWS Encryption SDK depends on several factors, including the following:  
 + The size of the plaintext data
 + Which of the supported algorithms is used
@@ -51,12 +51,12 @@ The amount of overhead added by the AWS Encryption SDK depends on several factor
 When you use the AWS Encryption SDK with its default configuration, with one CMK in AWS KMS as the master key, with no AAD, and encrypt nonframed data, the overhead is approximately 600 bytes\. In general, you can reasonably assume that the AWS Encryption SDK adds overhead of 1 KB or less, not including the provided AAD\. For more information, see [AWS Encryption SDK Message Format Reference](message-format.md)\.
 
 **Can I use my own master key provider?**  <a name="own-provider"></a>
-Yes\. The implementation details vary depending on which of the [supported programming languages](programming-languages.md) you use\. However, all supported languages allow you to define custom [cryptographic materials managers \(CMMs\)](concepts.md#crypt-materials-manager), master key providers, and master keys\.
+Yes\. The implementation details vary depending on which of the [supported programming languages](programming-languages.md) you use\. However, all supported languages allow you to define custom [cryptographic materials managers \(CMMs\)](concepts.md#crypt-materials-manager), master key providers, keyrings, master keys, and wrapping keys\.
 
 **Can I encrypt data under more than one master key?**  <a name="multiple-master-keys"></a>
-Yes\. You can encrypt the data key with additional master keys to add redundancy in case a master key is in a different region or is unavailable for decryption\.  
-To encrypt data under multiple master keys, create a master key provider with multiple master keys\. You can see examples of this pattern in the example code for [Java](java-example-code.md#java-example-multiple-providers) and [Python](python-example-code.md#python-example-multiple-providers)\.  
-When you encrypt data by using a master key provider that returns multiple master keys, the AWS Encryption SDK encrypts the data that you pass to the encryption methods with a data key and encrypts that data key with the same master key\. Then, it encrypts the data with the other master keys that the master key provider returned\. The resulting message includes the encrypted data and one encrypted data key for each master key\. The resulting message can be decrypted by using any one of the master keys used in the encryption operation\.
+Yes\. You can encrypt the data key with additional master keys or wrapping keys to add redundancy in case a master key is in a different region or is unavailable for decryption\.  
+To encrypt data under multiple master keys, create a master key provider with multiple master keys or a keyring with multiple wrapping keys\. You can see examples of this pattern in the example code for [Java](java-example-code.md#java-example-multiple-providers) and [Python](python-example-code.md#python-example-multiple-providers)\. When working with keyrings, you can create a [single keyring with multiple wrapping keys](choose-keyring.md#kms-keyring-encrypt) or a [multi\-keyring](choose-keyring.md#use-multi-keyring)\.  
+When you encrypt data by using a master key provider that returns multiple master keys or a keyring with multiple wrapping keys, the AWS Encryption SDK uses one master key to generate a plaintext data key\. It encrypts the data that you pass to the encryption methods with the data key and encrypts that data key with the same master key\. Then, it encrypts the data key with the other master keys\. The resulting [encrypted message](concepts.md#message) includes the encrypted data and one encrypted data key for each master key\. The resulting message can be decrypted by using any one of the master keys used in the encryption operation\.
 
 **Which data types can I encrypt with the AWS Encryption SDK?**  <a name="data-types"></a>
 The AWS Encryption SDK can encrypt raw bytes \(byte arrays\), I/O streams \(byte streams\), and strings\. We provide example code for each of the [supported programming languages](programming-languages.md)\.

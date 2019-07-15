@@ -1,6 +1,6 @@
 # AWS Encryption SDK for Java<a name="java"></a>
 
-This topic explains how to install and use the AWS Encryption SDK for Java\. For details about programming with the SDK, see the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub and the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
+This topic explains how to install and use the AWS Encryption SDK for Java\. For details about programming with the AWS Encryption SDK for Java, see the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\. For API documentation, see the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK for Java\.
 
 **Topics**
 + [Prerequisites](#java-prerequisites)

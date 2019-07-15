@@ -133,7 +133,7 @@ def setup():
     cache = LocalCryptoMaterialsCache(capacity=CACHE_CAPACITY)
            
     #  Because the cache is used only for decryption, the code doesn't set
-    #   the max bytes or max message security thresholds that are are enforced
+    #   the max bytes or max message security thresholds that are enforced
     #   only on on data keys used for encryption.
     materials_manager = CachingCryptoMaterialsManager(
         master_key_provider=key_provider,

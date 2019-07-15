@@ -160,7 +160,7 @@ Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This pa
 Creates output with specified frame length\. Enter a value in bytes\. This parameter is optional and valid only in encrypt commands\.
 
 \-\-max\-length  
-Indicates the maximum frame size \(or maximum content length for non\-framed messages\) in bytes to read from encrypted messages\. This parameter is optional and valid only in decrypt commands\. It is designed to protect you from decrypting extremely large malicious ciphertext\. 
+Indicates the maximum frame size \(or maximum content length for nonframed messages\) in bytes to read from encrypted messages\. This parameter is optional and valid only in decrypt commands\. It is designed to protect you from decrypting extremely large malicious ciphertext\. 
 
 \-\-caching  
 Enables the [data key caching](data-key-caching.md) feature, which reuses data keys, instead of generating a new data key for each input file\. This parameter supports an advanced scenario\. Be sure to read the [Data Key Caching](data-key-caching.md) documentation before using this feature\.   
