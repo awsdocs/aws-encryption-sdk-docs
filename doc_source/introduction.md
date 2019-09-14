@@ -26,6 +26,21 @@ The AWS Encryption SDK stores the encrypted data and encrypted data key together
 
 With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java or Python\) or a keyring \(C or JavaScript\) that determines which master keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
 
+## Compatibility With Encryption Libraries and Services<a name="intro-compatibility"></a>
+
+The AWS Encryption SDK is supported in several [programming languages](programming-languages.md)\. All language implementations are interoperable\. You can encrypt with one language implementation and decrypt with another\. Interoperability might be subject to language constraints\. If so, these constraints are described in the topic about the language implementation\. Also, when encrypting and decrypting, you must use compatible keyrings, or master keys and master key providers\. For details, see [Keyring Compatibility](choose-keyring.md#keyring-compatibility)\.
+
+However, the AWS Encryption SDK cannot interoperate with other libraries\. Because each library returns encrypted data in a different format, you cannot encrypt with one library and decrypt with another\.
+
+**DynamoDB Encryption Client and Amazon S3 Client\-Side Encryption**  
+The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. And these libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
+
+**AWS Key Management Service \(AWS KMS\)**  
+The AWS Encryption SDK can use [AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/) customer master keys \(CMKS\) and data keys to protect your data\. For example, you can configure the AWS Encryption SDK to encrypt your data under one or more CMKs in your AWS account\. However, you must use the AWS Encryption SDK to decrypt that data\.   
+The AWS Encryption SDK cannot decrypt the ciphertext that the AWS KMS [Encrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html) or [ReEncrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_ReEncrypt.html) operations return\. Similarly, the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\.
+
+For help deciding which library or service to use, see [How to Choose an Encryption Tool or Service](https://docs.aws.amazon.com/crypto/latest/userguide/awscryp-overview.html) in *AWS Cryptographic Services and Tools*\.
+
 ## Where to find more information<a name="intro-see-also"></a>
 
 If you're looking for more information about the AWS Encryption SDK and client\-side encryption, try these sources\.
@@ -40,7 +55,7 @@ For information about implementations of the AWS Encryption SDK in different pro
 + **Command Line Interface**: See [AWS Encryption SDK Command Line Interface](crypto-cli.md), [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/) for the AWS Encryption CLI, and the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 + **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
 + **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\.
-+ **JavaScript**: See [AWS Encryption SDK for JavaScript](javascript.md) and the [aws\-encryption\-sdk\-javascript](https://github.com/awslabs/aws-encryption-sdk-javascript/) repository on GitHub\. 
++ **JavaScript**: See [AWS Encryption SDK for JavaScript \(Beta Preview\)](javascript.md) and the [aws\-encryption\-sdk\-javascript](https://github.com/awslabs/aws-encryption-sdk-javascript/) repository on GitHub\. 
 **Note**  
 The AWS Encryption SDK for JavaScript is a beta release\. The code and the documentation are subject to change\.
 

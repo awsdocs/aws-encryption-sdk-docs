@@ -194,7 +194,7 @@ An *encryption context* is a type of arbitrary, non\-secret *additional authenti
 
 The encryption context that you specify in an encrypt command, along with any additional pairs that the [CMM](concepts.md#crypt-materials-manager) adds, is cryptographically bound to the encrypted data\. It is also included \(in plaintext\) in the [encrypted message](concepts.md#encryption-context) that the command returns\. If you are using an AWS KMS customer master key \(CMK\), the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\. 
 
-The following example shows a encryption context with three `name=value` pairs\.
+The following example shows an encryption context with three `name=value` pairs\.
 
 ```
 --encryption-context purpose=test dept=IT class=confidential 

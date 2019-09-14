@@ -1,4 +1,4 @@
-# AWS Encryption SDK for JavaScript<a name="javascript"></a>
+# AWS Encryption SDK for JavaScript \(Beta Preview\)<a name="javascript"></a>
 
 
 |  | 
@@ -14,9 +14,10 @@ All language\-specific implementations of the AWS Encryption SDK are designed to
 For details about programming with the AWS Encryption SDK for JavaScript, see the [aws\-encryption\-sdk\-javascript](https://github.com/awslabs/aws-encryption-sdk-javascript/) repository on GitHub\. 
 
 **Topics**
-+ [Compatibility of the AWS Encryption SDK for JavaScript](#javascript-compatibility)
-+ [Installing the AWS Encryption SDK for JavaScript](#javascript-installation)
-+ [Modules in the AWS Encryption SDK for JavaScript](#javascript-modules)
++ [Compatibility](#javascript-compatibility)
++ [Installation](#javascript-installation)
++ [Modules](#javascript-modules)
++ [Examples](js-examples.md)
 
 ## Compatibility of the AWS Encryption SDK for JavaScript<a name="javascript-compatibility"></a>
 
