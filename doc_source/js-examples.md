@@ -78,19 +78,19 @@ const context = {
 
 Step 3: Encrypt the data\.  
 To encrypt the plaintext data, call the `encrypt` function\. Pass in the KMS keyring, the plaintext data, and the encryption context\.  
-The `encrypt` function returns an [encrypted message](concepts.md#message) \(`ciphertext`\) that contains the encrypted data, the encrypted data keys, and important metadata, including the encryption context and signature\.  
+The `encrypt` function returns an [encrypted message](concepts.md#message) \(`result`\) that contains the encrypted data, the encrypted data keys, and important metadata, including the encryption context and signature\.  
 You can [decrypt this encrypted message](#javascript-example-decrypt) by using the AWS Encryption SDK for any supported programming language\.  
 
 ```
 const plaintext = new Uint8Array([1, 2, 3, 4, 5])
 
-const { ciphertext } = await encrypt(keyring, plaintext, { encryptionContext: context })
+const { result } = await encrypt(keyring, plaintext, { encryptionContext: context })
 ```
 
 ```
 const plaintext = 'asdf'
 
-const { ciphertext } = await encrypt(keyring, plaintext, { encryptionContext: context })
+const { result } = await encrypt(keyring, plaintext, { encryptionContext: context })
 ```
 
 ## Decrypting Data with a KMS Keyring<a name="javascript-example-decrypt"></a>
@@ -100,7 +100,7 @@ You can use the AWS Encryption SDK for JavaScript to decrypt the encrypted messa
 In this example, we decrypt the data that we encrypted in the [Encrypting Data with a KMS Keyring](#javascript-example-encrypt) example\.
 
 Step 1: Construct the keyring\.  
-To decrypt the data, pass in the [encrypted message](concepts.md#message) \(`ciphertext`\) that the `encrypt` function returned\. The encrypted message includes the encrypted data, the encrypted data keys, and important metadata, including the encryption context and signature\.  
+To decrypt the data, pass in the [encrypted message](concepts.md#message) \(`result`\) that the `encrypt` function returned\. The encrypted message includes the encrypted data, the encrypted data keys, and important metadata, including the encryption context and signature\.  
 You must also specify a [KMS keyring](choose-keyring.md#use-kms-keyring) when decrypting\. You can use the same keyring that was used to encrypt the data or a different keyring\. To succeed, at least one CMK in the decryption keyring must be able to decrypt one of the encrypted data keys in the encrypted message\. Because no data keys are generated, you do not need to specify a generator key in a decryption keyring\. If you do, the generator key and additional keys are treated the same way\.  
 To specify a CMK for a decryption keyring in the AWS Encryption SDK for JavaScript, you must use the key ARN\. Otherwise, the CMK is not recognized\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\.  
 If you reuse an encryption keyring for decrypting, be sure that the CMKs in the keyring are identified by their key ARNs\.
@@ -133,15 +133,15 @@ const keyring = new KmsKeyringNode({ keyIds })
 ```
 
 Step 2: Decrypt the data\.  
-Next, call the `decrypt` function\. Pass in the decryption keyring that you just created \(`keyring`\) and the [encrypted message](concepts.md#message) that the `encrypt` function returned \(`ciphertext`\)\. The AWS Encryption SDK uses the keyring to decrypt one of the encrypted data keys\. Then it uses the plaintext data key to decrypt the data\.  
+Next, call the `decrypt` function\. Pass in the decryption keyring that you just created \(`keyring`\) and the [encrypted message](concepts.md#message) that the `encrypt` function returned \(`result`\)\. The AWS Encryption SDK uses the keyring to decrypt one of the encrypted data keys\. Then it uses the plaintext data key to decrypt the data\.  
 If the call succeeds, the `plaintext` field contains the plaintext \(decrypted\) data\. The `messageHeader` field contains metadata about the decryption process, including the encryption context that was used to decrypt the data\.  
 
 ```
-const { plaintext, messageHeader } = await decrypt(keyring, ciphertext)
+const { plaintext, messageHeader } = await decrypt(keyring, result)
 ```
 
 ```
-const { plaintext, messageHeader } = await decrypt(keyring, ciphertext)
+const { plaintext, messageHeader } = await decrypt(keyring, result)
 ```
 
 Step 3: Verify the encryption context\.  

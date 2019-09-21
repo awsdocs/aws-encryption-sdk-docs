@@ -244,7 +244,7 @@ cool-new-thing.py.encrypted  employees.csv.encrypted  hello.txt.encrypted
 
 ```
 # To run this example, replace the fictitious CMK ARN with a valid master key identifier.
-PS C:\> $cmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab 
+PS C:\> $cmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 PS C:\> aws-encryption-cli --encrypt `
                            --input .\TestDir --recursive `
@@ -325,7 +325,7 @@ PS C:\> aws-encryption-cli --decrypt `
                            --encryption-context dept=IT `
                            --metadata-output $home\Metadata.txt `
                            --output C:\TestDec --interactive
-            
+
 PS C:\> dir .\TestDec
 
 
@@ -429,8 +429,8 @@ As in the previous example, the `--input` and `--output` parameters have a `-` v
 ```
 $  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
-$  echo 'Hello World' | 
-          aws-encryption-cli --encrypt --master-keys key=$cmkArn --input - --output - --encode -S | 
+$  echo 'Hello World' |
+          aws-encryption-cli --encrypt --master-keys key=$cmkArn --input - --output - --encode -S |
           aws-encryption-cli --decrypt  --input - --output - --decode -S
 Hello World
 ```
@@ -441,8 +441,8 @@ Hello World
 ```
 PS C:\> $cmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
-PS C:\> 'Hello World' | 
-               aws-encryption-cli --encrypt --master-keys key=$cmkArn --input - --output - --encode -S | 
+PS C:\> 'Hello World' |
+               aws-encryption-cli --encrypt --master-keys key=$cmkArn --input - --output - --encode -S |
                aws-encryption-cli --decrypt --input - --output - --decode -S
 Hello World
 ```
@@ -537,8 +537,6 @@ When you compress and encrypt files, be sure to compress before you encrypt\. Pr
 **Warning**  
 Be careful when compressing data that includes both secrets and data that might be controlled by a malicious actor\. The final size of the compressed data might inadvertently reveal sensitive information about its contents\.
 
-You can find the complete scripts in the Examples directory of the [aws\-encryption\-sdk\-cli repository](https://github.com/aws/aws-encryption-sdk-cli/) in GitHub\.
-
 ------
 #### [ PowerShell ]
 
@@ -550,10 +548,10 @@ Param
     [ValidateScript({Test-Path $_})]
     [String[]]
     $FilePath,
-    
+
     [Parameter()]
     [Switch]
-    $Recurse,  
+    $Recurse,
 
     [Parameter(Mandatory=$true)]
     [String]
@@ -599,9 +597,9 @@ PROCESS {
 
         # Step 1: Compress
         foreach ($file in $files)
-        {                   
+        {
             $fileName = $file.Name
-            try 
+            try
             {
                 Microsoft.PowerShell.Archive\Compress-Archive -Path $file.FullName -DestinationPath $ZipDirectory\$filename.zip
             }
@@ -609,14 +607,14 @@ PROCESS {
             {
                 Write-Error "Zip failed on $file.FullName"
             }
-    
+
             # Step 2: Encrypt
             if (-not (Test-Path "$ZipDirectory\$filename.zip"))
             {
                 Write-Error "Cannot find zipped file: $ZipDirectory\$filename.zip"
             }
             else
-            {        
+            {
                 # 2>&1 captures command output
                 $err = (aws-encryption-cli -e -i "$ZipDirectory\$filename.zip" `
                                            -o $EncryptDirectory `
@@ -633,10 +631,10 @@ PROCESS {
                 }
                 elseif (Test-Path "$EncryptDirectory\$fileName.zip.encrypted")
                 {
-                    # Step 3: Write to S3 bucket                
+                    # Step 3: Write to S3 bucket
                     if ($S3BucketFolder)
                     {
-                        Write-S3Object -BucketName $S3Bucket -File "$EncryptDirectory\$fileName.zip.encrypted" -Key "$S3BucketFolder/$fileName.zip.encrypted"                    
+                        Write-S3Object -BucketName $S3Bucket -File "$EncryptDirectory\$fileName.zip.encrypted" -Key "$S3BucketFolder/$fileName.zip.encrypted"
 
                     }
                     else
@@ -645,9 +643,69 @@ PROCESS {
                     }
                 }
             }
-        }    
+        }
     }
 }
+```
+
+------
+#### [ Bash ]
+
+```
+# Continue running even if an operation fails.
+set +e
+
+dir=$1
+encryptionContext=$2
+s3bucket=$3
+s3folder=$4
+masterKeyProvider="aws-kms"
+metadataOutput="/tmp/metadata-$(date +%s)"
+
+compress(){
+    gzip -qf $1
+}
+
+encrypt(){
+    # -e encrypt
+    # -i input
+    # -o output
+    # --metadata-output unique file for metadata
+    # -m masterKey read from environment variable
+    # -c encryption context read from the second argument.
+    # -v be verbose
+    aws-encryption-cli -e -i ${1} -o $(dirname ${1}) --metadata-output ${metadataOutput} -m key="${masterKey}" provider="${masterKeyProvider}" -c "${encryptionContext}" -v
+}
+
+
+s3put (){
+    # copy file argument 1 to s3 location passed into the script.
+    aws s3 cp ${1} ${s3bucket}/${s3folder}
+}
+
+# Validate all required arguments are present.
+if [ "${dir}" ] && [ "${encryptionContext}" ] && [ "${s3bucket}" ] && [ "${s3folder}" ] && [ "${masterKey}" ]; then
+
+# Is $dir a valid directory?
+test -d "${dir}"
+if [ $? -ne 0 ]; then
+    echo "Input is not a directory; exiting"
+    exit 1
+fi
+
+# Iterate over all the files in the directory, except *gz and *encrypted (in case of a re-run).
+for f in $(find ${dir} -type f \( -name "*" ! -name \*.gz ! -name \*encrypted \) ); do
+    echo "Working on $f"
+    compress ${f}
+    encrypt ${f}.gz
+    rm -f ${f}.gz
+    s3put ${f}.gz.encrypted
+done;
+else
+    echo "Arguments: <Directory> <encryption context> <s3://bucketname> <s3 folder>"
+    echo " and ENV var \$masterKey must be set"
+    exit 255
+fi
 ```
 
 ------
