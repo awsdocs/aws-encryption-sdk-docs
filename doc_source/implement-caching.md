@@ -7,8 +7,8 @@ The AWS Encryption SDK for JavaScript is a beta release\. The code and the docum
 
 For complete and tested examples of using data key caching in the AWS Encryption SDK, see:
 + C/C\+\+: [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp)
-+ JavaScript Browser: [caching\_materials\_manager\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/caching_materials_manager.ts)
-+ JavaScript Node\.js [caching\_materials\_manager\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/caching_materials_manager.ts)
++ JavaScript Browser: [caching\_cmm\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/caching_cmm.ts)
++ JavaScript Node\.js: [caching\_cmm\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/caching_cmm.ts)
 + Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/data_key_caching_basic.py)
 
 **Topics**
