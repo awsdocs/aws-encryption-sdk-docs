@@ -1,15 +1,10 @@
 # AWS Encryption SDK for JavaScript Examples<a name="js-examples"></a>
 
-
-|  | 
-| --- |
-|   The AWS Encryption SDK for JavaScript is a beta release\. The code and the documentation are subject to change\.  | 
-
 The following examples show you how to use the AWS Encryption SDK for JavaScript to encrypt and decrypt data\. 
 
-You can find more examples of using the AWS Encryption SDK for JavaScript in the [example\-node](https://github.com/awslabs/aws-encryption-sdk-javascript/tree/master/modules/example-node) and [example\-browser](https://github.com/awslabs/aws-encryption-sdk-javascript/tree/master/modules/example-browser) modules in the [aws\-encryption\-sdk\-javascript](https://github.com/awslabs/aws-encryption-sdk-javascript/) repository on GitHub\. These example modules are not installed when you install the `client-browser` or `client-node` modules\.
+You can find more examples of using the AWS Encryption SDK for JavaScript in the [example\-node](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/example-node) and [example\-browser](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/example-browser) modules in the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository on GitHub\. These example modules are not installed when you install the `client-browser` or `client-node` modules\.
 
-**See the complete code samples**: Node: [kms\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts), Browser: [kms\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)
+**See the complete code samples**: Node: [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts), Browser: [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)
 
 **Topics**
 + [Encrypting Data with a KMS Keyring](#javascript-example-encrypt)

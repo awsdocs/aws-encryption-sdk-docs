@@ -53,9 +53,6 @@ Master key providers in Java and Python are compatible with keyrings in the AWS 
 
 ## Keyring \(C and JavaScript\)<a name="keyring"></a>
 
-**Note**  
-The AWS Encryption SDK for JavaScript is a beta release\. The code and the documentation are subject to change\.
-
 A *keyring* generates, encrypts, and decrypts data keys\. Each [keyring](choose-keyring.md#using-keyrings) is typically associated with a wrapping key or a service that provides and protects wrapping keys\. You can use the keyrings that the AWS Encryption SDK provides or write your own compatible custom keyrings\. Keyrings are supported only in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript\. 
 
 You can use a single keyring or combine keyrings of the same type or a different type into a *multi\-keyring*\. The [multi\-keyring](choose-keyring.md#use-multi-keyring) returns a copy of the data key encrypted by each of the wrapping keys in each of the keyrings that comprise the multi\-keyring\. When you use a multi\-keyring to encrypt data, you can decrypt the data using a keyring configured with any one of the wrapping keys in the multi\-keyring\.
@@ -98,8 +95,8 @@ For examples of verifying an encryption context in your code, see:
 + C – [Encrypting and Decrypting Strings](c-examples.md#c-example-strings)
 + CLI – All [AWS Encryption SDK CLI examples](crypto-cli-examples.md) include an encryption context\. 
 + Java – [Strings](java-example-code.md#java-example-strings), [Byte Streams](java-example-code.md#java-example-streams)
-+ JavaScript Node\.js – [kms\-simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)
-+ JavaScript Browser – [kms\-simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)
++ JavaScript Node\.js – [kms\-simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)
++ JavaScript Browser – [kms\-simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)
 + Python – [Using Data Key Caching to Encrypt Messages](python-example-code.md#python-example-caching)
 
 ## Encrypted Message<a name="message"></a>

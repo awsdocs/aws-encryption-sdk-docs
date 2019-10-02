@@ -14,6 +14,7 @@ The following table describes significant changes to this documentation since No
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/javascript.html) | Added and updated documentation for the general availability release of the [AWS Encryption SDK for JavaScript](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/javascript.html)\. | October 1, 2019 | 
 | [Preview release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/javascript.html) | Added and updated documentation of the public beta release of the [AWS Encryption SDK for JavaScript](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/javascript.html)\. | June 21, 2019 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) | Added and updated documentation for the general availability release of the [AWS Encryption SDK for C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html)\. | May 16, 2019 | 
 | [Preview release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) | Added documentation of the preview release of the [AWS Encryption SDK for C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html)\. | February 5, 2019 | 

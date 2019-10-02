@@ -1,10 +1,5 @@
 # Using Keyrings<a name="choose-keyring"></a>
 
-
-|  | 
-| --- |
-|   The AWS Encryption SDK for JavaScript is a beta release\. The code and the documentation are subject to change\.  | 
-
 The AWS Encryption SDK for C and AWS Encryption SDK for JavaScript use *keyrings* to perform [envelope encryption](https://docs.aws.amazon.com/crypto/latest/userguide/cryptography-concepts.html#define-envelope-encryption)\. Keyrings generate, encrypt, and decrypt data keys\. The keyrings that you use determines the source of the unique data keys that protect each message, and the wrapping keys that encrypt that data key\. You specify a keyring when encrypting and the same or a different keyring when decrypting\. You can use the keyrings that the SDK provides or write your own compatible custom keyrings\. 
 
 You can use each keyring individually or combine keyrings into a [multi\-keyring](#use-multi-keyring)\. Although most keyrings can generate, encrypt, and decrypt data keys, you might create a keyring that performs only one particular operation, such as a keyring that only generates data keys, and use that keyring in combination with others\.
@@ -111,7 +106,7 @@ struct aws_cryptosdk_keyring *kms_encrypt_keyring =
 
 When you specify an AWS KMS CMK for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid CMK identifier: a key ID, alias name, key ARN, or alias ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.
 
-For a complete example, see [kms\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)\.
+For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)\.
 
 ```
 const clientProvider = getClient(KMS, { credentials })
@@ -130,7 +125,7 @@ const keyring = new KmsKeyringBrowser({
 
 When you specify an AWS KMS CMK for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid CMK identifier: a key ID, alias name, key ARN, or alias ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.
 
-For a complete example, see [kms\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)\.
+For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)\.
 
 ```
 const generatorKeyId = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
@@ -310,7 +305,7 @@ const keyring = new KmsKeyringBrowser({ clientProvider, discovery })
 ------
 #### [ JavaScript Node\.js ]
 
-To view this keyring, and the `limitRegions` and function, in a working example, see [kms\_regional\_discovery\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_regional_discovery.ts)\.
+To view this keyring, and the `limitRegions` and function, in a working example, see [kms\_regional\_discovery\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_regional_discovery.ts)\.
 
 ```
 const discovery = true
@@ -350,8 +345,8 @@ To identify the wrapping key, the Raw AES keyring uses a namespace and name that
 
 For an example of how to use a Raw AES keyring, see:
 + C: [raw\_aes\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c)
-+ JavaScript Node\.js: [aes\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/aes_simple.ts)
-+ JavaScript Browser: [aes\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/aes_simple.ts)
++ JavaScript Node\.js: [aes\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/aes_simple.ts)
++ JavaScript Browser: [aes\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/aes_simple.ts)
 
 ## Raw RSA Keyrings<a name="use-raw-rsa-keyring"></a>
 
@@ -367,8 +362,8 @@ When constructing a Raw RSA keyring in the AWS Encryption SDK for C, be sure to 
 
 For an example of how to use a Raw RSA keyring, see:
 + C: [raw\_rsa\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_rsa_keyring.c)
-+ JavaScript Node\.js: [rsa\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/rsa_simple.ts)
-+ JavaScript Browser: [rsa\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/rsa_simple.ts)
++ JavaScript Node\.js: [rsa\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/rsa_simple.ts)
++ JavaScript Browser: [rsa\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/rsa_simple.ts)
 
 ## Multi\-Keyrings<a name="use-multi-keyring"></a>
 
@@ -380,8 +375,8 @@ When decrypting, the AWS Encryption SDK uses the keyrings to try to decrypt one 
 
 To see a working example of a multi\-keyring, see:
 + C: [multi\_keyring\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/multi_keyring.cpp)[]()
-+ JavaScript Node\.js: [multi\_keyring\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/multi_keyring.ts)
-+ JavaScript Browser: [multi\_keyring\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/multi_keyring.ts)
++ JavaScript Node\.js: [multi\_keyring\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/multi_keyring.ts)
++ JavaScript Browser: [multi\_keyring\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/multi_keyring.ts)
 
 To create a multi\-keyring, first instantiate the child keyrings\. In this example, we use a KMS keyring and a Raw AES keyring, but you can combine any supported keyrings in a multi\-keyring\.
 
@@ -403,10 +398,10 @@ struct aws_cryptosdk_keyring *aes_keyring = aws_cryptosdk_raw_aes_keyring_new(
 ```
 const clientProvider = getClient(KMS, { credentials })
 
-// Define a KMS keyring. For details, see [kms\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts). 
+// Define a KMS keyring. For details, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts). 
 const kmsKeyring = new KmsKeyringBrowser({ generatorKeyId: exampleCmk })
 
-// Define a Raw AES keyring. For details, see [aes\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/aes_simple.ts).
+// Define a Raw AES keyring. For details, see [aes\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/aes_simple.ts).
 const aesKeyring = new RawAesKeyringWebCrypto({ keyName, keyNamespace, wrappingSuite, masterKey })
 ```
 
@@ -414,10 +409,10 @@ const aesKeyring = new RawAesKeyringWebCrypto({ keyName, keyNamespace, wrappingS
 #### [ JavaScript Node\.js ]
 
 ```
-// Define a KMS keyring. For details, see [kms\_simple\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts). 
+// Define a KMS keyring. For details, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts). 
 const kmsKeyring = new KmsKeyringNode({ generatorKeyId: exampleCmk })
 
-// Define a Raw AES keyring. For details, see [raw\_aes\_keyring\_node\.ts](https://github.com/awslabs/aws-encryption-sdk-javascript/blob/master/modules/raw-aes-keyring-node/src/raw_aes_keyring_node.ts).
+// Define a Raw AES keyring. For details, see [raw\_aes\_keyring\_node\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/raw-aes-keyring-node/src/raw_aes_keyring_node.ts).
 const aesKeyring = new RawAesKeyringNode({ keyName, keyNamespace, wrappingSuite, unencryptedMasterKey })
 ```
 
