@@ -19,7 +19,7 @@ Similarly, when you call `decryptString` in this example, the `decryptResult` ob
 
 ```
 /*
- * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except
  * in compliance with the License. A copy of the License is located at
@@ -64,8 +64,8 @@ public class StringExample {
         // Instantiate the SDK
         final AwsCrypto crypto = new AwsCrypto();
 
-        // Set up the KmsMasterKeyProvider backed by the default credentials        
-        final KmsMasterKeyProvider prov = new KmsMasterKeyProvider(keyArn);
+        // Set up the KmsMasterKeyProvider backed by the default credentials
+        final KmsMasterKeyProvider prov = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build()
 
         // Encrypt the data
         //
@@ -217,7 +217,7 @@ The following example shows you how to use the AWS Encryption SDK with more than
 
 ```
 /*
- * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except
  * in compliance with the License. A copy of the License is located at
@@ -297,7 +297,7 @@ public class EscrowedEncryptExample {
         final AwsCrypto crypto = new AwsCrypto();
 
         // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider kms = new KmsMasterKeyProvider(kmsArn);
+        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build()
         
         // 3. Instantiate a JCE master key provider
         // Because the user does not have access to the private escrow key,
@@ -328,7 +328,7 @@ public class EscrowedEncryptExample {
         final AwsCrypto crypto = new AwsCrypto();
         
         // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider kms = new KmsMasterKeyProvider(kmsArn);
+        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build()
         
         // 3. Instantiate a JCE master key provider
         // Because the user does not have access to the private escrow 

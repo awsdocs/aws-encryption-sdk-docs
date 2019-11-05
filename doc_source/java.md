@@ -16,16 +16,12 @@ You will need Java 8 or later\. On the Oracle website, go to [Java SE Downloads]
 If you use the Oracle JDK, you must also download and install the [Java Cryptography Extension \(JCE\) Unlimited Strength Jurisdiction Policy Files](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)\.
 
 **Bouncy Castle**  
-Bouncy Castle provides a cryptography API for Java\. If you don't have Bouncy Castle, go to [Bouncy Castle latest releases](https://bouncycastle.org/latest_releases.html) to download the provider file that corresponds to your JDK\.  
-If you use [Apache Maven](https://maven.apache.org/), Bouncy Castle is available with the following dependency definition\.  
+The AWS Encryption SDK for Java requires [Bouncy Castle](https://www.bouncycastle.org/java.html)\.   
++ AWS Encryption SDK for Java versions 1\.6\.1 and later use Bouncy Castle to serialize and deserialize cryptographic objects\. You can use Bouncy Castle or [Bouncy Castle FIPS](https://www.bouncycastle.org/fips_faq.html) to satisfy this requirement\. For help installing and configuring Bouncy Castle FIPS, see [BC FIPS Documentation](https://www.bouncycastle.org/documentation.html), especially the **User Guides** and **Security Policy** PDFs\.
 
-```
-<dependency>
-  <groupId>org.bouncycastle</groupId>
-  <artifactId>bcprov-ext-jdk15on</artifactId>
-  <version>1.58</version>
-</dependency>
-```
+   
++ Earlier versions of the AWS Encryption SDK for Java use Bouncy Castle's cryptography API for Java\. This requirement is satisfied only by non\-FIPS Bouncy Castle\.
+If you don't have Bouncy Castle, go to [Bouncy Castle latest releases](https://bouncycastle.org/latest_releases.html) to download the provider file that corresponds to your JDK\. You can also use [Apache Maven](https://maven.apache.org/) to get the artifact for the standard Bouncy Castle provider \([bcprov\-ext\-jdk15on](https://mvnrepository.com/artifact/org.bouncycastle/bcprov-ext-jdk15on)\) or the artifact for Bouncy Castle FIPS \([bc\-fips](https://mvnrepository.com/artifact/org.bouncycastle/bc-fips)\)\.
 
 **AWS SDK for Java \(Optional\)**  
 Although you don't need the AWS SDK for Java to use the AWS Encryption SDK for Java, you do need it to use [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as a master key provider, and to use some of the [example Java code](java-example-code.md) in this guide\. For more information about installing and configuring the AWS SDK for Java, see [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\.
@@ -44,7 +40,7 @@ The AWS Encryption SDK for Java is available through [Apache Maven](https://mave
 <dependency>
   <groupId>com.amazonaws</groupId>
   <artifactId>aws-encryption-sdk-java</artifactId>
-  <version>1.6.0</version>
+  <version>1.6.1</version>
 </dependency>
 ```
 
