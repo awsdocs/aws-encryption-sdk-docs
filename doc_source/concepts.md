@@ -31,7 +31,7 @@ A *master key*, also known as a *wrapping key*, is an encryption key that is use
 
 When you use the AWS Encryption SDK, you do not need to generate, implement, extend, protect or use data keys or master keys\. The AWS Encryption SDK does that work for you when you call the encrypt and decrypt operations\. However, in the Java and Python implementations, you need to specify a [cryptographic materials manager](#crypt-materials-manager) or a [master key provider](#master-key-provider) that supplies master keys\. In the C and JavaScript implementations, you specify a [keyring](#keyring) that interacts with wrapping keys for you and returns data keys\.
 
-The AWS Encryption SDK provides several commonly used master keys or wrapping keys, such as AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and RSA keys\. You can also extend or implement your own master keys and wrapping keys\. 
+The AWS Encryption SDK provides several commonly used master keys or wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric customer master keys \(CMKs\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and RSA keys\. You can also extend or implement your own master keys and wrapping keys\. 
 
 ## Cryptographic Materials Manager<a name="crypt-materials-manager"></a>
 

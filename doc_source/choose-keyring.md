@@ -53,7 +53,7 @@ When decrypting, the Java and Python implementations behave like the [KMS Discov
 
 ## KMS Keyrings<a name="use-kms-keyring"></a>
 
-A KMS keyring uses AWS Key Management Service \(AWS KMS\) [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) to generate, encrypt, and decrypt data keys\. AWS KMS protects your master keys and performs cryptographic operations within the FIPS boundary\. We recommend that you use a KMS keyring, or a keyring with similar security properties, whenever possible\.
+A KMS keyring uses AWS Key Management Service \(AWS KMS\) symmetric [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) to generate, encrypt, and decrypt data keys\. AWS KMS protects your master keys and performs cryptographic operations within the FIPS boundary\. We recommend that you use a KMS keyring, or a keyring with similar security properties, whenever possible\.
 
 A KMS keyring can have a *generator key*, which is the CMK that generates the plaintext data key that protects your data and encrypts it\. It can also have additional CMKs that encrypt the same plaintext data key\. When encrypting, the KMS keyring that you use must have a generator key\. Generator keys are not required for decrypting\. When decrypting, any key in the KMS keyring can be used to decrypt an encrypted data key\.
 

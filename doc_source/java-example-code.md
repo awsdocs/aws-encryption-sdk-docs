@@ -65,7 +65,7 @@ public class StringExample {
         final AwsCrypto crypto = new AwsCrypto();
 
         // Set up the KmsMasterKeyProvider backed by the default credentials
-        final KmsMasterKeyProvider prov = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build()
+        final KmsMasterKeyProvider prov = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build();
 
         // Encrypt the data
         //
@@ -297,7 +297,7 @@ public class EscrowedEncryptExample {
         final AwsCrypto crypto = new AwsCrypto();
 
         // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build()
+        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build();
         
         // 3. Instantiate a JCE master key provider
         // Because the user does not have access to the private escrow key,
@@ -328,7 +328,7 @@ public class EscrowedEncryptExample {
         final AwsCrypto crypto = new AwsCrypto();
         
         // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build()
+        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build();
         
         // 3. Instantiate a JCE master key provider
         // Because the user does not have access to the private escrow 
