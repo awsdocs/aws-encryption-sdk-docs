@@ -39,7 +39,7 @@ The cryptographic materials manager \(CMM\) assembles the cryptographic material
 
 The default CMM gets the encryption or decryption materials from the master key provider \(Java and Python\) or keyring \(C or JavaScript\) that you specify\. This might involve a call to a cryptographic service, such as AWS Key Management Service \(AWS KMS\)\.
 
-You can specify a CMM and master key provider or keyring, but it's not required\. If you specify a master key provider or keyring, the AWS Encryption SDK creates a Default CMM for you 
+You can specify a CMM and master key provider or keyring, but it's not required\. If you specify a master key provider or keyring, the AWS Encryption SDK creates a Default CMM for you\.
 
 Because the CMM acts as a liaison between the SDK and a keyring or master key provider, it is an ideal point for customization and extension, such as support for policy enforcement and caching\. The AWS Encryption SDK provides a caching CMM to support [data key caching\.](data-key-caching.md) 
 
