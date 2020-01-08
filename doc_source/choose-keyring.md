@@ -331,7 +331,7 @@ When encrypting, a KMS Regional Discovery keyring has no effect\. Because it doe
 
 When decrypting with a KMS Regional Discovery keyring, the AWS Encryption SDK can ask AWS KMS to decrypt any encrypted data key that was encrypted under a CMK in the specified AWS Region\. To succeed, the caller must have `kms:Decrypt` permission on at least one of the CMKs in the specified AWS Region that encrypted one of the data keys in the encrypted message\.
 
-In a multi\-keyring, because it allows the use of any CMK in the AWS Region, a KMS Regional Discovery keyring can override CMK limits that other KMS keyrings in the multi\-keyring might impose\. For example, if you combine a KMS keyring that lets you use a particular CMK in the EU \(London\) Region and a KMS Regional Discovery keyring for the EU \(London\) Region, the resulting multi\-keyring behaves just like the KMS Regional Discovery keyring alone\. It lets the AWS Encryption SDK ask AWS KMS to decrypt any encrypted data key that was encrypted by any CMK in the EU \(London\) Region\. 
+In a multi\-keyring, because it allows the use of any CMK in the AWS Region, a KMS Regional Discovery keyring can override CMK limits that other KMS keyrings in the multi\-keyring might impose\. For example, if you combine a KMS keyring that lets you use a particular CMK in the Europe \(London\) Region and a KMS Regional Discovery keyring for the Europe \(London\) Region, the resulting multi\-keyring behaves just like the KMS Regional Discovery keyring alone\. It lets the AWS Encryption SDK ask AWS KMS to decrypt any encrypted data key that was encrypted by any CMK in the Europe \(London\) Region\. 
 
 ## Raw AES Keyrings<a name="use-raw-aes-keyring"></a>
 

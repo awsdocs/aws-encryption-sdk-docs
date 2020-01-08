@@ -48,7 +48,9 @@ If you're looking for more information about the AWS Encryption SDK and client\-
 + For information about how this SDK works, see [How the SDK Works](how-it-works.md)\.
 + For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
 + For detailed technical information, see the [AWS Encryption SDK Reference](reference.md)\.
++ For the technical specification for the AWS Encryption SDK, see the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification) repository in GitHub\.
 + For answers to your questions about using the AWS Encryption SDK, read and post on the [AWS Crypto Tools Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=302)\.
++ To provide feedback on this documentation, use the **Feedback** link on this page\. You can also file an issue or contribute to [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs), the open\-source repository for this documentation on GitHub\.
 
 For information about implementations of the AWS Encryption SDK in different programming languages\.
 + **C**: See [AWS Encryption SDK for C](c-language.md), the AWS Encryption SDK [C documentation](https://aws.github.io/aws-encryption-sdk-c/html/), and the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.

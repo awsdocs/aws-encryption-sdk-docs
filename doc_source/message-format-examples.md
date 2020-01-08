@@ -3,7 +3,7 @@
 
 |  | 
 | --- |
-|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming Languages](programming-languages.md)\.  | 
+|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming Languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification) repository in GitHub\.  | 
 
 The following topics show examples of the AWS Encryption SDK message format\. Each example shows the raw bytes, in hexadecimal notation, followed by a description of what those bytes represent\.
 
