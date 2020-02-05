@@ -36,7 +36,7 @@ You can use a single keyring or also combine keyrings of the same type or a diff
 
 ## Keyring Compatibility<a name="keyring-compatibility"></a>
 
-Although the Java, Python, C, and JavaScript implementations of the AWS Encryption SDK have some architectural differences, they are designed to be fully compatible, subject to language constraints\. You can encrypt your data using one programming language implementation and decrypt it with any other language implementation\. However, you must use the same or corresponding master keys to encrypt and decrypt your data keys\. For information about language constraints, see the topic about each language implementation, such as [Compatibility of the AWS Encryption SDK for JavaScript](javascript.md#javascript-compatibility) in the AWS Encryption SDK for JavaScript topic\.
+Although the Java, Python, C, and JavaScript implementations of the AWS Encryption SDK have some architectural differences, they are designed to be fully compatible, subject to language constraints\. You can encrypt your data using one programming language implementation and decrypt it with any other language implementation\. However, you must use the same or corresponding master keys to encrypt and decrypt your data keys\. For information about language constraints, see the topic about each language implementation, such as [Compatibility of the AWS Encryption SDK for JavaScript](javascript-compatibility.md) in the AWS Encryption SDK for JavaScript topic\.
 
 The following table shows which master keys and master key providers are compatible with the keyrings provided in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript\. Any minor incompatibility due to language constraints is explained in the topic about the language implementation\.
 
@@ -358,7 +358,7 @@ Use a Raw RSA keyring when you want to use an asymmetric key pair and provide th
 
 To identify the key pair, the Raw RSA keyring uses a namespace and name that you provide\. These values are not secret\. They appear in plaintext in the header of the [encrypted message](concepts.md#message) that the AWS Encryption SDK returns\. However, they are critical\. If you use the same key pair in an encryption keyring and a decryption keyring, be sure to use the same namespace and name for the key pair in both keyrings\. If the namespace and name are not an exact, case\-sensitive match, the AWS Encryption SDK will not recognize that the asymmetric keys are a pair, and it will not be able to decrypt the encrypted data keys\.
 
-When constructing a Raw RSA keyring in the AWS Encryption SDK for C, be sure to provide the *contents* of the PEM file that includes each key as a null\-terminated C\-string, not as a path or file name\. When constructing a Raw RSA keyring in JavaScript, be aware of [potential incompatibility](javascript.md#javascript-compatibility) with other language implementations\.
+When constructing a Raw RSA keyring in the AWS Encryption SDK for C, be sure to provide the *contents* of the PEM file that includes each key as a null\-terminated C\-string, not as a path or file name\. When constructing a Raw RSA keyring in JavaScript, be aware of [potential incompatibility](javascript-compatibility.md) with other language implementations\.
 
 For an example of how to use a Raw RSA keyring, see:
 + C: [raw\_rsa\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_rsa_keyring.c)
@@ -423,7 +423,7 @@ Next, create the multi\-keyring and specify its generator keyring, if any\. In t
 ------
 #### [ C ]
 
-In the multi\-keyring constructor in C, you specify only its generator keyring\. 
+In the multi\-keyring constructor in C, you specify only its generator keyring\.
 
 ```
 struct aws_cryptosdk_keyring *multi_keyring = aws_cryptosdk_multi_keyring_new(alloc, kms_keyring);

@@ -168,14 +168,8 @@ All regular frames in a message have the same frame length\. The final frame can
 
 The composition of frames in framed data varies with the length of the encrypted content\.
 + **Equal to the frame length** — When the encrypted content length is the same as the frame length of the regular frames, the message can consist of a regular frame that contains the data, followed by a final frame of zero \(0\) length\. Or, the message can consist only of a final frame that contains the data\. In this case, the final frame has the same frame length as the regular frames\.
-
-   
 + **Multiple of the frame length** — When the encrypted content length is an exact multiple of the frame length of the regular frames, the message can end in a regular frame that contains the data, followed by a final frame of zero \(0\) length\. Or, the message can end in a final frame that contains the data\. In this case, the final frame has the same frame length as the regular frames\.
-
-   
 + **Not a multiple of the frame length** — When the encrypted content length is not an exact multiple of the frame length of the regular frames, the final frame contains the remaining data\. The frame length of the final frame is less than the frame length of the regular frames\. 
-
-   
 + **Less than the frame length** — When the encrypted content length is less than the frame length of the regular frames, the message consists of a final frame that contains all of the data\. The frame length of the final frame is less than the frame length of the regular frames\.
 
 The following tables describe the fields that form the frames\. The bytes are appended in the order shown\.

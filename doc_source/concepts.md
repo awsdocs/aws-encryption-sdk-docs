@@ -85,8 +85,6 @@ The following example encryption context consists of two encryption context pair
 
 To decrypt the data, you pass in the encrypted message\. Because the AWS Encryption SDK can extract the encryption context from the encrypted message header, you are not required to provide the encryption context separately\. However, the encryption context can help you to confirm that you are decrypting the correct encrypted message\. 
 + In the [AWS Encryption SDK Command Line Interface](crypto-cli.md) \(CLI\), if you provide an encryption context in a decrypt command, the CLI verifies that the values are present in the encryption context of the encrypted message before it returns the plaintext data\. 
-
-   
 + In other languages, the decrypt response includes the encryption context and the plaintext data\. The decrypt function in your application should always verify that the encryption context in the decrypt response includes the encryption context in the encrypt request \(or a subset\) before it returns the plaintext data\.
 
 When choosing an encryption context, remember that it is not a secret\. The encryption context is displayed in plaintext in the header of the [encrypted message](#message) that the SDK returns\. If you are using AWS Key Management Service, the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\.

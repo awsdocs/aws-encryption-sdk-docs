@@ -91,8 +91,6 @@ To enable data key caching, you create a [cache](#simplecache) and a *caching cr
 
 There are two types of CMMs\. Both get data keys \(and related cryptographic material\), but in different ways, as follows:
 + A CMM is associated with a keyring \(C or JavaScript\) or a master key provider \(Java and Python\)\. When the SDK asks the CMM for encryption or decryption materials, the CMM gets the materials from its keyring or master key provider\. In Java and Python, the CMM uses the master keys to generate, encrypt, or decrypt the data keys\. In C and JavaScript, the keyring generates, encrypts, and returns the cryptographic materials\.
-
-   
 + A caching CMM is associated with one cache, such as a [local cache](#simplecache), and an underlying CMM\. When the SDK asks the caching CMM for cryptographic materials, the caching CMM tries to get them from the cache\. If it cannot find a match, the caching CMM asks its underlying CMM for the materials\. Then, it caches the new cryptographic materials before returning them to the caller\. 
 
 The caching CMM also enforces [security thresholds](thresholds.md) that you set for each cache entry\. Because the security thresholds are set in and enforced by the caching CMM, you can use any compatible cache, even if the cache is not designed for sensitive material\.

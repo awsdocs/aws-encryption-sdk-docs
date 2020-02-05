@@ -8,9 +8,9 @@ You can find the source code for these examples in [Java](sample-cache-example-j
 
 ![\[This diagram shows how data producers and consumers use the AWS KMS, Amazon Kinesis Data Streams, and Amazon DynamoDB.\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/simplecache-example.png)
 
-## local cache Results<a name="caching-example-impact"></a>
+## Local Cache Results<a name="caching-example-impact"></a>
 
-The following table shows that local cache reduces the total calls to KMS \(per second per Region\) in this example to 1% of its original value\.
+The following table shows that a local cache reduces the total calls to KMS \(per second per Region\) in this example to 1% of its original value\.
 
 
 **Producer requests**  
