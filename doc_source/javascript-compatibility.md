@@ -39,7 +39,7 @@ The AWS Encryption SDK for JavaScript requires the following libraries and opera
 + The WebCrypto API, which performs basic cryptographic operations in web applications, isn't available for all browsers\. For information about the web browser versions that support web cryptography, see [Can I Use Web Cryptography?](https://caniuse.com/#feat=cryptography)\.
 + Modern versions of the Safari web browser don't support AES\-GCM encryption of zero bytes, which the AWS Encryption SDK requires\. If the browser implements the WebCrypto API, but can't use AES\-GCM to encrypt zero bytes, the AWS Encryption SDK for JavaScript uses the fallback library only for zero\-byte encryption\. It uses the WebCrypto API for all other operations\.
 
-To configure a fallback for either limitation, add the following statements to your code\. In the [configureFallback](https://github.com/aws/aws-encryption-sdk-javascript//blob/master/modules/web-crypto-backend/src/backend-factory.ts#L78) function, specify a library that supports the missing features\. The following example uses the Microsoft Research JavaScript Cryptography Library \(`msrcrypto`\), but you can replace it with a compatible library\.
+To configure a fallback for either limitation, add the following statements to your code\. In the [configureFallback](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/web-crypto-backend/src/backend-factory.ts#L78) function, specify a library that supports the missing features\. The following example uses the Microsoft Research JavaScript Cryptography Library \(`msrcrypto`\), but you can replace it with a compatible library\.
 
 ```
 import { configureFallback } from '@aws-crypto/client-browser'

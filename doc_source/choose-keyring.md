@@ -61,6 +61,7 @@ Like all keyrings, KMS keyrings can be used independently or in a [multi\-keyrin
 
 **Topics**
 + [Required Permissions for KMS Keyrings](#kms-keyring-permissions)
++ [Identifying CMKs in a AWS KMS Keyring](#kms-keyring-id)
 + [Encrypting with a KMS Keyring](#kms-keyring-encrypt)
 + [Decrypting with a KMS Keyring](#kms-keyring-decrypt)
 + [Using a KMS Discovery Keyring](#kms-keyring-discovery)
@@ -74,6 +75,13 @@ The AWS Encryption SDK doesn't require an AWS account and it doesn't depend on a
 + To encrypt with a multi\-keyring comprised of KMS keyrings, you need [kms:GenerateDataKey](https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey.html) permission on the generator key in the generator keyring\. You need [kms:Encrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html) permission on all other keys in all other KMS keyrings\. 
 
 For detailed information about permissions for AWS KMS customer master keys, see [Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html) in the *AWS Key Management Service Developer Guide*\.
+
+### Identifying CMKs in a AWS KMS Keyring<a name="kms-keyring-id"></a>
+
+A KMS keyring can include one or more AWS KMS customer master keys \(CMKs\)\. To specify a CMK in a KMS keyring, use a supported AWS KMS key identifier\. The key identifiers you can use to identify a CMK in a keyring vary with the operation and the language implementation\. For details about the key identifiers for a AWS KMS CMK, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
++ In an encryption keyring, you can use a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-ARN) to identify CMKs\. Some language implementations allow other formats\.
++ In a decryption keyring, you must use a key ARN to identify CMKs\. This requirement applies to all language implementations of the AWS Encryption SDK\.
++ In a keyring used for encryption and decryption, you must use a key ARN to identify CMKs\. This requirement applies to all language implementations of the AWS Encryption SDK\.
 
 ### Encrypting with a KMS Keyring<a name="kms-keyring-encrypt"></a>
 
@@ -89,7 +97,7 @@ If you plan to use the same keyring for encrypting and decrypting data, use a ke
 ------
 #### [ C ]
 
-When you specify an AWS KMS CMK for a keyring in the AWS Encryption SDK for C, you must use the Amazon Resource Name \(ARN\) of the CMK\. In an encryption keyring, you can specify the key ARN or alias ARN\. In a decryption keyring, you must use the key ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.
+To identify an AWS KMS CMK in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying CMKs in a AWS KMS Keyring](#kms-keyring-id)\.
 
 For a complete example, see [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp)\.
 
@@ -104,7 +112,7 @@ struct aws_cryptosdk_keyring *kms_encrypt_keyring =
 ------
 #### [ JavaScript Browser ]
 
-When you specify an AWS KMS CMK for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid CMK identifier: a key ID, alias name, key ARN, or alias ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.
+When you specify an AWS KMS CMK for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid CMK identifier: a [key ID](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-id), [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN), [alias name](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-name), or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. For help identifying CMKs in a KMS keyring, see [Identifying CMKs in a AWS KMS Keyring](#kms-keyring-id)\.\.
 
 For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)\.
 
@@ -123,7 +131,7 @@ const keyring = new KmsKeyringBrowser({
 ------
 #### [ JavaScript Node\.js ]
 
-When you specify an AWS KMS CMK for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid CMK identifier: a key ID, alias name, key ARN, or alias ARN\. For help finding the key ARN, see [Finding the Key ID and ARN](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) in the *AWS Key Management Service Developer Guide*\. To find the alias ARN, use the [ListAliases](https://docs.aws.amazon.com/kms/latest/APIReference/API_ListAliases.html) API\.
+When you specify an AWS KMS CMK for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid CMK identifier: a [key ID](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-id), [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN), [alias name](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-name), or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. For help identifying CMKs in a KMS keyring, see [Identifying CMKs in a AWS KMS Keyring](#kms-keyring-id)\.\.
 
 For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)\.
 

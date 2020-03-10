@@ -18,9 +18,9 @@ This example uses the AWS Encryption CLI to encrypt the contents of the `hello.t
 
 When you run an encrypt command on a file, the AWS Encryption CLI gets the contents of the file, generates a unique [data key](concepts.md#DEK), encrypts the file contents under the data key, and then writes the [encrypted message](concepts.md#message) to a new file\. 
 
-The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
+The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\. For details about the key identifiers for an AWS KMS customer master key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 
-The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--master-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the master key represented by the CMK ARN\. 
+The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--master-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the master key represented by the key ARN\. 
 
 The command uses the `--metadata-output` parameter to specify a text file for the metadata about the encryption operation\. As a best practice, the command uses the `--encryption-context` parameter to specify an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context)\.
 
@@ -30,7 +30,7 @@ The value of the `--output` parameter, a dot \(\.\), tells the command to write 
 #### [ Bash ]
 
 ```
-\\ To run this example, replace the fictitious CMK ARN with a valid value.
+\\ To run this example, replace the fictitious key ARN with a valid value.
 $ cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $ aws-encryption-cli --encrypt \
@@ -45,7 +45,7 @@ $ aws-encryption-cli --encrypt \
 #### [ PowerShell ]
 
 ```
-# To run this example, replace the fictitious CMK ARN with a valid value.
+# To run this example, replace the fictitious key ARN with a valid value.
 PS C:\> $CmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 PS C:\> aws-encryption-cli --encrypt `
@@ -225,7 +225,7 @@ The final command lists the files in the `TestEnc` directory\. There is one outp
 #### [ Bash ]
 
 ```
-# To run this example, replace the fictitious CMK ARN with a valid master key identifier.
+# To run this example, replace the fictitious key ARN with a valid master key identifier.
 $  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $ aws-encryption-cli --encrypt \
@@ -243,7 +243,7 @@ cool-new-thing.py.encrypted  employees.csv.encrypted  hello.txt.encrypted
 #### [ PowerShell ]
 
 ```
-# To run this example, replace the fictitious CMK ARN with a valid master key identifier.
+# To run this example, replace the fictitious key ARN with a valid master key identifier.
 PS C:\> $cmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 PS C:\> aws-encryption-cli --encrypt `

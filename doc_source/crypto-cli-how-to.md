@@ -64,12 +64,12 @@ In an encrypt command, each `--master-keys` parameter value must include at leas
 ```
 aws-encryption-cli --encrypt --master-keys key=1234abcd-12ab-34cd-56ef-1234567890ab key=1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d
 ```
-In encrypt commands that use AWS KMS CMKs, the value of **key** can be the CMK ID, its [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn), an alias name, or alias ARN\. For example, this encrypt command uses an alias ARN in the value of the **key** attribute\.   
+In encrypt commands that use AWS KMS CMKs, the value of **key** can be the key ID, its key ARN, an alias name, or alias ARN\. For example, this encrypt command uses an alias ARN in the value of the **key** attribute\. For details about the key identifiers for a AWS KMS CMK, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.  
 
 ```
 aws-encryption-cli --encrypt --master-keys key=arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias
 ```
-In decrypt commands that use a custom master key provider, **key** and **provider** attributes are required\. The key attribute is not permitted in decrypt commands that use an AWS KMS CMK\.  
+In decrypt commands that use a custom master key provider, **key** and **provider** attributes are required\. The **key** attribute is not permitted in decrypt commands that use an AWS KMS CMK\.  
 
 ```
 aws-encryption-cli --decrypt --master-keys provider='myProvider' key='100101'

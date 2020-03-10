@@ -85,8 +85,8 @@ Specifies the [master keys](concepts.md#master-key) used in encryption and decry
 The `--master-keys` parameter is required in encrypt commands\. It is required in decrypt commands only when you are using a custom master key provider\.  
 **Attributes**: The value of the `--master-keys` parameter consists of the following attributes\. The format is `attribute_name=value`\.     
 **key**  
-Identifies the master key\. The format is a **key**=ID pair\.   
-The **key** attribute is required in all encrypt commands\. When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a CMK ID or Amazon Resource Name \(ARN\), an alias, or an alias ARN\.   
+Identifies the master key\. The format is a **key**=ID pair\. The **key** attribute is required in all encrypt commands\.   
+When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For details about the   
 The **key** attribute is required in decrypt commands when the master key provider is not AWS KMS\. The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS CMK\.   
 You can specify multiple **key** attributes in each `--master-keys` parameter value\. However, any **provider**, **region**, and **profile** attributes apply to all master keys in the parameter value\. To specify master keys with different attribute values, use multiple `--master-keys` parameters in the command\.   
 **provider**  
