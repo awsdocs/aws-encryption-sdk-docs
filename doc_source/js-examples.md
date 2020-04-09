@@ -148,7 +148,7 @@ First, get the encryption context from the message header\. Then, verify that ea
 const { encryptionContext } = messageHeader
 
 Object
-  .entries(context)
+  .entries(encryptionContext)
   .forEach(([key, value]) => {
     if (encryptionContext[key] !== value) throw new Error('Encryption Context does not match expected values')
 })
@@ -158,7 +158,7 @@ Object
 const { encryptionContext } = messageHeader
 
 Object
-  .entries(context)
+  .entries(encryptionContext)
   .forEach(([key, value]) => {
     if (encryptionContext[key] !== value) throw new Error('Encryption Context does not match expected values')
 })
