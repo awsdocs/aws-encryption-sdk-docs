@@ -1,4 +1,4 @@
-# Getting Started with the AWS Encryption SDK<a name="getting-started"></a>
+# Getting started with the AWS Encryption SDK<a name="getting-started"></a>
 
 To use the AWS Encryption SDK, you need to configure [keyring](concepts.md#keyring) or [master key provider](concepts.md#master-key-provider) with encryption keys\. If you don't have a key infrastructure, we recommend using [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\. Many of the code examples in the AWS Encryption SDK require an AWS KMS [customer master key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMK\)\.
 

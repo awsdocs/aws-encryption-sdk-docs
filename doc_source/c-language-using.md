@@ -4,19 +4,19 @@ This topic explains some of the features of the AWS Encryption SDK for C that ar
 
 For details about programming with the AWS Encryption SDK for C, see the [C examples](c-examples.md), the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) on GitHub, and the [AWS Encryption SDK for C API documentation](https://aws.github.io/aws-encryption-sdk-c/html/)\.
 
-See also: [Using Keyrings](choose-keyring.md)
+See also: [Using keyrings](choose-keyring.md)
 
 **Topics**
-+ [Patterns for Encrypting and Decrypting Data](#c-language-using-pattern)
-+ [Reference Counting](#c-language-using-release)
++ [Patterns for encrypting and decrypting data](#c-language-using-pattern)
++ [Reference counting](#c-language-using-release)
 
-## Patterns for Encrypting and Decrypting Data<a name="c-language-using-pattern"></a>
+## Patterns for encrypting and decrypting data<a name="c-language-using-pattern"></a>
 
 When you use the AWS Encryption SDK for C, you follow a pattern similar to this: create a [keyring](concepts.md#keyring), create a [CMM](concepts.md#crypt-materials-manager) that uses the keyring, create a session that uses the CMM \(and keyring\), and then process the session\.
 
 1\. Create a keyring\.  
-Configure your [keyring](concepts.md#keyring) with the wrapping keys that you want to use to encrypt your data keys\. This example uses a [KMS keyring](choose-keyring.md#use-kms-keyring) with one AWS KMS customer master key \(CMK\), but you can use any type of keyring in its place\.  
-To identify an AWS KMS CMK in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying CMKs in a AWS KMS Keyring](choose-keyring.md#kms-keyring-id)\.  
+Configure your [keyring](concepts.md#keyring) with the wrapping keys that you want to use to encrypt your data keys\. This example uses an [AWS KMS keyring](choose-keyring.md#use-kms-keyring) with one AWS KMS customer master key \(CMK\), but you can use any type of keyring in its place\.  
+To identify an AWS KMS CMK in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
 
 ```
 const char * KEY_ARN = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"    
@@ -73,7 +73,7 @@ aws_cryptosdk_session_process(session,
                               &ciphertext_consumed)
 ```
 
-## Reference Counting<a name="c-language-using-release"></a>
+## Reference counting<a name="c-language-using-release"></a>
 
 To prevent memory leaks, be sure to release your references to all objects that you create when you are finished with them\. Otherwise, you end up with memory leaks\. The SDK provides methods to make this task easier\.
 

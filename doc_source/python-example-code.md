@@ -1,14 +1,14 @@
-# AWS Encryption SDK for Python Example Code<a name="python-example-code"></a>
+# AWS Encryption SDK for Python example code<a name="python-example-code"></a>
 
 The following examples show you how to use the AWS Encryption SDK for Python to encrypt and decrypt data\.
 
 **Topics**
 + [Strings](#python-example-strings)
-+ [Byte Streams](#python-example-streams)
-+ [Byte Streams with Multiple Master Key Providers](#python-example-multiple-providers)
-+ [Using Data Key Caching to Encrypt Messages](#python-example-caching)
++ [Byte streams](#python-example-streams)
++ [Byte streams with multiple master key providers](#python-example-multiple-providers)
++ [Using data key caching to encrypt messages](#python-example-caching)
 
-## Encrypting and Decrypting Strings<a name="python-example-strings"></a>
+## Encrypting and decrypting strings<a name="python-example-strings"></a>
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. This example uses a customer master key \(CMK\) in [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as the master key\.
 
@@ -77,7 +77,7 @@ def cycle_string(key_arn, source_plaintext, botocore_session=None):
     print('Decrypted: ', cycled_plaintext)
 ```
 
-## Encrypting and Decrypting Byte Streams<a name="python-example-streams"></a>
+## Encrypting and decrypting byte streams<a name="python-example-streams"></a>
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt byte streams\. This example doesn't use AWS\. It uses a static, ephemeral master key provider\.
 
@@ -180,7 +180,7 @@ def cycle_file(source_plaintext_filename):
     return ciphertext_filename, cycled_plaintext_filename
 ```
 
-## Encrypting and Decrypting Byte Streams with Multiple Master Key Providers<a name="python-example-multiple-providers"></a>
+## Encrypting and decrypting byte streams with multiple master key providers<a name="python-example-multiple-providers"></a>
 
 The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses an AWS KMS customer master key \(CMK\) and an RSA key pair as the master keys\.
 
@@ -325,11 +325,11 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
     return ciphertext_filename, cycled_kms_plaintext_filename, cycled_static_plaintext_filename
 ```
 
-## Using Data Key Caching to Encrypt Messages<a name="python-example-caching"></a>
+## Using data key caching to encrypt messages<a name="python-example-caching"></a>
 
 The following example shows how to use [data key caching](data-key-caching.md) in the AWS Encryption SDK for Python\. It is designed to show you how to configure an instance of the [local cache](data-caching-details.md#simplecache) \(LocalCryptoMaterialsCache\) with the required capacity value and an instance of the [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) with [cache security thresholds](thresholds.md)\. 
 
-This very basic example creates a function that encrypts a fixed string\. It lets you specify a AWS KMS customer master key, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data Key Caching Example in Python](sample-cache-example-python.md)\.
+This very basic example creates a function that encrypts a fixed string\. It lets you specify an AWS KMS customer master key, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data key caching example in Python](sample-cache-example-python.md)\.
 
 Although it is optional, this example also uses an [encryption context](concepts.md#encryption-context) as additional authenticated data\. When you decrypt data that was encrypted with an encryption context, be sure that your application verifies that the encryption context is the one that you expect before returning the plaintext data to your caller\. An encryption context is a best practice element of any encryption or decryption operation, but it plays a special role in data key caching\. For details, see [Encryption Context: How to Select Cache Entries](data-caching-details.md#caching-encryption-context)\.
 

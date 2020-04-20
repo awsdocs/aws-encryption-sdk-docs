@@ -1,4 +1,4 @@
-# Data Key Caching Example in Java<a name="sample-cache-example-java"></a>
+# Data key caching example in Java<a name="sample-cache-example-java"></a>
 
 This code sample creates a basic implementation of data key caching with a [local cache](data-caching-details.md#simplecache) in Java\. For details about the Java implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Java](java.md)\.
 
@@ -8,7 +8,7 @@ The code creates two instances of a local cache: one for data producers that are
 
 The producer gets a map, converts it to JSON, uses the AWS Encryption SDK to encrypt it, and pushes the ciphertext record to a [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each AWS Region\. 
 
-The code defines a [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) and associates it with a [local cache](data-caching-details.md#simplecache) and an underlying KMS [master key provider](concepts.md#master-key-provider)\. The caching CMM caches the data keys \(and [related cryptographic materials](data-caching-details.md#cache-entries)\) from the master key provider\. It also interacts with the cache on behalf of the SDK and enforces security thresholds that you set\. 
+The code defines a [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) and associates it with a [local cache](data-caching-details.md#simplecache) and an underlying [AWS KMS master key provider](concepts.md#master-key-provider)\. The caching CMM caches the data keys \(and [related cryptographic materials](data-caching-details.md#cache-entries)\) from the master key provider\. It also interacts with the cache on behalf of the SDK and enforces security thresholds that you set\. 
 
 Because the call to the `encryptData` method specifies a caching CMM, instead of a regular [cryptographic materials manager \(CMM\)](concepts.md#crypt-materials-manager) or master key provider, the method will use data key caching\.
 

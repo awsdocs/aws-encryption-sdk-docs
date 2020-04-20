@@ -1,12 +1,12 @@
-# Installing the AWS Encryption SDK Command Line Interface<a name="crypto-cli-install"></a>
+# Installing the AWS Encryption SDK command line interface<a name="crypto-cli-install"></a>
 
 This topic explains how to install the AWS Encryption CLI\. For detailed information, see the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub and [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
 **Topics**
-+ [Installing the Prerequisites](#crypto-cli-prerequisites)
++ [Installing the prerequisites](#crypto-cli-prerequisites)
 + [Installing the AWS Encryption CLI](#install-sdk-cli)
 
-## Installing the Prerequisites<a name="crypto-cli-prerequisites"></a>
+## Installing the prerequisites<a name="crypto-cli-prerequisites"></a>
 
 The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To use the AWS Encryption CLI, you need Python and `pip`, the Python package management tool\. Python and `pip` are available on all supported platforms\.
 

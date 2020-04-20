@@ -1,12 +1,12 @@
-# Document History for the AWS Encryption SDK Developer Guide<a name="document-history"></a>
+# Document history for the AWS Encryption SDK Developer Guide<a name="document-history"></a>
 
 This topic describes significant updates to the *AWS Encryption SDK Developer Guide*\.
 
 **Topics**
-+ [Recent Updates](#recent-updates)
-+ [Earlier Updates](#earlier-updates)
++ [Recent updates](#recent-updates)
++ [Earlier updates](#earlier-updates)
 
-## Recent Updates<a name="recent-updates"></a>
+## Recent updates<a name="recent-updates"></a>
 
 The following table describes significant changes to this documentation since November 2017\. In addition to major changes listed here, we also update the documentation frequently to improve the descriptions and examples, and to address the feedback that you send to us\. To be notified about significant changes, use the link in the upper right corner to subscribe to the RSS feed\.
 
@@ -20,7 +20,7 @@ The following table describes significant changes to this documentation since No
 | [Preview release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html) | Added documentation of the preview release of the [AWS Encryption SDK for C](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/c-language.html)\. | February 5, 2019 | 
 | [New release](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) | Added documentation of the [command line interface](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/crypto-cli.html) for the AWS Encryption SDK\. | November 20, 2017 | 
 
-## Earlier Updates<a name="earlier-updates"></a>
+## Earlier updates<a name="earlier-updates"></a>
 
 The following table describes significant changes to the *AWS Encryption SDK Developer Guide* before November 2017\.
 
@@ -29,7 +29,7 @@ The following table describes significant changes to the *AWS Encryption SDK Dev
 
 | Change | Description | Date | 
 | --- | --- | --- | 
-| New release |  Added the [Data Key Caching](data-key-caching.md) chapter for the new feature\. Added the [AWS Encryption SDK Initialization Vector Reference](IV-reference.md) topic that explains that the SDK changed from generating random IVs to constructing deterministic IVs\. Added the [Concepts in the AWS Encryption SDK](concepts.md) topic to explain concepts, including the new cryptographic materials manager\.  | July 31, 2017 | 
-| Update |  Expanded the [Message Format Reference](message-format.md) documentation into a new [AWS Encryption SDK Reference](reference.md) section\. Added a section about the AWS Encryption SDK [Supported Algorithm Suites](supported-algorithms.md)\.  | March 21, 2017 | 
+| New release |  Added the [Data key caching](data-key-caching.md) chapter for the new feature\. Added the [AWS Encryption SDK initialization vector reference](IV-reference.md) topic that explains that the SDK changed from generating random IVs to constructing deterministic IVs\. Added the [Concepts in the AWS Encryption SDK](concepts.md) topic to explain concepts, including the new cryptographic materials manager\.  | July 31, 2017 | 
+| Update |  Expanded the [Message format reference](message-format.md) documentation into a new [AWS Encryption SDK reference](reference.md) section\. Added a section about the AWS Encryption SDK [Supported algorithm suites](supported-algorithms.md)\.  | March 21, 2017 | 
 | New release | The AWS Encryption SDK now supports the [Python](python.md) programming language, in addition to [Java](java.md)\. | March 21, 2017 | 
 | Initial release | Initial release of the AWS Encryption SDK and this documentation\. | March 22, 2016 | 

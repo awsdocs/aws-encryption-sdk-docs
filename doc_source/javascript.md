@@ -8,7 +8,7 @@ All language\-specific implementations of the AWS Encryption SDK are designed to
 
 **Learn More**
 + For details about programming with the AWS Encryption SDK for JavaScript, see the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository on GitHub\.
-+ For programming examples, see [AWS Encryption SDK for JavaScript Examples](js-examples.md) and the [example\-browser](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/example-browser) and [example\-node](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/example-node) modules in the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository\. 
++ For programming examples, see [AWS Encryption SDK for JavaScript examples](js-examples.md) and the [example\-browser](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/example-browser) and [example\-node](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/example-node) modules in the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository\. 
 +  For a real\-world example of using the AWS Encryption SDK for JavaScript to encrypt data in a web application, see [How to enable encryption in a browser with the AWS Encryption SDK for JavaScript and Node\.js](http://aws.amazon.com/blogs/security/how-to-enable-encryption-browser-aws-encryption-sdk-javascript-node-js/) in the AWS Security Blog\.
 
 **Topics**

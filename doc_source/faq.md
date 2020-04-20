@@ -1,4 +1,4 @@
-# Frequently Asked Questions<a name="faq"></a>
+# Frequently asked questions<a name="faq"></a>
 + [How is the AWS Encryption SDK different from the AWS SDKs?](#aws-sdks)
 + [How is the AWS Encryption SDK different from the Amazon S3 encryption client?](#s3-encryption-client)
 + [Which cryptographic algorithms are supported by the AWS Encryption SDK, and which one is the default?](#supported-algorithms-faq)
@@ -26,11 +26,11 @@ The AWS Encryption SDK provides encryption and decryption for data that you can 
 
 **Which cryptographic algorithms are supported by the AWS Encryption SDK, and which one is the default?**  <a name="supported-algorithms-faq"></a>
 The AWS Encryption SDK uses the Advanced Encryption Standard \(AES\) algorithm in Galois/Counter Mode \(GCM\), known as AES\-GCM\. The SDK supports 256\-bit, 192\-bit, and 128\-bit encryption keys\. In all cases, the length of the initialization vector \(IV\) is 12 bytes; the length of the authentication tag is 16 bytes\. By default, the SDK uses the data key as an input to the HMAC\-based extract\-and\-expand key derivation function \(HKDF\) to derive the AES\-GCM encryption key, and also adds an Elliptic Curve Digital Signature Algorithm \(ECDSA\) signature\.  
-For information about choosing which algorithm to use, see [Supported Algorithm Suites](supported-algorithms.md)\.  
-For implementation details about the supported algorithms, see [Algorithms Reference](algorithms-reference.md)\.
+For information about choosing which algorithm to use, see [Supported algorithm suites](supported-algorithms.md)\.  
+For implementation details about the supported algorithms, see [Algorithms reference](algorithms-reference.md)\.
 
 **How is the initialization vector \(IV\) generated and where is it stored?**  <a name="iv-generation"></a>
-In previous releases, the AWS Encryption SDK randomly generated a unique IV value for each encryption operation\. The SDK now uses a deterministic method to construct a different IV value for each frame so that every IV is unique within its message\. The SDK stores the IV in the encrypted message that it returns\. For more information, see [AWS Encryption SDK Message Format Reference](message-format.md)\.
+In previous releases, the AWS Encryption SDK randomly generated a unique IV value for each encryption operation\. The SDK now uses a deterministic method to construct a different IV value for each frame so that every IV is unique within its message\. The SDK stores the IV in the encrypted message that it returns\. For more information, see [AWS Encryption SDK message format reference](message-format.md)\.
 
 **How is each data key generated, encrypted, and decrypted?**  <a name="key-generation"></a>
 The method depends on the master key provider or keyring and its implementation of its master keys or wrapping keys\. When AWS KMS is the master key provider, the AWS Encryption SDK uses the AWS KMS [GenerateDataKey](https://docs.aws.amazon.com/kms/latest/APIReference/API_GenerateDataKey.html) API operation to generate each data key in both plaintext and encrypted forms\. It uses the [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation to decrypt the data key\. AWS KMS encrypts and decrypts the data key by using the customer master key \(CMK\) that you specified when configuring the master key provider or keyring\.
@@ -39,7 +39,7 @@ The method depends on the master key provider or keyring and its implementation 
 The AWS Encryption SDK does this for you\. When you encrypt data, the SDK encrypts the data key and stores the encrypted key along with the encrypted data in the [encrypted message](concepts.md#message) that it returns\. When you decrypt data, the AWS Encryption SDK extracts the encrypted data key from the encrypted message, decrypts it, and then uses it to decrypt the data\.
 
 **How does the AWS Encryption SDK store encrypted data keys with their encrypted data?**  <a name="store-encrypted-keys"></a>
-The encryption operations in the AWS Encryption SDK return an [encrypted message](concepts.md#message), a single data structure that contains the encrypted data and its encrypted data keys\. The message format consists of at least two parts: a *header* and a *body*\. In some cases, the message format consists of a third part known as a *footer*\. The message header contains the encrypted data keys and information about how the message body is formed\. The message body contains the encrypted data\. The message footer contains a signature that authenticates the message header and message body\. For more information, see [AWS Encryption SDK Message Format Reference](message-format.md)\.
+The encryption operations in the AWS Encryption SDK return an [encrypted message](concepts.md#message), a single data structure that contains the encrypted data and its encrypted data keys\. The message format consists of at least two parts: a *header* and a *body*\. In some cases, the message format consists of a third part known as a *footer*\. The message header contains the encrypted data keys and information about how the message body is formed\. The message body contains the encrypted data\. The message footer contains a signature that authenticates the message header and message body\. For more information, see [AWS Encryption SDK message format reference](message-format.md)\.
 
 **How much overhead does the AWS Encryption SDK message format add to my encrypted data?**  <a name="overhead"></a>
 The amount of overhead added by the AWS Encryption SDK depends on several factors, including the following:  
@@ -48,7 +48,7 @@ The amount of overhead added by the AWS Encryption SDK depends on several factor
 + Whether additional authenticated data \(AAD\) is provided, and the length of that AAD
 + The number and type of master key providers
 + The frame size \(when [framed data](message-format.md#body-framing) is used\)
-When you use the AWS Encryption SDK with its default configuration, with one CMK in AWS KMS as the master key, with no AAD, and encrypt nonframed data, the overhead is approximately 600 bytes\. In general, you can reasonably assume that the AWS Encryption SDK adds overhead of 1 KB or less, not including the provided AAD\. For more information, see [AWS Encryption SDK Message Format Reference](message-format.md)\.
+When you use the AWS Encryption SDK with its default configuration, with one CMK in AWS KMS as the master key, with no AAD, and encrypt nonframed data, the overhead is approximately 600 bytes\. In general, you can reasonably assume that the AWS Encryption SDK adds overhead of 1 KB or less, not including the provided AAD\. For more information, see [AWS Encryption SDK message format reference](message-format.md)\.
 
 **Can I use my own master key provider?**  <a name="own-provider"></a>
 Yes\. The implementation details vary depending on which of the [supported programming languages](programming-languages.md) you use\. However, all supported languages allow you to define custom [cryptographic materials managers \(CMMs\)](concepts.md#crypt-materials-manager), master key providers, keyrings, master keys, and wrapping keys\.

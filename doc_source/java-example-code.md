@@ -1,17 +1,17 @@
-# AWS Encryption SDK for Java Example Code<a name="java-example-code"></a>
+# AWS Encryption SDK for Java example code<a name="java-example-code"></a>
 
 The following examples show you how to use the AWS Encryption SDK for Java to encrypt and decrypt data\.
 
 **Topics**
 + [Strings](#java-example-strings)
-+ [Byte Streams](#java-example-streams)
-+ [Byte Streams with Multiple Master Key Providers](#java-example-multiple-providers)
++ [Byte streams](#java-example-streams)
++ [Byte streams with multiple master key providers](#java-example-multiple-providers)
 
-## Encrypting and Decrypting Strings<a name="java-example-strings"></a>
+## Encrypting and decrypting strings<a name="java-example-strings"></a>
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. 
 
-This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying CMKs in a KMS keyring, see [Identifying CMKs in a AWS KMS Keyring](choose-keyring.md#kms-keyring-id)\.
+This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying CMKs in an AWS KMS keyring, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)
 
 When you call `encryptString`, the AWS Encryption SDK returns the [encrypted message](concepts.md#message)\. This includes the ciphertext, the encrypted data keys, and the encryption context, if you use it\. When you call `getResult` on the returned object, the AWS Encryption SDK returns a base\-64\-encoded string version of the [encrypted message](message-format.md)\.
 
@@ -104,7 +104,7 @@ public class StringExample {
 }
 ```
 
-## Encrypting and Decrypting Byte Streams<a name="java-example-streams"></a>
+## Encrypting and decrypting byte streams<a name="java-example-streams"></a>
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt byte streams\. This example does not use AWS\. It uses the Java Cryptography Extension \(JCE\) to protect the master key\.
 
@@ -211,7 +211,7 @@ public class FileStreamingExample {
 }
 ```
 
-## Encrypting and Decrypting Byte Streams with Multiple Master Key Providers<a name="java-example-multiple-providers"></a>
+## Encrypting and decrypting byte streams with multiple master key providers<a name="java-example-multiple-providers"></a>
 
 The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses a CMK in [AWS KMS](https://aws.amazon.com/kms/) and an RSA key pair as the master keys\.
 

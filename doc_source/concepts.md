@@ -3,16 +3,16 @@
 This section introduces the concepts used in the AWS Encryption SDK, and provides a glossary and reference\.
 
 **Topics**
-+ [Data Keys](#DEK)
-+ [Master Key](#master-key)
-+ [Cryptographic Materials Manager](#crypt-materials-manager)
-+ [Master Key Provider \(Java and Python\)](#master-key-provider)
++ [Data keys](#DEK)
++ [Master key](#master-key)
++ [Cryptographic materials manager](#crypt-materials-manager)
++ [Master key provider \(Java and Python\)](#master-key-provider)
 + [Keyring \(C and JavaScript\)](#keyring)
-+ [Algorithm Suite](#crypto-algorithm)
-+ [Encryption Context](#encryption-context)
-+ [Encrypted Message](#message)
++ [Algorithm suite](#crypto-algorithm)
++ [Encryption context](#encryption-context)
++ [Encrypted message](#message)
 
-## Data Keys<a name="DEK"></a>
+## Data keys<a name="DEK"></a>
 
 A *data key* is an encryption key that the AWS Encryption SDK uses to encrypt your data\. Each data key is a byte array that conforms to the requirements for cryptographic keys\. Unless you're using [data key caching](data-key-caching.md), the AWS Encryption SDK uses a unique data key to encrypt each message\. 
 
@@ -25,7 +25,7 @@ However, when you select your master key provider \(Java and Python\) or keyring
 **Tip**  
 In the AWS Encryption SDK, we distinguish *data keys* from *data encryption keys*\. Several of the supported [algorithm suites](#crypto-algorithm), including the default suite, use a [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function) that prevents the data key from hitting its cryptographic limits\. The key derivation function takes the data key as input and returns a data encryption key that is actually used to encrypt the data\. For this reason, we often say that data is encrypted "under" a data key rather than "by" the data key\.
 
-## Master Key<a name="master-key"></a>
+## Master key<a name="master-key"></a>
 
 A *master key*, also known as a *wrapping key*, is an encryption key that is used to encrypt data keys\. Each plaintext data key can be encrypted under one or more master keys\. 
 
@@ -33,7 +33,7 @@ When you use the AWS Encryption SDK, you do not need to generate, implement, ext
 
 The AWS Encryption SDK provides several commonly used master keys or wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric customer master keys \(CMKs\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and RSA keys\. You can also extend or implement your own master keys and wrapping keys\. 
 
-## Cryptographic Materials Manager<a name="crypt-materials-manager"></a>
+## Cryptographic materials manager<a name="crypt-materials-manager"></a>
 
 The cryptographic materials manager \(CMM\) assembles the cryptographic materials that are used to encrypt and decrypt data\. The *cryptographic materials* include plaintext and encrypted data keys, and an optional message signing key\. You can use the default CMM that the AWS Encryption SDK provides or write a custom CMM\. You can specify a CMM, but you never interact with it directly\. The encryption and decryption methods handle it for you\.
 
@@ -43,13 +43,13 @@ You can specify a CMM and master key provider or keyring, but it's not required\
 
 Because the CMM acts as a liaison between the SDK and a keyring or master key provider, it is an ideal point for customization and extension, such as support for policy enforcement and caching\. The AWS Encryption SDK provides a caching CMM to support [data key caching\.](data-key-caching.md) 
 
-## Master Key Provider \(Java and Python\)<a name="master-key-provider"></a>
+## Master key provider \(Java and Python\)<a name="master-key-provider"></a>
 
 In the AWS Encryption SDK for Java and the AWS Encryption SDK for Python, a *master key provider* returns master keys, or objects that identify or represent master keys\. Each master key is associated with one master key provider, but a master key provider typically provides multiple master keys\.
 
 When you use the Java and Python implementations of the AWS Encryption SDK, you need to specify a [cryptographic materials manager](#crypt-materials-manager) \(CMM\) or a master key provider, but you do not need to design or implement your own master key provider\. If you specify a master key provider, the SDK creates a Default CMM for you based on the master key provider that you specify\. 
 
-Master key providers in Java and Python are compatible with keyrings in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript, subject to language constraints\. However, you must specify the same key material and use a keyring that is compatible with the master key provider\. For details, see [Keyring Compatibility](choose-keyring.md#keyring-compatibility)\.
+Master key providers in Java and Python are compatible with keyrings in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript, subject to language constraints\. However, you must specify the same key material and use a keyring that is compatible with the master key provider\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
 
 ## Keyring \(C and JavaScript\)<a name="keyring"></a>
 
@@ -57,11 +57,11 @@ A *keyring* generates, encrypts, and decrypts data keys\. Each [keyring](choose-
 
 You can use a single keyring or combine keyrings of the same type or a different type into a *multi\-keyring*\. The [multi\-keyring](choose-keyring.md#use-multi-keyring) returns a copy of the data key encrypted by each of the wrapping keys in each of the keyrings that comprise the multi\-keyring\. When you use a multi\-keyring to encrypt data, you can decrypt the data using a keyring configured with any one of the wrapping keys in the multi\-keyring\.
 
-For details about working with keyrings, see [Using Keyrings](choose-keyring.md)\.
+For details about working with keyrings, see [Using keyrings](choose-keyring.md)\.
 
-Keyrings in C and JavaScript are compatible with master key providers in the AWS Encryption SDK for Java and the AWS Encryption SDK for Python\. However, you must specify the same key material and use a keyring that is compatible with the master key provider, subject to language constraints\. Any minor incompatibility due to language constraints is explained in the topic about the language implementation\. For details, see [Keyring Compatibility](choose-keyring.md#keyring-compatibility)\. 
+Keyrings in C and JavaScript are compatible with master key providers in the AWS Encryption SDK for Java and the AWS Encryption SDK for Python\. However, you must specify the same key material and use a keyring that is compatible with the master key provider, subject to language constraints\. Any minor incompatibility due to language constraints is explained in the topic about the language implementation\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\. 
 
-## Algorithm Suite<a name="crypto-algorithm"></a>
+## Algorithm suite<a name="crypto-algorithm"></a>
 
 The AWS Encryption SDK supports several [algorithm suites](supported-algorithms.md)\. All of the supported suites use Advanced Encryption Standard \(AES\) as the primary algorithm, and combine it with other algorithms and values\. 
 
@@ -69,7 +69,7 @@ The AWS Encryption SDK establishes a recommended algorithm suite as the default 
 
 If you specify an algorithm suite, we recommend an algorithm suite that uses a [key derivation function](https://en.wikipedia.org/wiki/HKDF) and a message signing algorithm\. Algorithm suites that have neither feature are supported only for backward compatibility\.
 
-## Encryption Context<a name="encryption-context"></a>
+## Encryption context<a name="encryption-context"></a>
 
 To improve the security of your cryptographic operations, include an [encryption context](https://docs.aws.amazon.com/crypto/latest/userguide/cryptography-concepts.html#define-encryption-context) in all requests to encrypt data\. Using an encryption context is optional, but it is a cryptographic best practice that we recommend\.
 
@@ -95,9 +95,9 @@ For examples of verifying an encryption context in your code, see:
 + Java – [Strings](java-example-code.md#java-example-strings), [Byte Streams](java-example-code.md#java-example-streams)
 + JavaScript Node\.js – [kms\-simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)
 + JavaScript Browser – [kms\-simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)
-+ Python – [Using Data Key Caching to Encrypt Messages](python-example-code.md#python-example-caching)
++ Python – [Using data key caching to encrypt messages](python-example-code.md#python-example-caching)
 
-## Encrypted Message<a name="message"></a>
+## Encrypted message<a name="message"></a>
 
 When you encrypt data with the AWS Encryption SDK, it returns an encrypted message\.
 

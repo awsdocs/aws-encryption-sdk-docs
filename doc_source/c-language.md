@@ -6,13 +6,13 @@ Like all implementations of the AWS Encryption SDK, the AWS Encryption SDK for C
 
 All language\-specific implementations of the AWS Encryption SDK are fully interoperable\. For example, you can encrypt data with the AWS Encryption SDK for C and decrypt it with [any supported language implementation](programming-languages.md), including the [AWS Encryption CLI](crypto-cli.md)\.
 
-The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS Key Management Service \(AWS KMS\) so it can support the optional [KMS keyring](choose-keyring.md#use-kms-keyring)\. However, the AWS Encryption SDK doesn't require AWS KMS or any other AWS service\.
+The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS Key Management Service \(AWS KMS\) so it can support the optional [AWS KMS keyring](choose-keyring.md#use-kms-keyring)\. However, the AWS Encryption SDK doesn't require AWS KMS or any other AWS service\.
 
 **Learn More**
 + For details about programming with the AWS Encryption SDK for C, see the [C examples](c-examples.md), the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) on GitHub, and the [AWS Encryption SDK for C API documentation](https://aws.github.io/aws-encryption-sdk-c/html/)\.
 + For a discussion about how to use the AWS Encryption SDK for C to encrypt data so that you can decrypt it in multiple AWS Regions, see [How to decrypt ciphertexts in multiple regions with the AWS Encryption SDK in C](http://aws.amazon.com/blogs/security/how-to-decrypt-ciphertexts-multiple-regions-aws-encryption-sdk-in-c/) in the AWS Security Blog\.
 
 **Topics**
-+ [Install and Build](c-language-installation.md)
++ [Install and build](c-language-installation.md)
 + [Using the C SDK](c-language-using.md)
 + [Examples](c-examples.md)

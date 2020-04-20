@@ -4,9 +4,9 @@ The AWS Encryption SDK for JavaScript is designed to be interoperable with other
 
 However, when you use the AWS Encryption SDK for JavaScript, you need to be aware of some compatibility issues in the JavaScript language implementation and in web browsers\.
 
-Also, when using different language implementations, be sure to configure compatible master key providers, master keys, and keyrings\. For details, see [Keyring Compatibility](choose-keyring.md#keyring-compatibility)\.
+Also, when using different language implementations, be sure to configure compatible master key providers, master keys, and keyrings\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
 
-## AWS Encryption SDK for JavaScript Compatibility<a name="javascript-language-compatibility"></a>
+## AWS Encryption SDK for JavaScript compatibility<a name="javascript-language-compatibility"></a>
 
 The JavaScript implementation of the AWS Encryption SDK differs from other language implementations in the following ways:
 + The encrypt operation of the AWS Encryption SDK for JavaScript doesn't return nonframed ciphertext\. However, the AWS Encryption SDK for JavaScript will decrypt framed and nonframed ciphertext returned by other language implementations of the AWS Encryption SDK\.
@@ -18,22 +18,22 @@ The JavaScript implementation of the AWS Encryption SDK differs from other langu
   + OAEP with SHA1 and MGF1 with SHA1
   + PKCS1v15
 
-## Browser Compatibility<a name="javascript-browser-compatibility"></a>
+## Browser compatibility<a name="javascript-browser-compatibility"></a>
 
 Some web browsers don't support basic cryptographic operations that the AWS Encryption SDK for JavaScript requires\. You can compensate for some of the missing operations by configuring a fallback for the WebCrypto API that the browser implements\.
 
-**Web Browser Limitations**
+**Web browser limitations**
 
 The following limitations are common to all web browsers:
 + The WebCrypto API doesn't support PKCS1v15 key wrapping\.
 + Browsers don't support 192\-bit keys\.
 
-**Required Cryptographic Operations**
+**Required cryptographic operations**
 
 The AWS Encryption SDK for JavaScript requires the following operations in web browsers\. If a browser doesn't support these operations, it's incompatible with the AWS Encryption SDK for JavaScript\.
 + The browser must include `crypto.getRandomValues()`, which is a method for generating cryptographically random values\. For information about the web browser versions that support `crypto.getRandomValues()`, see [Can I Use crypto\.getRandomValues\(\)?](https://caniuse.com/#feat=getrandomvalues)\.
 
-**Required Fallback**
+**Required fallback**
 
 The AWS Encryption SDK for JavaScript requires the following libraries and operations in web browsers\. If you support a web browser that doesn't fulfill these requirements, you must configure a fallback\. Otherwise, attempts to use the AWS Encryption SDK for JavaScript with the browser will fail\.
 + The WebCrypto API, which performs basic cryptographic operations in web applications, isn't available for all browsers\. For information about the web browser versions that support web cryptography, see [Can I Use Web Cryptography?](https://caniuse.com/#feat=cryptography)\.

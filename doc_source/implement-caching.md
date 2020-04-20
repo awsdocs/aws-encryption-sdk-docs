@@ -1,4 +1,4 @@
-# How to Use Data Key Caching<a name="implement-caching"></a>
+# How to use data key caching<a name="implement-caching"></a>
 
 This topic shows you how to use data key caching in your application\. It takes you through the process step by step\. Then, it combines the steps in a simple example that uses data key caching in an operation to encrypt a string\.
 
@@ -9,13 +9,13 @@ For complete and tested examples of using data key caching in the AWS Encryption
 + C/C\+\+: [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp)
 + JavaScript Browser: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/caching_cmm.ts)
 + JavaScript Node\.js: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/caching_cmm.ts)
-+ Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/data_key_caching_basic.py)
++ Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/legacy/data_key_caching_basic.py)
 
 **Topics**
-+ [Using Data Key Caching: Step\-by\-Step](#implement-caching-steps)
-+ [Data Key Caching Example: Encrypt a String](#caching-example-encrypt-string)
++ [Using data key caching: Step\-by\-step](#implement-caching-steps)
++ [Data key caching example: Encrypt a string](#caching-example-encrypt-string)
 
-## Using Data Key Caching: Step\-by\-Step<a name="implement-caching-steps"></a>
+## Using data key caching: Step\-by\-step<a name="implement-caching-steps"></a>
 
 These step\-by\-step instructions show you how to create the components that you need to implement data key caching\.
 + [Create a data key cache](data-caching-details.md#simplecache)\. In these examples, we use the local cache that the AWS Encryption SDK provides\. We limit the cache to 10 data keys\.
@@ -74,7 +74,7 @@ These step\-by\-step instructions show you how to create the components that you
 ------
 
    
-+ Create a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C and JavaScript\)\. These examples use an AWS Key Management Service \(AWS KMS\) master key provider or a compatible [KMS keyring](choose-keyring.md#use-kms-keyring)\.
++ Create a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C and JavaScript\)\. These examples use an AWS Key Management Service \(AWS KMS\) master key provider or a compatible [AWS KMS keyring](choose-keyring.md#use-kms-keyring)\.
 
    
 
@@ -82,9 +82,9 @@ These step\-by\-step instructions show you how to create the components that you
 #### [ C ]
 
   ```
-  // Create a KMS keyring
+  // Create an AWS KMS keyring
   //   The input is the Amazon Resource Name (ARN) 
-  //   of a KMS customer master key (CMK)
+  //   of an AWS KMS customer master key (CMK)
   
   struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(kms_cmk_arn);
   ```
@@ -93,9 +93,9 @@ These step\-by\-step instructions show you how to create the components that you
 #### [ Java ]
 
   ```
-  // Create a KMS master key provider
+  // Create an AWS KMS master key provider
   //   The input is the Amazon Resource Name (ARN) 
-  //   of a KMS customer master key (CMK)
+  //   of an AWS KMS customer master key (CMK)
   
   MasterKeyProvider<KmsMasterKey> keyProvider = new KmsMasterKeyProvider(kmsCmkArn);
   ```
@@ -103,7 +103,7 @@ These step\-by\-step instructions show you how to create the components that you
 ------
 #### [ JavaScript Browser ]
 
-  In the browser, you must inject your credentials securely\. This example defines credentials in a webpack \(kms\.webpack\.config\) that resolves credentials at runtime\. It creates an AWS KMS client provider instance from a AWS KMS client and the credentials\. Then, when it creates the keyring, it passes the client provider to the constructor along with the AWS KMS customer master key \(`generatorKeyId)`\.
+  In the browser, you must inject your credentials securely\. This example defines credentials in a webpack \(kms\.webpack\.config\) that resolves credentials at runtime\. It creates an AWS KMS client provider instance from an AWS KMS client and the credentials\. Then, when it creates the keyring, it passes the client provider to the constructor along with the AWS KMS customer master key \(`generatorKeyId)`\.
 
   ```
   const { accessKeyId, secretAccessKey, sessionToken } = credentials
@@ -116,9 +116,9 @@ These step\-by\-step instructions show you how to create the components that you
       }
     })
   
-  /*  Create a KMS keyring
+  /*  Create an AWS KMS keyring
    *  The input is the Amazon Resource Name (ARN) 
-   */ of a KMS customer master key (CMK)
+   */ of an AWS KMS customer master key (CMK)
   
   const keyring = new KmsKeyringBrowser({ clientProvider, generatorKeyId })
   ```
@@ -127,9 +127,9 @@ These step\-by\-step instructions show you how to create the components that you
 #### [ JavaScript Node\.js ]
 
   ```
-  /* Create a KMS keyring
+  /* Create an AWS KMS keyring
    *   The input is the Amazon Resource Name (ARN) 
-  */   of a KMS customer master key (CMK)
+  */   of an AWS KMS customer master key (CMK)
   
   const keyring = new KmsKeyringNode({ generatorKeyId })
   ```
@@ -138,9 +138,9 @@ These step\-by\-step instructions show you how to create the components that you
 #### [ Python ]
 
   ```
-  # Create a KMS master key provider
+  # Create an AWS KMS master key provider
   #  The input is the Amazon Resource Name (ARN) 
-  #  of a KMS customer master key (CMK)
+  #  of an AWS KMS customer master key (CMK)
   
   key_provider = aws_encryption_sdk.KMSMasterKeyProvider(key_ids=[kms_cmk_arn])
   ```
@@ -161,7 +161,7 @@ These step\-by\-step instructions show you how to create the components that you
 
   In the AWS Encryption SDK for C, you can create a caching CMM from an underlying CMM, such as the default CMM, or from a keyring\. This example creates the caching CMM from a keyring\.
 
-  After you create the caching CMM, you can release your references to the keyring and the cache\. For details, see [Reference Counting](c-language-using.md#c-language-using-release)\.
+  After you create the caching CMM, you can release your references to the keyring and the cache\. For details, see [Reference counting](c-language-using.md#c-language-using-release)\.
 
   ```
   // Create the caching CMM
@@ -335,15 +335,15 @@ encrypted_message, header = aws_encryption_sdk.encrypt(
 
 ------
 
-## Data Key Caching Example: Encrypt a String<a name="caching-example-encrypt-string"></a>
+## Data key caching example: Encrypt a string<a name="caching-example-encrypt-string"></a>
 
 This simple code example uses data key caching when encrypting a string\. It combines the code from the [step\-by\-step procedure](#implement-caching-steps) into test code that you can run\.
 
 The example creates a [local cache](data-caching-details.md#simplecache) and a [master key provider](concepts.md#master-key-provider) or [keyring](concepts.md#keyring) for an AWS KMS [customer master key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMK\)\. Then, it uses the local cache and master key provider or keyring to create a caching CMM with appropriate [security thresholds](thresholds.md)\. In Java and Python, the encryption request specifies the caching CMM, the plaintext data to encrypt, and an [encryption context](data-caching-details.md#caching-encryption-context)\. In C, the caching CMM is specified in the session, and the session is provided to the encryption request\.
 
-To run these examples, you need to supply the [Amazon Resource Name \(ARN\) of a KMS CMK](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)\. Be sure that you have [permission to use the CMK](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to generate a data key\.
+To run these examples, you need to supply the [Amazon Resource Name \(ARN\) of an AWS KMS CMK](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)\. Be sure that you have [permission to use the CMK](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to generate a data key\.
 
-For more detailed, real\-world examples of creating and using a data key cache, see [Data Key Caching Example in Java](sample-cache-example-java.md) for Java, [Data Key Caching Example in Python](sample-cache-example-python.md) for Python, and [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp) for C/C\+\+\.
+For more detailed, real\-world examples of creating and using a data key cache, see [Data key caching example in Java](sample-cache-example-java.md) for Java, [Data key caching example in Python](sample-cache-example-python.md) for Python, and [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp) for C/C\+\+\.
 
 ------
 #### [ C ]

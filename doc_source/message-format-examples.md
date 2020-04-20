@@ -1,17 +1,17 @@
-# AWS Encryption SDK Message Format Examples<a name="message-format-examples"></a>
+# AWS Encryption SDK message format examples<a name="message-format-examples"></a>
 
 
 |  | 
 | --- |
-|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming Languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification) repository in GitHub\.  | 
+|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.  | 
 
 The following topics show examples of the AWS Encryption SDK message format\. Each example shows the raw bytes, in hexadecimal notation, followed by a description of what those bytes represent\.
 
 **Topics**
-+ [Non\-Framed Data](#example-nonframed)
-+ [Framed Data](#example-framed)
++ [Non\-framed data](#example-nonframed)
++ [Framed data](#example-framed)
 
-## Non\-Framed Data<a name="example-nonframed"></a>
+## Non\-framed data<a name="example-nonframed"></a>
 
 The following example shows the message format for nonframed data\.
 
@@ -21,7 +21,7 @@ The following example shows the message format for nonframed data\.
 +--------+
 01                                         Version (1.0)
 80                                         Type (128, customer authenticated encrypted data)
-0378                                       Algorithm ID (see [Algorithms Reference](algorithms-reference.md))
+0378                                       Algorithm ID (see [Algorithms reference](algorithms-reference.md))
 B8929B01 753D4A45 C0217F39 404F70FF        Message ID (random 128-bit value)
 008E                                       AAD Length (142)
 0004                                       AAD Key-Value Pair Count (4)
@@ -153,7 +153,7 @@ BE84B355 3CED1721 A0BE2A1B 8E3F449E
 34CB7E4B 363A38
 ```
 
-## Framed Data<a name="example-framed"></a>
+## Framed data<a name="example-framed"></a>
 
 The following example shows the message format for framed data\.
 
@@ -163,7 +163,7 @@ The following example shows the message format for framed data\.
 +--------+
 01                                         Version (1.0)
 80                                         Type (128, customer authenticated encrypted data)
-0378                                       Algorithm ID (see [Algorithms Reference](algorithms-reference.md))
+0378                                       Algorithm ID (see [Algorithms reference](algorithms-reference.md))
 6E7C0FBD 4DF4A999 717C22A2 DDFE1A27        Message ID (random 128-bit value)
 008E                                       AAD Length (142)
 0004                                       AAD Key-Value Pair Count (4)

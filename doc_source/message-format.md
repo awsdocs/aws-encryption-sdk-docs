@@ -1,20 +1,20 @@
-# AWS Encryption SDK Message Format Reference<a name="message-format"></a>
+# AWS Encryption SDK message format reference<a name="message-format"></a>
 
 
 |  | 
 | --- |
-|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming Languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification) repository in GitHub\.  | 
+|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.  | 
 
 The encryption operations in the AWS Encryption SDK return a single data structure or *message* that contains the encrypted data \(ciphertext\) and all encrypted data keys\. To understand this data structure, or to build libraries that read and write it, you need to understand the message format\.
 
 The message format consists of at least two parts: a *header* and a *body*\. In some cases, the message format consists of a third part, a *footer*\. The message format defines an ordered sequence of bytes in network byte order, also called big\-endian format\. The message format begins with the header, followed by the body, followed by the footer \(when there is one\)\.
 
 **Topics**
-+ [Header Structure](#header-structure)
-+ [Body Structure](#body-structure)
-+ [Footer Structure](#footer-structure)
++ [Header structure](#header-structure)
++ [Body structure](#body-structure)
++ [Footer structure](#footer-structure)
 
-## Header Structure<a name="header-structure"></a>
+## Header structure<a name="header-structure"></a>
 
 The message header contains the encrypted data key and information about how the message body is formed\. The following table describes the fields that form the header\. The bytes are appended in the order shown\.
 
@@ -44,7 +44,7 @@ The version of this message format\. The current version is 1\.0, encoded as the
 The type of this message format\. The type indicates the kind of structure\. The only supported type is described as *customer authenticated encrypted data*\. Its type value is 128, encoded as byte `80` in hexadecimal notation\.
 
 **Algorithm ID**  <a name="header-algorithm-id"></a>
-An identifier for the algorithm used\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer\. For more information about the algorithms, see [AWS Encryption SDK Algorithms Reference](algorithms-reference.md)\.
+An identifier for the algorithm used\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer\. For more information about the algorithms, see [AWS Encryption SDK algorithms reference](algorithms-reference.md)\.
 
 **Message ID**  <a name="header-message-id"></a>
 A randomly generated 128\-bit value that identifies the message\. The Message ID:  
@@ -91,7 +91,7 @@ The key provider identifier\. It is used to indicate the provider of the encrypt
 The length of the key provider information\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the key provider information\.  
 **Key Provider Information**  <a name="data-key-provider-info"></a>
 The key provider information\. It is determined by the key provider\.  
-When AWS KMS is the master key provider or you are using a KMS keyring, this value contains the Amazon Resource Name \(ARN\) of the AWS KMS customer master key \(CMK\)\.  
+When AWS KMS is the master key provider or you are using an AWS KMS keyring, this value contains the Amazon Resource Name \(ARN\) of the AWS KMS customer master key \(CMK\)\.  
 **Encrypted Data Key Length**  <a name="data-key-length"></a>
 The length of the encrypted data key\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the encrypted data key\.  
 **Encrypted Data Key**  <a name="data-key"></a>
@@ -120,15 +120,15 @@ The initialization vector \(IV\) used to calculate the header authentication tag
 **Authentication Tag**  <a name="header-authentication-tag"></a>
 The authentication value for the header\. It is used to authenticate the entire contents of the header\.
 
-## Body Structure<a name="body-structure"></a>
+## Body structure<a name="body-structure"></a>
 
 The message body contains the encrypted data, called the *ciphertext*\. The structure of the body depends on the content type \(nonframed or framed\)\. The following sections describe the format of the message body for each content type\.
 
 **Topics**
-+ [Non\-Framed Data](#body-no-framing)
-+ [Framed Data](#body-framing)
++ [Non\-framed data](#body-no-framing)
++ [Framed data](#body-framing)
 
-### Non\-Framed Data<a name="body-no-framing"></a>
+### Non\-framed data<a name="body-no-framing"></a>
 
 Non\-framed data is encrypted in a single blob with a unique IV and [body AAD](body-aad-reference.md)\. The following table describes the fields that form nonframed data\. The bytes are appended in the order shown\.
 
@@ -156,7 +156,7 @@ The encrypted content \(ciphertext\) as returned by the [encryption algorithm](a
 **Authentication Tag**  <a name="body-unframed-tag"></a>
 The authentication value for the body\. It is used to authenticate the message body\.
 
-### Framed Data<a name="body-framing"></a>
+### Framed data<a name="body-framing"></a>
 
 In framed data, the plaintext data is divided into equal\-length parts called *frames*\. The AWS Encryption SDK encrypts each frame separately with a unique IV and [body AAD](body-aad-reference.md)\. 
 
@@ -228,7 +228,7 @@ The encrypted content \(ciphertext\) for the frame, as returned by the [encrypti
 **Authentication Tag**  <a name="body-framed-final-tag"></a>
 The authentication value for the frame\. It is used to authenticate the entire frame\.
 
-## Footer Structure<a name="footer-structure"></a>
+## Footer structure<a name="footer-structure"></a>
 
 When the [algorithms with signing](algorithms-reference.md) are used, the message format contains a footer\. The message footer contains a signature calculated over the message header and body\. The following table describes the fields that form the footer\. The bytes are appended in the order shown\.
 

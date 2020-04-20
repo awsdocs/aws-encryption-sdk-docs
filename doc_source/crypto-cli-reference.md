@@ -1,31 +1,31 @@
-# AWS Encryption SDK CLI Syntax and Parameter Reference<a name="crypto-cli-reference"></a>
+# AWS Encryption SDK CLI syntax and parameter reference<a name="crypto-cli-reference"></a>
 
-This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For examples, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
+This topic provides syntax diagrams and brief parameter descriptions to help you use the AWS Encryption SDK Command Line Interface \(CLI\)\. For help with master keys and other parameters, see [How to use the AWS Encryption SDK command line interface](crypto-cli-how-to.md)\. For examples, see [Examples of the AWS Encryption SDK command line interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
 **Topics**
-+ [AWS Encryption CLI Syntax](#crypto-cli-syntax)
-+ [AWS Encryption CLI Command Line Parameters](#crypto-cli-parameters)
-+ [Advanced Parameters](#cli-advanced-parameters)
++ [AWS Encryption CLI syntax](#crypto-cli-syntax)
++ [AWS Encryption CLI command line parameters](#crypto-cli-parameters)
++ [Advanced parameters](#cli-advanced-parameters)
 
-## AWS Encryption CLI Syntax<a name="crypto-cli-syntax"></a>
+## AWS Encryption CLI syntax<a name="crypto-cli-syntax"></a>
 
 These AWS Encryption CLI syntax diagrams show the syntax for each task that you perform with the AWS Encryption CLI\. 
 
-**Get Help**  
+**Get help**  
 To get the full AWS Encryption CLI syntax with parameter descriptions, use `--help` or `-h`\.  
 
 ```
 aws-encryption-cli (--help | -h)
 ```
 
-**Get the Version**  
+**Get the version**  
 To get the version number of your AWS Encryption CLI installation, use `--version`\. Be sure to include the version when you ask questions, report problems, or share tips about using the AWS Encryption CLI\.  
 
 ```
 aws-encryption-cli --version
 ```
 
-**Encrypt Data**  
+**Encrypt data**  
 The following syntax diagram shows the parameters that an encrypt command uses\.   
 
 ```
@@ -43,7 +43,7 @@ aws-encryption-cli --encrypt
                    [--quiet]
 ```
 
-**Decrypt Data**  
+**Decrypt data**  
 The following syntax diagram shows the parameters that a decrypt command uses\.   
 
 ```
@@ -60,8 +60,8 @@ aws-encryption-cli --decrypt
                    [--quiet]
 ```
 
-**Use Configuration Files**  
-You can refer to configuration files that contain parameters and their values\. This is equivalent to typing the parameters and values in the command\. For an example, see [How to Store Parameters in a Configuration File](crypto-cli-how-to.md#crypto-cli-config-file)\.  
+**Use configuration files**  
+You can refer to configuration files that contain parameters and their values\. This is equivalent to typing the parameters and values in the command\. For an example, see [How to store parameters in a configuration file](crypto-cli-how-to.md#crypto-cli-config-file)\.  
 
 ```
 aws-encryption-cli @<configuration_file>
@@ -70,7 +70,7 @@ aws-encryption-cli @<configuration_file>
 aws-encryption-cli `@<configuration_file>
 ```
 
-## AWS Encryption CLI Command Line Parameters<a name="crypto-cli-parameters"></a>
+## AWS Encryption CLI command line parameters<a name="crypto-cli-parameters"></a>
 
 This list provides a basic description of the AWS Encryption CLI command parameters\. For a complete description, see the [aws\-encryption\-sdk\-cli documentation](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
@@ -151,7 +151,7 @@ Displays verbose information, warning, and debugging messages\. The detail in th
 **\-\-quiet \(\-q\)**  
 Suppresses warning messages, such as the message that appears when you overwrite an output file\.
 
-## Advanced Parameters<a name="cli-advanced-parameters"></a>
+## Advanced parameters<a name="cli-advanced-parameters"></a>
 
 \-\-algorithm  
 Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This parameter is optional and valid only in encrypt commands\. By default, the AWS Encryption CLI uses the default algorithm suite for the AWS Encryption SDK, which is AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. This algorithm suite is recommended for most encryption operations\. For a list of valid values, see the values for the `algorithm` parameter in [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/index.html#execution)\.

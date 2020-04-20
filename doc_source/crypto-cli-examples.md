@@ -1,18 +1,18 @@
-# Examples of the AWS Encryption SDK Command Line Interface<a name="crypto-cli-examples"></a>
+# Examples of the AWS Encryption SDK command line interface<a name="crypto-cli-examples"></a>
 
-Use the following examples to try the AWS Encryption CLI on the platform you prefer\. For help with master keys and other parameters, see [How to Use the AWS Encryption SDK Command Line Interface](crypto-cli-how-to.md)\. For a quick reference, see [AWS Encryption SDK CLI Syntax and Parameter Reference](crypto-cli-reference.md)\.
+Use the following examples to try the AWS Encryption CLI on the platform you prefer\. For help with master keys and other parameters, see [How to use the AWS Encryption SDK command line interface](crypto-cli-how-to.md)\. For a quick reference, see [AWS Encryption SDK CLI syntax and parameter reference](crypto-cli-reference.md)\.
 
 **Topics**
-+ [Encrypting a File](#cli-example-encrypt-file)
-+ [Decrypting a File](#cli-example-decrypt-file)
-+ [Encrypting All Files in a Directory](#cli-example-encrypt-directory)
-+ [Decrypting All Files in a Directory](#cli-example-decrypt-directory)
-+ [Encrypting and Decrypting on the Command Line](#cli-example-stdin)
-+ [Using Multiple Master Keys](#cli-example-multimaster)
-+ [Encrypting and Decrypting in Scripts](#cli-example-script)
-+ [Using Data Key Caching](#cli-example-caching)
++ [Encrypting a file](#cli-example-encrypt-file)
++ [Decrypting a file](#cli-example-decrypt-file)
++ [Encrypting all files in a directory](#cli-example-encrypt-directory)
++ [Decrypting all files in a directory](#cli-example-decrypt-directory)
++ [Encrypting and decrypting on the command line](#cli-example-stdin)
++ [Using multiple master keys](#cli-example-multimaster)
++ [Encrypting and decrypting in scripts](#cli-example-script)
++ [Using data key caching](#cli-example-caching)
 
-## Encrypting a File<a name="cli-example-encrypt-file"></a>
+## Encrypting a file<a name="cli-example-encrypt-file"></a>
 
 This example uses the AWS Encryption CLI to encrypt the contents of the `hello.txt` file, which contains a "Hello World" string\. 
 
@@ -106,7 +106,7 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-## Decrypting a File<a name="cli-example-decrypt-file"></a>
+## Decrypting a file<a name="cli-example-decrypt-file"></a>
 
 This example uses the AWS Encryption CLI to decrypt the contents of the `Hello.txt.encrypted` file that was encrypted in the previous example\.
 
@@ -176,7 +176,7 @@ Hello World
 
 ------
 
-## Encrypting All Files in a Directory<a name="cli-example-encrypt-directory"></a>
+## Encrypting all files in a directory<a name="cli-example-encrypt-directory"></a>
 
 This example uses the AWS Encryption CLI to encrypt the contents of all of the files in a directory\. 
 
@@ -266,7 +266,7 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-## Decrypting All Files in a Directory<a name="cli-example-decrypt-directory"></a>
+## Decrypting all files in a directory<a name="cli-example-decrypt-directory"></a>
 
 This example decrypts all files in a directory\. It starts with the files in the `TestEnc` directory that were encrypted in the previous example\.
 
@@ -338,7 +338,7 @@ PS C:\> dir .\TestDec
 
 ------
 
-## Encrypting and Decrypting on the Command Line<a name="cli-example-stdin"></a>
+## Encrypting and decrypting on the command line<a name="cli-example-stdin"></a>
 
 These examples show you how to pipe input to commands \(stdin\) and write output to the command line \(stdout\)\. They explain how to represent stdin and stdout in a command and how to use the built\-in Base64 encoding tools to prevent the shell from misinterpreting non\-ASCII characters\.
 
@@ -449,7 +449,7 @@ Hello World
 
 ------
 
-## Using Multiple Master Keys<a name="cli-example-multimaster"></a>
+## Using multiple master keys<a name="cli-example-multimaster"></a>
 
 This example shows how to use multiple master keys when encrypting and decrypting data in the AWS Encryption CLI\. 
 
@@ -457,7 +457,7 @@ When you use multiple master keys to encrypt data, any one of the master keys ca
 
 When you encrypt with multiple master keys, the first master key plays a special role\. It generates the data key that is used to encrypt the data\. The remaining master keys encrypt the plaintext data key\. The resulting [encrypted message](concepts.md#message) includes the encrypted data and a collection of encrypted data keys, one for each master key\. Although the first master key generated the data key, any of the master keys can decrypt one of the data keys, which can be used to decrypt the data\. 
 
-**Encrypting with Three Master Keys**
+**Encrypting with three master keys**
 
 This example command uses three master keys to encrypt the `Finance.log` file, one in each of three AWS Regions\. 
 
@@ -526,7 +526,7 @@ PS C:\> aws-encryption-cli --decrypt `
 
 ------
 
-## Encrypting and Decrypting in Scripts<a name="cli-example-script"></a>
+## Encrypting and decrypting in scripts<a name="cli-example-script"></a>
 
 This example shows how to use the AWS Encryption CLI in scripts\. You can write scripts that just encrypt and decrypt data, or scripts that encrypt or decrypt as part of a data management process\.
 
@@ -710,7 +710,7 @@ fi
 
 ------
 
-## Using Data Key Caching<a name="cli-example-caching"></a>
+## Using data key caching<a name="cli-example-caching"></a>
 
 This example uses [data key caching](data-key-caching.md) in a command that encrypts a large number of files\. 
 

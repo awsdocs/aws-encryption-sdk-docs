@@ -5,7 +5,7 @@ This topic explains how to install and use the AWS Encryption SDK for Java\. For
 **Topics**
 + [Prerequisites](#java-prerequisites)
 + [Installation](#java-installation)
-+ [Example Code](java-example-code.md)
++ [Example code](java-example-code.md)
 
 ## Prerequisites<a name="java-prerequisites"></a>
 

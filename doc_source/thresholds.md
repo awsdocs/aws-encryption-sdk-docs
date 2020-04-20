@@ -1,4 +1,4 @@
-# Setting Cache Security Thresholds<a name="thresholds"></a>
+# Setting cache security thresholds<a name="thresholds"></a>
 
 When you implement data key caching, you need to configure the security thresholds that the [caching CMM](data-caching-details.md#caching-cmm) enforces\. 
 

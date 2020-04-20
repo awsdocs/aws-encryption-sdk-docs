@@ -1,4 +1,4 @@
-# AWS Encryption SDK Command Line Interface<a name="crypto-cli"></a>
+# AWS Encryption SDK command line interface<a name="crypto-cli"></a>
 
 The AWS Encryption SDK Command Line Interface \(AWS Encryption CLI\) enables you to use the AWS Encryption SDK to encrypt and decrypt data interactively at the command line and in scripts\. You don't need cryptography or programming expertise\. 
 
@@ -15,6 +15,6 @@ The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. Each time
 
 **Topics**
 + [Installing the CLI](crypto-cli-install.md)
-+ [How to Use the CLI](crypto-cli-how-to.md)
++ [How to use the CLI](crypto-cli-how-to.md)
 + [Examples](crypto-cli-examples.md)
-+ [Syntax and Parameter Reference](crypto-cli-reference.md)
++ [Syntax and parameter reference](crypto-cli-reference.md)

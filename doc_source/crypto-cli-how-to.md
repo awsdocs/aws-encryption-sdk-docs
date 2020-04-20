@@ -1,16 +1,16 @@
-# How to Use the AWS Encryption SDK Command Line Interface<a name="crypto-cli-how-to"></a>
+# How to use the AWS Encryption SDK command line interface<a name="crypto-cli-how-to"></a>
 
-This topic explains how to use the parameters in the AWS Encryption CLI\. For examples, see [Examples of the AWS Encryption SDK Command Line Interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
+This topic explains how to use the parameters in the AWS Encryption CLI\. For examples, see [Examples of the AWS Encryption SDK command line interface](crypto-cli-examples.md)\. For complete documentation, see [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\. 
 
 **Topics**
-+ [How to Encrypt and Decrypt Data](#crypto-cli-e-d-intro)
-+ [How to Specify a Master Key](#crypto-cli-master-key)
-+ [How to Provide Input](#crypto-cli-input)
-+ [How to Specify the Output Location](#crypto-cli-output)
-+ [How to Use an Encryption Context](#crypto-cli-encryption-context)
-+ [How to Store Parameters in a Configuration File](#crypto-cli-config-file)
++ [How to encrypt and decrypt data](#crypto-cli-e-d-intro)
++ [How to specify a master key](#crypto-cli-master-key)
++ [How to provide input](#crypto-cli-input)
++ [How to specify the output location](#crypto-cli-output)
++ [How to use an encryption context](#crypto-cli-encryption-context)
++ [How to store parameters in a configuration file](#crypto-cli-config-file)
 
-## How to Encrypt and Decrypt Data<a name="crypto-cli-e-d-intro"></a>
+## How to encrypt and decrypt data<a name="crypto-cli-e-d-intro"></a>
 
 The AWS Encryption CLI uses the features of the AWS Encryption SDK to make it easy to encrypt and decrypt data securely\.
 + When you encrypt data in the AWS Encryption CLI, you specify your plaintext data and a [master key](concepts.md#master-key), such as an AWS Key Management Service \(AWS KMS\) customer master key \(CMK\)\. If you are using a custom master key provider, you need to specify the provider\. You also specify output locations for the [encrypted message](concepts.md#message) and for metadata about the encryption operation\. An [encryption context](concepts.md#encryption-context) is optional, but recommended\.
@@ -37,7 +37,7 @@ The AWS Encryption CLI uses the features of the AWS Encryption SDK to make it ea
 
   The AWS Encryption CLI uses the master key to decrypt the data key in the encrypted message\. Then it uses the data key to decrypt your data\. It returns your plaintext data and metadata about the operation\.
 
-## How to Specify a Master Key<a name="crypto-cli-master-key"></a>
+## How to specify a master key<a name="crypto-cli-master-key"></a>
 
 When you encrypt data in the AWS Encryption CLI, you need to specify a [master key](concepts.md#master-key)\. You can use an AWS KMS customer master key \(CMK\) or a master key from a custom [master key provider](concepts.md#master-key-provider)\. The custom master key provider can be any compatible Python master key provider\.
 
@@ -47,13 +47,13 @@ To specify a master key, use the `--master-keys` parameter \(`-m`\)\. Its value 
 
 You can include [multiple `--master-keys` parameters](#cli-many-cmks) in the same command\. 
 
-### Master Key Parameter Attributes<a name="cli-master-key-attributes"></a>
+### Master key parameter attributes<a name="cli-master-key-attributes"></a>
 
 The value of the `--master-keys` parameter consists of the following attributes and their values\. 
 
 If an attribute name or value includes spaces or special characters, enclose both the name and value in quotation marks\. For example, `--master-keys key=12345 "provider=my cool provider".`
 
-**Key: Specify a Master Key**  
+**Key: Specify a master key**  
 Use the **key** attribute to identify a master key\. The value can be any key identifier that the master key provider recognizes\.   
 
 ```
@@ -75,7 +75,7 @@ In decrypt commands that use a custom master key provider, **key** and **provide
 aws-encryption-cli --decrypt --master-keys provider='myProvider' key='100101'
 ```
 
-**Provider: Specify the Master Key Provider**  
+**Provider: Specify the master key provider**  
 The **provider** attribute identifies the [master key provider](concepts.md#master-key-provider)\. The default value is `aws-kms`, which represents AWS KMS\. If you are using a different master key provider, the **provider** attribute is required\.   
 
 ```
@@ -92,7 +92,7 @@ Use the **region** attribute to specify the AWS Region of an AWS KMS CMK\. This 
 AWS Encryption CLI commands use the AWS Region that is specified in the **key** attribute value if it includes a region, such as an ARN\. if the **key** value specifies a AWS Region, the **region** attribute is ignored\.  
 The **region** attribute takes precedence over other region specifications\. If you don't use a region attribute, AWS Encryption CLI commands uses the AWS Region specified in your AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html), if any, or your default profile\.
 
-**Profile: Specify a Named Profile**  
+**Profile: Specify a named profile**  
 Use the **profile** attribute to specify an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. Named profiles can include credentials and an AWS Region\. This attribute is valid only when the master key provider is AWS KMS\.   
 
 ```
@@ -100,7 +100,7 @@ Use the **profile** attribute to specify an AWS CLI [named profile](https://docs
 ```
 You can use the **profile** attribute to specify alternate credentials in encrypt and decrypt commands\. In an encrypt command, the AWS Encryption CLI uses the AWS Region in the named profile only when the **key** value does not include a region and there is no **region** attribute\. In a decrypt command, the AWS Region in the name profile is ignored\.
 
-### How to Specify Multiple Master Keys<a name="cli-many-cmks"></a>
+### How to specify multiple master keys<a name="cli-many-cmks"></a>
 
 You can specify multiple master keys in each command\. 
 
@@ -122,7 +122,7 @@ There are two ways to specify multiple master keys:
   --master-keys region=us-west-1 key=alias/primary_CMK
   ```
 
-## How to Provide Input<a name="crypto-cli-input"></a>
+## How to provide input<a name="crypto-cli-input"></a>
 
 The encrypt operation in the AWS Encryption CLI takes plaintext data as input and returns an [encrypted message](concepts.md#message)\. The decrypt operation takes an encrypted message as input and returns plaintext data\. 
 
@@ -150,7 +150,7 @@ You can provide input in any of the following ways:
   echo 'Hello World' | aws-encryption-cli --encrypt --input -
   ```
 
-## How to Specify the Output Location<a name="crypto-cli-output"></a>
+## How to specify the output location<a name="crypto-cli-output"></a>
 
 The `--output` parameter tells the AWS Encryption CLI where to write the results of the encryption or decryption operation\. It is required in every AWS Encryption CLI command\. The AWS Encryption CLI creates a new output file for every input file in the operation\. 
 
@@ -184,13 +184,13 @@ You can the output location in several ways\.
   --output -
   ```
 
-## How to Use an Encryption Context<a name="crypto-cli-encryption-context"></a>
+## How to use an encryption context<a name="crypto-cli-encryption-context"></a>
 
 The AWS Encryption CLI lets you provide an encryption context in encrypt and decrypt commands\. It is not required, but it is a cryptographic best practice that we recommend\.
 
 An *encryption context* is a type of arbitrary, non\-secret *additional authenticated data*\. In the AWS Encryption CLI, the encryption context consists of a collection of `name=value` pairs\. You can use any content in the pairs, including information about the files, data that helps you to find the encryption operation in logs, or data that your grants or policies require\. 
 
-**In an Encrypt Command**
+**In an encrypt command**
 
 The encryption context that you specify in an encrypt command, along with any additional pairs that the [CMM](concepts.md#crypt-materials-manager) adds, is cryptographically bound to the encrypted data\. It is also included \(in plaintext\) in the [encrypted message](concepts.md#encryption-context) that the command returns\. If you are using an AWS KMS customer master key \(CMK\), the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\. 
 
@@ -200,7 +200,7 @@ The following example shows an encryption context with three `name=value` pairs\
 --encryption-context purpose=test dept=IT class=confidential 
 ```
 
-**In a Decrypt Command**
+**In a decrypt command**
 
 In a decrypt command, the encryption context helps you to confirm that you are decrypting the right encrypted message\. 
 
@@ -258,7 +258,7 @@ aws-encryption-cli --decrypt --encryption-context dept=Finance ...
 aws-encryption-cli --decrypt --encryption-context scope ...
 ```
 
-## How to Store Parameters in a Configuration File<a name="crypto-cli-config-file"></a>
+## How to store parameters in a configuration file<a name="crypto-cli-config-file"></a>
 
 You can save time and avoid typing errors by saving frequently used AWS Encryption CLI parameters and values in configuration files\. 
 
@@ -291,7 +291,7 @@ PS C:\> aws-encryption-cli -e `@cmk.conf -i .\Hello.txt -o .\TestDir
 
 ------
 
-**Configuration File Rules**
+**Configuration file rules**
 
 The rules for using configuration files are as follows:
 + You can include multiple parameters in each configuration file and list them in any order\. List each parameter with its values \(if any\) on a separate line\. 
