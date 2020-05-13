@@ -539,13 +539,13 @@ public class SimpleDataKeyCachingExample {
 */
 
 import {
-KmsKeyringBrowser,
-KMS,
-getClient,
-encrypt,
-decrypt,
-WebCryptoCachingMaterialsManager,
-getLocalCryptographicMaterialsCache
+    KmsKeyringBrowser,
+    KMS,
+    getClient,
+    encrypt,
+    decrypt,
+    WebCryptoCachingMaterialsManager,
+    getLocalCryptographicMaterialsCache
 } from '@aws-crypto/client-browser'
 import { toBase64 } from '@aws-sdk/util-base64-browser'
 
@@ -610,7 +610,7 @@ const keyring = new KmsKeyringBrowser({ clientProvider, generatorKeyId, keyIds }
 */
 const capacity = 10
 
-* There is also a second optional parameter, "proactiveFrequency". 
+/* There is also a second optional parameter, "proactiveFrequency". 
 * By default, every 60 seconds (60,000 milliseconds) all data keys in the
 * cache are checked to verify that they conform to all data key caching 
 * thresholds. Data keys that exceed any threshold are evicted.
