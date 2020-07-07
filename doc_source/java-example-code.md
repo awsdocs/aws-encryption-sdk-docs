@@ -9,13 +9,13 @@ The following examples show you how to use the AWS Encryption SDK for Java to en
 
 ## Encrypting and decrypting strings<a name="java-example-strings"></a>
 
-The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. 
+The following example shows you how to use the AWS Encryption SDK for Java to encrypt and decrypt strings\. Before using the string, convert it into a byte array\.
 
-This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying CMKs in an AWS KMS keyring, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)
+This example uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) as the master key\. For help creating a key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\.
 
-When you call `encryptString`, the AWS Encryption SDK returns the [encrypted message](concepts.md#message)\. This includes the ciphertext, the encrypted data keys, and the encryption context, if you use it\. When you call `getResult` on the returned object, the AWS Encryption SDK returns a base\-64\-encoded string version of the [encrypted message](message-format.md)\.
+When you call the `encryptData()` method, it returns an [encrypted message](concepts.md#message) \(`CryptoResult`\) that includes the ciphertext, the encrypted data keys, and the encryption context\. When you call `getResult` on the `CryptoResult` object, it returns a base\-64\-encoded string version of the [encrypted message](message-format.md) that you can pass to the `decryptData()` method\.
 
-Similarly, when you call `decryptString` in this example, the `decryptResult` object contains the encrypted message\. Before returning the plaintext, verify that the CMK ID and the encryption context in the encrypted message are the ones that you expect\.
+Similarly, when you call `decryptData()`, the `CryptoResult` object it returns contains the plaintext message and a CMK ID\. Before your application returns the plaintext, verify that the CMK ID and the encryption context in the encrypted message are the ones that you expect\.
 
 ```
 /*
@@ -33,6 +33,8 @@ Similarly, when you call `decryptString` in this example, the `decryptResult` ob
 
 package com.amazonaws.crypto.examples;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -43,63 +45,65 @@ import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
 
 /**
  * <p>
- * Encrypts and then decrypts a string under a KMS key
- * 
+ * Encrypts and then decrypts data using an AWS KMS customer master key.
+ *
  * <p>
  * Arguments:
  * <ol>
- * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your KMS customer master 
+ * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your AWS KMS customer master
  *    key (CMK), see 'Viewing Keys' at http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html
- * <li>String to encrypt
  * </ol>
  */
-public class StringExample {
-    private static String keyArn;
-    private static String data;
+public class BasicEncryptionExample {
+
+    private static final byte[] EXAMPLE_DATA = "Hello World".getBytes(StandardCharsets.UTF_8);
 
     public static void main(final String[] args) {
-        keyArn = args[0];
-        data = args[1];
+        final String keyArn = args[0];
 
-        // Instantiate the SDK
+        encryptAndDecrypt(keyArn);
+    }
+
+    static void encryptAndDecrypt(final String keyArn) {
+        // 1. Instantiate the SDK
         final AwsCrypto crypto = new AwsCrypto();
 
-        // Set up the KmsMasterKeyProvider backed by the default credentials
-        final KmsMasterKeyProvider prov = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build();
+        // 2. Instantiate a KMS master key provider
+        final KmsMasterKeyProvider masterKeyProvider = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build();
 
-        // Encrypt the data
+        // 3. Create an encryption context
         //
         // Most encrypted data should have an associated encryption context
         // to protect integrity. This sample uses placeholder values.
         //
         // For more information see:
         // blogs.aws.amazon.com/security/post/Tx2LZ6WBJJANTNW/How-to-Protect-the-Integrity-of-Your-Encrypted-Data-by-Using-AWS-Key-Management
-        final Map<String, String> context = Collections.singletonMap("Example", "String");
+        final Map<String, String> encryptionContext = Collections.singletonMap("ExampleContextKey", "ExampleContextValue");
 
-        final String ciphertext = crypto.encryptString(prov, data, context).getResult();
-        System.out.println("Ciphertext: " + ciphertext);
+        // 4. Encrypt the data
+        final CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(masterKeyProvider, EXAMPLE_DATA, encryptionContext);
+        final byte[] ciphertext = encryptResult.getResult();
 
-        // Decrypt the data
-        final CryptoResult<String, KmsMasterKey> decryptResult = crypto.decryptString(prov, ciphertext);
-        
-        // Before returning the plaintext, verify that the customer master key that
-        // was used in the encryption operation was the one supplied to the master key provider.  
+        // 5. Decrypt the data
+        final CryptoResult<byte[], KmsMasterKey> decryptResult = crypto.decryptData(masterKeyProvider, ciphertext);
+
+        // 6. Before verifying the plaintext, verify that the customer master key that
+        // was used in the encryption operation was the one supplied to the master key provider.
         if (!decryptResult.getMasterKeyIds().get(0).equals(keyArn)) {
             throw new IllegalStateException("Wrong key ID!");
         }
 
-        // Also, verify that the encryption context in the result contains the
-        // encryption context supplied to the encryptString method. Because the
-        // SDK can add values to the encryption context, don't require that 
-        // the entire context matches. 
-        for (final Map.Entry<String, String> e : context.entrySet()) {
-            if (!e.getValue().equals(decryptResult.getEncryptionContext().get(e.getKey()))) {
-                throw new IllegalStateException("Wrong Encryption Context!");
-            }
+        // 7. Also, verify that the encryption context in the result contains the
+        // encryption context supplied to the encryptData method. Because the
+        // SDK can add values to the encryption context, don't require that
+        // the entire context matches.
+        if (!encryptionContext.entrySet().stream()
+                .allMatch(e -> e.getValue().equals(decryptResult.getEncryptionContext().get(e.getKey())))) {
+            throw new IllegalStateException("Wrong Encryption Context!");
         }
 
-        // Now we can return the plaintext data
-        System.out.println("Decrypted: " + decryptResult.getResult());
+        // 8. Verify that the decrypted plaintext matches the original plaintext
+        assert Arrays.equals(decryptResult.getResult(), EXAMPLE_DATA);
     }
 }
 ```

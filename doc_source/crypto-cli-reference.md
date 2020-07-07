@@ -157,19 +157,26 @@ Suppresses warning messages, such as the message that appears when you overwrite
 Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This parameter is optional and valid only in encrypt commands\. By default, the AWS Encryption CLI uses the default algorithm suite for the AWS Encryption SDK, which is AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. This algorithm suite is recommended for most encryption operations\. For a list of valid values, see the values for the `algorithm` parameter in [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/index.html#execution)\.
 
 \-\-frame\-length  
-Creates output with specified frame length\. Enter a value in bytes\. This parameter is optional and valid only in encrypt commands\.
+Creates output with specified frame length\. This parameter is optional and valid only in encrypt commands\.   
+Enter a value in bytes\. Valid values are 0 and 1 – 2^31 \- 1\. A value of 0 indicates nonframed data\. The default is 4096 \(bytes\)\.   
+Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
 
 \-\-max\-length  
-Indicates the maximum frame size \(or maximum content length for nonframed messages\) in bytes to read from encrypted messages\. This parameter is optional and valid only in decrypt commands\. It is designed to protect you from decrypting extremely large malicious ciphertext\. 
+Indicates the maximum frame size \(or maximum content length for nonframed messages\) in bytes to read from encrypted messages\. This parameter is optional and valid only in decrypt commands\. It is designed to protect you from decrypting extremely large malicious ciphertext\.   
+Enter a value in bytes\. If you omit this parameter, the AWS Encryption SDK does not limit the frame size when decrypting\.
 
 \-\-caching  
 Enables the [data key caching](data-key-caching.md) feature, which reuses data keys, instead of generating a new data key for each input file\. This parameter supports an advanced scenario\. Be sure to read the [Data Key Caching](data-key-caching.md) documentation before using this feature\.   
 The `--caching` parameter has the following attributes\.    
 **capacity \(required\)**  
-Determines the maximum number of entries in the cache\.  
+Determines the maximum number of entries in the cache\.   
+The minimum value is 1\. There is no maximum value\.  
 **max\_age \(required\)**  
-Determine how long cache entries are used, beginning when they are added to the cache\.  
-**max\_messages\_encrypted**  
-Determines the maximum number of messages that a cached entry can encrypt\.  
-**max\_bytes\_encrypted**  
-Determines the maximum number of bytes that a cached entry can encrypt\.
+Determine how long cache entries are used, in seconds, beginning when they are added to the cache\.  
+Enter a value greater than 0\. There is no maximum value\.  
+**max\_messages\_encrypted \(optional\)**  
+Determines the maximum number of messages that a cached entry can encrypt\.   
+Valid values are 1 – 2^32\. The default value is 2^32 \(messages\)\.  
+**max\_bytes\_encrypted \(optional\)**  
+Determines the maximum number of bytes that a cached entry can encrypt\.  
+Valid values are 0 and 1 – 2^63 \- 1\. The default value is 2^63 \- 1 \(messages\)\. A value of 0 lets you use data key caching only when you are encrypting empty message strings\.

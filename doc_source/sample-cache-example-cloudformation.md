@@ -1,6 +1,6 @@
 # Local cache example AWS CloudFormation template<a name="sample-cache-example-cloudformation"></a>
 
-This AWS CloudFormation template sets up all the necessary AWS resources to replicate this example\.
+This AWS CloudFormation template sets up all the necessary AWS resources to reproduce this example\.
 
 ```
 Parameters:

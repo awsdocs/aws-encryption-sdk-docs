@@ -18,20 +18,19 @@ If you use the Oracle JDK, you must also download and install the [Java Cryptogr
 **Bouncy Castle**  
 The AWS Encryption SDK for Java requires [Bouncy Castle](https://www.bouncycastle.org/java.html)\.   
 + AWS Encryption SDK for Java versions 1\.6\.1 and later use Bouncy Castle to serialize and deserialize cryptographic objects\. You can use Bouncy Castle or [Bouncy Castle FIPS](https://www.bouncycastle.org/fips_faq.html) to satisfy this requirement\. For help installing and configuring Bouncy Castle FIPS, see [BC FIPS Documentation](https://www.bouncycastle.org/documentation.html), especially the **User Guides** and **Security Policy** PDFs\.
-
-   
 + Earlier versions of the AWS Encryption SDK for Java use Bouncy Castle's cryptography API for Java\. This requirement is satisfied only by non\-FIPS Bouncy Castle\.
 If you don't have Bouncy Castle, go to [Bouncy Castle latest releases](https://bouncycastle.org/latest_releases.html) to download the provider file that corresponds to your JDK\. You can also use [Apache Maven](https://maven.apache.org/) to get the artifact for the standard Bouncy Castle provider \([bcprov\-ext\-jdk15on](https://mvnrepository.com/artifact/org.bouncycastle/bcprov-ext-jdk15on)\) or the artifact for Bouncy Castle FIPS \([bc\-fips](https://mvnrepository.com/artifact/org.bouncycastle/bc-fips)\)\.
 
 **AWS SDK for Java \(Optional\)**  
-Although you don't need the AWS SDK for Java to use the AWS Encryption SDK for Java, you do need it to use [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as a master key provider, and to use some of the [example Java code](java-example-code.md) in this guide\. For more information about installing and configuring the AWS SDK for Java, see [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/)\.
+The AWS Encryption SDK for Java doesn't require the AWS SDK for Java\. However, [AWS SDK for Java version 1\.11](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/welcome.html) is required to use [AWS Key Management Service](https://aws.amazon.com/kms/) \(AWS KMS\) as a master key provider\. It's also required for some of the [example Java code](java-example-code.md) in this guide\.  
+To install the AWS SDK for Java, use Apache Maven\. To [import the entire AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-project-maven.html#configuring-maven-entire-sdk) as a dependency, declare it in your `pom.xml` file\. To create a dependency only for the AWS KMS module, follow the instructions for [specifying particular modules](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-project-maven.html#configuring-maven-individual-components), and set the `artifactId` to `aws-java-sdk-kms`\.
 
 ## Installation<a name="java-installation"></a>
 
 You can install the AWS Encryption SDK for Java in the following ways\.
 
 **Manually**  
-To install the AWS Encryption SDK for Java, clone or download the [aws\-encryption\-sdk\-java GitHub repository](https://github.com/aws/aws-encryption-sdk-java/)\.
+To install the AWS Encryption SDK for Java, clone or download the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) GitHub repository\.
 
 **Using Apache Maven**  
 The AWS Encryption SDK for Java is available through [Apache Maven](https://maven.apache.org/) with the following dependency definition\.  

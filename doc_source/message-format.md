@@ -1,9 +1,9 @@
 # AWS Encryption SDK message format reference<a name="message-format"></a>
 
-
-|  | 
-| --- |
-|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.  | 
+****  
+The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\.  
+To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\.  
+For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.
 
 The encryption operations in the AWS Encryption SDK return a single data structure or *message* that contains the encrypted data \(ciphertext\) and all encrypted data keys\. To understand this data structure, or to build libraries that read and write it, you need to understand the message format\.
 
@@ -98,9 +98,10 @@ The length of the encrypted data key\. It is a 2\-byte value interpreted as a 16
 The encrypted data key\. It is the data encryption key encrypted by the key provider\.
 
 **Content Type**  <a name="header-content-type"></a>
-The type of encrypted content, either nonframed or framed\.  
-Non\-framed content is not broken into parts; it is a single encrypted blob\. Non\-framed content is type 1, encoded as the byte `01` in hexadecimal notation\.  
-Framed content is broken into equal\-length parts; each part is encrypted separately\. Framed content is type 2, encoded as the byte `02` in hexadecimal notation\.
+The type of encrypted data, either nonframed or framed\.  
+Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
+Framed data is divided into equal\-length parts; each part is encrypted separately\. Framed content is type 2, encoded as the byte `02` in hexadecimal notation\.  
+Nonframed data is not divided; it is a single encrypted blob\. Non\-framed content is type 1, encoded as the byte `01` in hexadecimal notation\.
 
 **Reserved**  <a name="header-reserved"></a>
 A reserved sequence of 4 bytes\. This value must be 0\. It is encoded as the bytes `00 00 00 00` in hexadecimal notation \(that is, a 4\-byte sequence of a 32\-bit integer value equal to 0\)\.
@@ -109,7 +110,8 @@ A reserved sequence of 4 bytes\. This value must be 0\. It is encoded as the byt
 The length of the initialization vector \(IV\)\. It is a 1\-byte value interpreted as an 8\-bit unsigned integer that specifies the number of bytes that contain the IV\. This value is determined by the IV bytes value of the [algorithm](algorithms-reference.md) that generated the message\.
 
 **Frame Length**  <a name="header-frame-length"></a>
-The length of each frame of framed content\. It is a 4\-byte value interpreted as a 32\-bit unsigned integer that specifies the number of bytes that form each frame\. When the content is nonframed—that is, when the value of the content type field is 1—this value must be 0\.
+The length of each frame of framed data\. It is a 4\-byte value interpreted as a 32\-bit unsigned integer that specifies the number of bytes in each frame\. When the data is nonframed, that is, when the value of the `Content Type` field is 1, this value must be 0\.  
+Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
 
 **Header Authentication**  <a name="header-authentication"></a>
 The header authentication is determined by the [algorithm](algorithms-reference.md) that generated the message\. The header authentication is calculated over the entire header\. It consists of an IV and an authentication tag\. The bytes are appended in the order shown\.    
@@ -130,7 +132,12 @@ The message body contains the encrypted data, called the *ciphertext*\. The stru
 
 ### Non\-framed data<a name="body-no-framing"></a>
 
-Non\-framed data is encrypted in a single blob with a unique IV and [body AAD](body-aad-reference.md)\. The following table describes the fields that form nonframed data\. The bytes are appended in the order shown\.
+Non\-framed data is encrypted in a single blob with a unique IV and [body AAD](body-aad-reference.md)\.
+
+**Note**  
+Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
+
+The following table describes the fields that form nonframed data\. The bytes are appended in the order shown\.
 
 
 **Non\-Framed Body Structure**  
@@ -158,7 +165,10 @@ The authentication value for the body\. It is used to authenticate the message b
 
 ### Framed data<a name="body-framing"></a>
 
-In framed data, the plaintext data is divided into equal\-length parts called *frames*\. The AWS Encryption SDK encrypts each frame separately with a unique IV and [body AAD](body-aad-reference.md)\. 
+In framed data, the plaintext data is divided into equal\-length parts called *frames*\. The AWS Encryption SDK encrypts each frame separately with a unique IV and [body AAD](body-aad-reference.md)\.
+
+**Note**  
+Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
 
 The [frame length](#header-frame-length), which is the length of the [encrypted content](#body-framed-regular-content) in the frame, can be different for each message\. The maximum number of bytes in a frame is 2^32 \- 1\. The maximum number of frames in a message is 2^32 \- 1\.
 

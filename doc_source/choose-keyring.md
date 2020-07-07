@@ -41,7 +41,7 @@ Although the Java, Python, C, and JavaScript implementations of the AWS Encrypti
 The following table shows which master keys and master key providers are compatible with the keyrings provided in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript\. Any minor incompatibility due to language constraints is explained in the topic about the language implementation\.
 
 
-**Compatible Keyrings and Master Key Providers**  
+**Compatible keyrings and master key providers**  
 
 | Keyring: C and JavaScript | Master key provider: Java and Python | 
 | --- | --- | 
@@ -443,8 +443,8 @@ struct aws_cryptosdk_keyring *multi_keyring = aws_cryptosdk_multi_keyring_new(al
 To add a child keyring to your multi\-keyring, use the `aws_cryptosdk_multi_keyring_add_child` method\. You need to call the method once for each child keyring that you add\. 
 
 ```
-/* Add the Raw AES keyring (C only)
-int aws_cryptosdk_multi_keyring_add_child(struct aws_cryptosdk_keyring *multi, struct aws_cryptosdk_keyring *child);
+// Add the Raw AES keyring (C only)
+aws_cryptosdk_multi_keyring_add_child(multi_keyring, aes_keyring);
 ```
 
 ------

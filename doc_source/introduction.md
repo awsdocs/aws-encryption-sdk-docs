@@ -1,6 +1,6 @@
 # What is the AWS Encryption SDK?<a name="introduction"></a>
 
-The AWS Encryption SDK is a client\-side encryption library designed to make it easy for everyone to encrypt and decrypt data using industry standards and best practices\. It enables you to focus on the core functionality of your application, rather than on how to best encrypt and decrypt your data\.
+The AWS Encryption SDK is a client\-side encryption library designed to make it easy for everyone to encrypt and decrypt data using industry standards and best practices\. It enables you to focus on the core functionality of your application, rather than on how to best encrypt and decrypt your data\. The AWS Encryption SDK is provided free of charge under the Apache 2\.0 license\.
 
 The AWS Encryption SDK answers questions like the following for you:
 + Which encryption algorithm should I use?
@@ -44,16 +44,15 @@ The AWS Encryption SDK supports only [symmetric CMKs](https://docs.aws.amazon.co
 
 For help deciding which library or service to use, see [How to Choose an Encryption Tool or Service](https://docs.aws.amazon.com/crypto/latest/userguide/awscryp-overview.html) in *AWS Cryptographic Services and Tools*\.
 
-## Where to find more information<a name="intro-see-also"></a>
+## Learning more<a name="intro-see-also"></a>
 
-If you're looking for more information about the AWS Encryption SDK and client\-side encryption, try these sources\.
+For more information about the AWS Encryption SDK and client\-side encryption, try these sources\.
 + To get started quickly, see [Getting started](getting-started.md)\.
 + For information about how this SDK works, see [How the SDK works](how-it-works.md)\.
 + For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
 + For detailed technical information, see the [AWS Encryption SDK reference](reference.md)\.
 + For the technical specification for the AWS Encryption SDK, see the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification) repository in GitHub\.
 + For answers to your questions about using the AWS Encryption SDK, read and post on the [AWS Crypto Tools Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=302)\.
-+ To provide feedback on this documentation, use the **Feedback** link on this page\. You can also file an issue or contribute to [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs), the open\-source repository for this documentation on GitHub\.
 
 For information about implementations of the AWS Encryption SDK in different programming languages\.
 + **C**: See [AWS Encryption SDK for C](c-language.md), the AWS Encryption SDK [C documentation](https://aws.github.io/aws-encryption-sdk-c/html/), and the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
@@ -62,6 +61,9 @@ For information about implementations of the AWS Encryption SDK in different pro
 + **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\.
 + **JavaScript**: See [AWS Encryption SDK for JavaScript](javascript.md) and the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository on GitHub\. 
 
-If you have questions or comments about this guide, let us know\! Choose the feedback link in the lower\-right corner of the page or the GitHub link in the upper\-right corner of the page\. You can also file an issue in the [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs/) GitHub repository for this guide\.
+## Sending feedback<a name="report-issues"></a>
 
-The AWS Encryption SDK is provided free of charge under the Apache license\.
+We welcome your feedback\! If you have a question or comment, or an issue to report, please use the following resources\.
++ If you discover a potential security vulnerability in the AWS Encryption SDK, please [notify AWS security](https://aws.amazon.com/security/vulnerability-reporting/)\. Do not create a public GitHub issue\.
++ To provide feedback on the AWS Encryption SDK, file an issue in the GitHub repository for the programming language you are using\. 
++ To provide feedback on this documentation, use the **Feedback** link on this page\. You can also file an issue or contribute to [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs), the open\-source repository for this documentation on GitHub\.

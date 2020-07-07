@@ -1,9 +1,9 @@
 # AWS Encryption SDK algorithms reference<a name="algorithms-reference"></a>
 
-
-|  | 
-| --- |
-|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.  | 
+****  
+The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\.  
+To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\.  
+For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.
 
 To build your own library that can read and write ciphertexts that are compatible with the AWS Encryption SDK, you should understand how the SDK implements the supported algorithms to encrypt raw data\. The SDK supports nine algorithm suites\. An implementation specifies the encryption algorithm and mode, encryption key length, key derivation algorithm \(if one applies\), and signature algorithm \(if one applies\)\. The following table contains an overview of each implementation\. By default, the SDK uses the first implementation in the following table\. The list that follows the table provides more information\.
 

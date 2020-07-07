@@ -2,14 +2,11 @@
 
 This topic shows you how to use data key caching in your application\. It takes you through the process step by step\. Then, it combines the steps in a simple example that uses data key caching in an operation to encrypt a string\.
 
-**Note**  
-The AWS Encryption SDK for JavaScript is a beta release\. The code and the documentation are subject to change\.
-
 For complete and tested examples of using data key caching in the AWS Encryption SDK, see:
 + C/C\+\+: [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp)
 + JavaScript Browser: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/caching_cmm.ts)
 + JavaScript Node\.js: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/caching_cmm.ts)
-+ Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/legacy/data_key_caching_basic.py)
++ Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/data_key_caching_basic.py)
 
 **Topics**
 + [Using data key caching: Step\-by\-step](#implement-caching-steps)
@@ -539,13 +536,13 @@ public class SimpleDataKeyCachingExample {
 */
 
 import {
-    KmsKeyringBrowser,
-    KMS,
-    getClient,
-    encrypt,
-    decrypt,
-    WebCryptoCachingMaterialsManager,
-    getLocalCryptographicMaterialsCache
+KmsKeyringBrowser,
+KMS,
+getClient,
+encrypt,
+decrypt,
+WebCryptoCachingMaterialsManager,
+getLocalCryptographicMaterialsCache
 } from '@aws-crypto/client-browser'
 import { toBase64 } from '@aws-sdk/util-base64-browser'
 
@@ -610,7 +607,7 @@ const keyring = new KmsKeyringBrowser({ clientProvider, generatorKeyId, keyIds }
 */
 const capacity = 10
 
-/* There is also a second optional parameter, "proactiveFrequency". 
+* There is also a second optional parameter, "proactiveFrequency". 
 * By default, every 60 seconds (60,000 milliseconds) all data keys in the
 * cache are checked to verify that they conform to all data key caching 
 * thresholds. Data keys that exceed any threshold are evicted.

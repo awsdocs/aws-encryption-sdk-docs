@@ -49,7 +49,7 @@ In the AWS Encryption SDK for Java and the AWS Encryption SDK for Python, a *mas
 
 When you use the Java and Python implementations of the AWS Encryption SDK, you need to specify a [cryptographic materials manager](#crypt-materials-manager) \(CMM\) or a master key provider, but you do not need to design or implement your own master key provider\. If you specify a master key provider, the SDK creates a Default CMM for you based on the master key provider that you specify\. 
 
-Master key providers in Java and Python are compatible with keyrings in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript, subject to language constraints\. However, you must specify the same key material and use a keyring that is compatible with the master key provider\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
+master key providers\-upper; in Java and Python are compatible with keyrings in the AWS Encryption SDK for C and the AWS Encryption SDK for JavaScript, subject to language constraints\. However, you must specify the same key material and use a keyring that is compatible with the master key provider\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
 
 ## Keyring \(C and JavaScript\)<a name="keyring"></a>
 
