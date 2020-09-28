@@ -2,6 +2,8 @@
 
 This topic explains some of the features of the AWS Encryption SDK for C that are not supported in other programming language implementations\. 
 
+The examples in this section show how to use [version 2\.0\.*x*](about-versions.md) and later of the AWS Encryption SDK for C\. For examples that use earlier versions, find your release in the [Releases](https://github.com/aws/aws-encryption-sdk-c/releases) list of the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
+
 For details about programming with the AWS Encryption SDK for C, see the [C examples](c-examples.md), the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) in the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) on GitHub, and the [AWS Encryption SDK for C API documentation](https://aws.github.io/aws-encryption-sdk-c/html/)\.
 
 See also: [Using keyrings](choose-keyring.md)
@@ -31,7 +33,7 @@ When you create a session with a keyring, the AWS Encryption SDK for C automatic
 For example, the following session uses the allocator and the keyring that was defined in step 1\. When you encrypt data, the mode is `AWS_CRYPTOSDK_ENCRYPT`\.  
 
 ```
-struct aws_cryptosdk_session * session = aws_cryptosdk_session_new_from_keyring(allocator, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
+struct aws_cryptosdk_session * session = aws_cryptosdk_session_new_from_keyring_2(allocator, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
 ```
 
 3\. Set the message size\.  
@@ -90,8 +92,8 @@ In the following example, when you create a session with a [keyring](concepts.md
 
 ```
 // The session gets a reference to the keyring.
-struct aws_cryptosdk_session *session =
-	aws_cryptosdk_session_new_from_keyring(alloc, AWS_CRYPTOSDK_ENCRYPT, keyring);
+struct aws_cryptosdk_session *session =	
+	aws_cryptosdk_session_new_from_keyring_2(alloc, AWS_CRYPTOSDK_ENCRYPT, keyring);
 
 // After you create a session with a keyring, release the reference to the keyring object.
 aws_cryptosdk_keyring_release(keyring);
@@ -112,7 +114,7 @@ aws_cryptosdk_materials_cache_release(cache);
 aws_cryptosdk_keyring_release(kms_keyring);
 
 // Create a session with the caching CMM.
-struct aws_cryptosdk_session *session = aws_cryptosdk_session_new_from_cmm(allocator, AWS_CRYPTOSDK_ENCRYPT, caching_cmm);
+struct aws_cryptosdk_session *session = aws_cryptosdk_session_new_from_cmm_2(allocator, AWS_CRYPTOSDK_ENCRYPT, caching_cmm);
 
 // Release your references to the caching CMM.
 aws_cryptosdk_cmm_release(caching_cmm);

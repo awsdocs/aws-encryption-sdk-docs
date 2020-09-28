@@ -1,6 +1,6 @@
 # AWS Encryption SDK for Java example code<a name="java-example-code"></a>
 
-The following examples show you how to use the AWS Encryption SDK for Java to encrypt and decrypt data\.
+The following examples show you how to use the AWS Encryption SDK for Java to encrypt and decrypt data\. These examples show how to use [version 2\.0\.*x*](about-versions.md) and later of the AWS Encryption SDK for Java\. For examples that use earlier versions, find your release in the [Releases](https://github.com/aws/aws-encryption-sdk-java/releases) list of the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
 
 **Topics**
 + [Strings](#java-example-strings)
@@ -18,18 +18,8 @@ When you call the `encryptData()` method, it returns an [encrypted message](conc
 Similarly, when you call `decryptData()`, the `CryptoResult` object it returns contains the plaintext message and a CMK ID\. Before your application returns the plaintext, verify that the CMK ID and the encryption context in the encrypted message are the ones that you expect\.
 
 ```
-/*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except
- * in compliance with the License. A copy of the License is located at
- *
- * http://aws.amazon.com/apache2.0
- *
- * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package com.amazonaws.crypto.examples;
 
@@ -42,6 +32,7 @@ import com.amazonaws.encryptionsdk.AwsCrypto;
 import com.amazonaws.encryptionsdk.CryptoResult;
 import com.amazonaws.encryptionsdk.kms.KmsMasterKey;
 import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
 
 /**
  * <p>
@@ -66,34 +57,37 @@ public class BasicEncryptionExample {
 
     static void encryptAndDecrypt(final String keyArn) {
         // 1. Instantiate the SDK
-        final AwsCrypto crypto = new AwsCrypto();
+        // This builds the AwsCrypto client with the RequireEncryptRequireDecrypt commitment policy,
+        // which enforces that this client only encrypts using committing algorithm suites and enforces
+        // that this client will only decrypt encrypted messages that were created with a committing algorithm suite.
+        // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
+        // or `AwsCrypto.standard()`.
+        final AwsCrypto crypto = AwsCrypto.builder()
+                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+                .build();
 
-        // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider masterKeyProvider = KmsMasterKeyProvider.builder().withKeysForEncryption(keyArn).build();
+        // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict().
+        // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
+        // indicated by keyArn.
+        // To encrypt and decrypt with this master key provider, use an AWS KMS key ARN to identify the CMKs.
+        // In strict mode, the decrypt operation requires a key ARN.
+        final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(keyArn);
 
         // 3. Create an encryption context
-        //
         // Most encrypted data should have an associated encryption context
         // to protect integrity. This sample uses placeholder values.
-        //
         // For more information see:
         // blogs.aws.amazon.com/security/post/Tx2LZ6WBJJANTNW/How-to-Protect-the-Integrity-of-Your-Encrypted-Data-by-Using-AWS-Key-Management
         final Map<String, String> encryptionContext = Collections.singletonMap("ExampleContextKey", "ExampleContextValue");
 
         // 4. Encrypt the data
-        final CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(masterKeyProvider, EXAMPLE_DATA, encryptionContext);
+        final CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(keyProvider, EXAMPLE_DATA, encryptionContext);
         final byte[] ciphertext = encryptResult.getResult();
 
         // 5. Decrypt the data
-        final CryptoResult<byte[], KmsMasterKey> decryptResult = crypto.decryptData(masterKeyProvider, ciphertext);
+        final CryptoResult<byte[], KmsMasterKey> decryptResult = crypto.decryptData(keyProvider, ciphertext);
 
-        // 6. Before verifying the plaintext, verify that the customer master key that
-        // was used in the encryption operation was the one supplied to the master key provider.
-        if (!decryptResult.getMasterKeyIds().get(0).equals(keyArn)) {
-            throw new IllegalStateException("Wrong key ID!");
-        }
-
-        // 7. Also, verify that the encryption context in the result contains the
+        // 6. Verify that the encryption context in the result contains the
         // encryption context supplied to the encryptData method. Because the
         // SDK can add values to the encryption context, don't require that
         // the entire context matches.
@@ -102,7 +96,7 @@ public class BasicEncryptionExample {
             throw new IllegalStateException("Wrong Encryption Context!");
         }
 
-        // 8. Verify that the decrypted plaintext matches the original plaintext
+        // 7. Verify that the decrypted plaintext matches the original plaintext
         assert Arrays.equals(decryptResult.getResult(), EXAMPLE_DATA);
     }
 }
@@ -113,18 +107,8 @@ public class BasicEncryptionExample {
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt byte streams\. This example does not use AWS\. It uses the Java Cryptography Extension \(JCE\) to protect the master key\.
 
 ```
-/*
- * Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except
- * in compliance with the License. A copy of the License is located at
- * 
- * http://aws.amazon.com/apache2.0
- * 
- * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package com.amazonaws.crypto.examples;
 
@@ -142,18 +126,19 @@ import com.amazonaws.encryptionsdk.AwsCrypto;
 import com.amazonaws.encryptionsdk.CryptoInputStream;
 import com.amazonaws.encryptionsdk.MasterKey;
 import com.amazonaws.encryptionsdk.jce.JceMasterKey;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
 import com.amazonaws.util.IOUtils;
 
 /**
  * <p>
- * Encrypts and then decrypts a file under a random key
- * 
+ * Encrypts and then decrypts a file under a random key.
+ *
  * <p>
  * Arguments:
  * <ol>
  * <li>Name of file containing plaintext data to encrypt
  * </ol>
- * 
+ *
  * <p>
  * This program demonstrates using a standard Java {@link SecretKey} object as a {@link MasterKey} to
  * encrypt and decrypt streaming data.
@@ -165,19 +150,26 @@ public class FileStreamingExample {
         srcFile = args[0];
 
         // In this example, we generate a random key. In practice, 
-        // you would get a key from an existing store.
+        // you would get a key from an existing store
         SecretKey cryptoKey = retrieveEncryptionKey();
 
-        // Create a JCE master key provider using the random key and an AES-GCM encryption algorithm 
+        // Create a JCE master key provider using the random key and an AES-GCM encryption algorithm
         JceMasterKey masterKey = JceMasterKey.getInstance(cryptoKey, "Example", "RandomKey", "AES/GCM/NoPadding");
 
-        // Instantiate the SDK
-        AwsCrypto crypto = new AwsCrypto();
+        // Instantiate the SDK.
+        // This builds the AwsCrypto client with the RequireEncryptRequireDecrypt commitment policy,
+        // which enforces that this client only encrypts using committing algorithm suites and enforces
+        // that this client will only decrypt encrypted messages that were created with a committing algorithm suite.
+        // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
+        // or `AwsCrypto.standard()`.
+        final AwsCrypto crypto = AwsCrypto.builder()
+                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+                .build();
 
         // Create an encryption context to identify this ciphertext
         Map<String, String> context = Collections.singletonMap("Example", "FileStreaming");
 
-        // Because the file might be too large to load into memory, we stream the data, instead of 
+        // Because the file might be to large to load into memory, we stream the data, instead of 
         //loading it all at once.
         FileInputStream in = new FileInputStream(srcFile);
         CryptoInputStream<JceMasterKey> encryptingStream = crypto.createEncryptingStream(masterKey, in, context);
@@ -203,7 +195,7 @@ public class FileStreamingExample {
     }
 
     /**
-     * In practice, this key would be saved in a secure location.
+     * In practice, this key would be saved in a secure location. 
      * For this demo, we generate a new random key for each operation.
      */
     private static SecretKey retrieveEncryptionKey() {
@@ -220,18 +212,8 @@ public class FileStreamingExample {
 The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses a CMK in [AWS KMS](https://aws.amazon.com/kms/) and an RSA key pair as the master keys\.
 
 ```
-/*
- * Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except
- * in compliance with the License. A copy of the License is located at
- * 
- * http://aws.amazon.com/apache2.0
- * 
- * or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
+// Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 package com.amazonaws.crypto.examples;
 
@@ -249,32 +231,34 @@ import com.amazonaws.encryptionsdk.MasterKeyProvider;
 import com.amazonaws.encryptionsdk.jce.JceMasterKey;
 import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
 import com.amazonaws.encryptionsdk.multi.MultipleProviderFactory;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
 import com.amazonaws.util.IOUtils;
 
 /**
  * <p>
- * Encrypts a file using both KMS and an asymmetric key pair.
+ * Encrypts a file using both AWS KMS and an asymmetric key pair.
  *
  * <p>
  * Arguments:
  * <ol>
- * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your KMS customer master 
+ * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your AWS KMS customer master
  *    key (CMK), see 'Viewing Keys' at http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html
- * <li>Name of file containing plaintext data to encrypt
+ *
+  * <li>Name of file containing plaintext data to encrypt
  * </ol>
- * 
- * You might use AWS Key Management Service (KMS) for most encryption and decryption operations, but 
- * still want the option of decrypting your data offline independently of KMS. This sample 
+ *
+ * You might use AWS Key Management Service (AWS KMS) for most encryption and decryption operations, but
+ * still want the option of decrypting your data offline independently of AWS KMS. This sample
  * demonstrates one way to do this.
  * 
- * The sample encrypts data under both a KMS customer master key (CMK) and an "escrowed" RSA key pair
- * so that either key alone can decrypt it. You might commonly use the KMS CMK for decryption. However, 
- * at any time, you can use the private RSA key to decrypt the ciphertext independent of KMS.
- * 
+ * The sample encrypts data under both an AWS KMS customer master key (CMK) and an "escrowed" RSA key pair
+ * so that either key alone can decrypt it. You might commonly use the AWS KMS CMK for decryption. However,
+ * at any time, you can use the private RSA key to decrypt the ciphertext independent of AWS KMS.
+ *
  * This sample uses the JCEMasterKey class to generate a RSA public-private key pair
  * and saves the key pair in memory. In practice, you would store the private key in a secure offline 
  * location, such as an offline HSM, and distribute the public key to your development team.
- * 
+ *
  */
 public class EscrowedEncryptExample {
     private static PublicKey publicEscrowKey;
@@ -283,7 +267,7 @@ public class EscrowedEncryptExample {
     public static void main(final String[] args) throws Exception {
         // This sample generates a new random key for each operation.
         // In practice, you would distribute the public key and save the private key in secure
-        // storage. 
+        // storage.
         generateEscrowKeyPair();
 
         final String kmsArn = args[0];
@@ -298,10 +282,20 @@ public class EscrowedEncryptExample {
     private static void standardEncrypt(final String kmsArn, final String fileName) throws Exception {
         // Encrypt with the KMS CMK and the escrowed public key
         // 1. Instantiate the SDK
-        final AwsCrypto crypto = new AwsCrypto();
+        // This builds the AwsCrypto client with the RequireEncryptRequireDecrypt commitment policy,
+        // which enforces that this client only encrypts using committing algorithm suites and enforces
+        // that this client will only decrypt encrypted messages that were created with a committing algorithm suite.
+        // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
+        // or `AwsCrypto.standard()`.
+        final AwsCrypto crypto = AwsCrypto.builder()
+                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+                .build();
 
-        // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build();
+        // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict()
+        //
+        // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
+        // indicated by kmsArn.
+        final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsArn);
         
         // 3. Instantiate a JCE master key provider
         // Because the user does not have access to the private escrow key,
@@ -310,7 +304,7 @@ public class EscrowedEncryptExample {
                 "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 
         // 4. Combine the providers into a single master key provider
-        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(kms, escrowPub);
+        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(keyProvider, escrowPub);
 
         // 5. Encrypt the file
         // To simplify the code, we omit the encryption context. Production code should always 
@@ -325,23 +319,33 @@ public class EscrowedEncryptExample {
     }
 
     private static void standardDecrypt(final String kmsArn, final String fileName) throws Exception {
-        // Decrypt with the KMS CMK and the escrow public key. You can use a combined provider, 
-        // as shown here, or just the KMS master key provider.
-        
-        // 1. Instantiate the SDK
-        final AwsCrypto crypto = new AwsCrypto();
-        
-        // 2. Instantiate a KMS master key provider
-        final KmsMasterKeyProvider kms = KmsMasterKeyProvider.builder().withKeysForEncryption(kmsArn).build();
+        // Decrypt with the AWS KMS CMK and the escrow public key. You can use a combined provider,
+        // as shown here, or just the AWS KMS master key provider.
+
+        // 1. Instantiate the SDK.
+        // This builds the AwsCrypto client with the RequireEncryptRequireDecrypt commitment policy,
+        // which enforces that this client only encrypts using committing algorithm suites and enforces
+        // that this client will only decrypt encrypted messages that were created with a committing algorithm suite.
+        // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
+        // or `AwsCrypto.standard()`.
+        final AwsCrypto crypto = AwsCrypto.builder()
+                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+                .build();
+
+        // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict()
+        //
+        // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
+        // indicated by kmsArn.
+        final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsArn);
         
         // 3. Instantiate a JCE master key provider
-        // Because the user does not have access to the private escrow 
-        // key, they pass in "null" for the private key parameter.
+        // Because the user does not have access to the private 
+        // escrow key, they pass in "null" for the private key parameter.
         final JceMasterKey escrowPub = JceMasterKey.getInstance(publicEscrowKey, null, "Escrow", "Escrow",
                 "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 
-        // 4. Combine the providers into a single master key provider 
-        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(kms, escrowPub);
+        // 4. Combine the providers into a single master key provider
+        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(keyProvider, escrowPub);
 
         // 5. Decrypt the file
         // To simplify the code, we omit the encryption context. Production code should always 
@@ -355,19 +359,19 @@ public class EscrowedEncryptExample {
     }
 
     private static void escrowDecrypt(final String fileName) throws Exception {
-        // You can decrypt the stream using only the private key. 
-        // This method does not call KMS.
+        // You can decrypt the stream using only the private key.
+        // This method does not call AWS KMS.
 
         // 1. Instantiate the SDK
-        final AwsCrypto crypto = new AwsCrypto();
+        final AwsCrypto crypto = AwsCrypto.standard();
 
-        // 2. Instantiate a JCE master key
-        // This method call uses the escrowed private key, not null
+        // 2. Instantiate a JCE master key provider
+        // This method call uses the escrowed private key, not null 
         final JceMasterKey escrowPriv = JceMasterKey.getInstance(publicEscrowKey, privateEscrowKey, "Escrow", "Escrow",
                 "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 
         // 3. Decrypt the file
-         // To simplify the code, we omit the encryption context. Production code should always 
+        // To simplify the code, we omit the encryption context. Production code should always 
         // use an encryption context. For an example, see the other SDK samples.
         final FileInputStream in = new FileInputStream(fileName + ".encrypted");
         final FileOutputStream out = new FileOutputStream(fileName + ".deescrowed");

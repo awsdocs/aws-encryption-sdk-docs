@@ -2,6 +2,8 @@
 
 The following examples show you how to use the AWS Encryption SDK for C to encrypt and decrypt data\. 
 
+The examples in this section show how to use version 2\.0\.*x* and later of the AWS Encryption SDK for C\. For examples that use earlier versions, find your release in the [Releases](https://github.com/aws/aws-encryption-sdk-c/releases) list of the [aws\-encryption\-sdk\-c repository](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
+
 When you install and build the AWS Encryption SDK for C, the source code for these and other examples are included in the `examples` subdirectory, and they are compiled and built into the `build` directory\. You can also find them in the [examples](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples) subdirectory of the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
 
 **Topics**
@@ -46,7 +48,7 @@ After you create a session with the keyring, you can release your reference to t
 
 ```
 struct aws_cryptosdk_session *session = 
-       aws_cryptosdk_session_new_from_keyring(alloc, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
+       aws_cryptosdk_session_new_from_keyring_2(alloc, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
 
 // When you add the keyring to the session, release the keyring object
 aws_cryptosdk_keyring_release(kms_keyring);
@@ -142,8 +144,8 @@ Create a session using the allocator and the keyring\. To configure the session 
 After you create a session with a keyring, you can release your reference to the keyring using the method that the SDK provides\. The session retains a reference to the keyring object during its lifetime, and both the session and keyring are released when you destroy the session\. This reference counting technique helps to prevent memory leaks and to prevent the objects from being released while they are in use\.  
 
 ```
-struct aws_cryptosdk_session *session =
-	aws_cryptosdk_session_new_from_keyring(alloc, AWS_CRYPTOSDK_DECRYPT, kms_keyring);
+struct aws_cryptosdk_session *session =	
+	aws_cryptosdk_session_new_from_keyring_2(alloc, AWS_CRYPTOSDK_DECRYPT, kms_keyring);
 
 // When you add the keyring to the session, release the keyring object
 aws_cryptosdk_keyring_release(kms_keyring);

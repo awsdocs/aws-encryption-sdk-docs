@@ -45,6 +45,11 @@ To use AWS KMS CMKs with the AWS Encryption CLI, you need to [install](https://d
 
 Use `pip` to install the AWS Encryption CLI and the Python [cryptography library](https://cryptography.io/en/latest/) that it requires\. 
 
+**Note**  
+If you are new to the AWS Encryption CLI, install the latest available version\.   
+If you support commands and scripts designed for version of the AWS Encryption CLI before 1\.7\.*x*, we recommend that you upgrade first to version 1\.7\.*x* before upgrading to version 2\.0\.*x* or later\. Version 2\.0\.*x* of the AWS Encryption CLI introduces new security features to support [AWS Encryption SDK best practices](best-practices.md)\. However, version 2\.0\.*x* is not backward\-compatible; it will cause scripts designed for earlier versions of the AWS Encryption CLI to fail\.   
+For information about the changes and for help migrating from your current version to version 1\.7\.*x* and 2\.0\.*x*, see [Migrating to version 2\.0\.*x*](migration.md)\.
+
 The AWS Encryption CLI requires the **cryptography** library on all platforms\. All versions of `pip` install and build the **cryptography** library on Windows and OS X\. 
 
 On Linux, `pip` 8\.1 and later installs and builds the **cryptography** library\. If you are using an earlier version of `pip` and your Linux environment doesn't have the tools needed to build the **cryptography** library, you must install them\. For more information, see [Building cryptography on Linux](https://cryptography.io/en/latest/installation/#building-cryptography-on-linux)\.

@@ -15,7 +15,7 @@ If you don't use hardware security modules \(HSMs\) or another encryption key ma
 
 The AWS Encryption SDK for C requires the following libraries:
 + [OpenSSL](https://www.openssl.org/) 1\.0\.2 or greater, including 1\.1\.0 or later – The AWS Encryption SDK uses the encryption algorithms and other cryptographic primitives in the OpenSSL cryptography library\. The SDK doesn't define or create any cryptographic primitives\.
-+ [aws\-c\-common](https://github.com/awslabs/aws-c-common/) 0\.3\.0 or later – This library defines general\-purpose tools and structures that the AWS Encryption SDK for C uses\. It's installed automatically when you install the AWS SDK for C\+\+\.
++ [aws\-c\-common](https://github.com/awslabs/aws-c-common/) 0\.4\.42 or later – This library defines general\-purpose tools and structures that the AWS Encryption SDK for C uses\. It's installed automatically when you install the AWS SDK for C\+\+\.
 **Note**  
 The preferred version of the `aws-c-common` library is installed automatically when you install the AWS SDK for C\+\+\. If you're installing the SDK for C\+\+, don't install the `aws-c-common` library separately\. 
 
@@ -24,7 +24,7 @@ To build the SDK, you need:
 + [CMake](https://cmake.org/) 3\.9 or later\.
 
 To use the AWS Encryption SDK for C with AWS KMS, you need the following:
-+ [AWS SDK for C\+\+](https://docs.aws.amazon.com/sdk-for-cpp/latest/developer-guide/) 1\.7\.36 or later – The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS KMS\. To use AWS KMS to protect your encryption keys, and to run many of the examples in this guide and in the repository, install the SDK for C\+\+\. This C\+\+ SDK requires a C\+\+ compiler and the `curl` tool\. 
++ [AWS SDK for C\+\+](https://docs.aws.amazon.com/sdk-for-cpp/latest/developer-guide/) 1\.8\.32 or later – The AWS Encryption SDK for C uses the AWS SDK for C\+\+ to interact with AWS KMS\. To use AWS KMS to protect your encryption keys, and to run many of the examples in this guide and in the repository, install the SDK for C\+\+\. This C\+\+ SDK requires a C\+\+ compiler and the `curl` tool\. 
 
 ## Install the AWS Encryption SDK for C<a name="c-language-how-to-install"></a>
 

@@ -48,6 +48,7 @@ For help deciding which library or service to use, see [How to Choose an Encrypt
 
 For more information about the AWS Encryption SDK and client\-side encryption, try these sources\.
 + To get started quickly, see [Getting started](getting-started.md)\.
++ For best practice guidelines, see [Best practices for the AWS Encryption SDK](best-practices.md)\.
 + For information about how this SDK works, see [How the SDK works](how-it-works.md)\.
 + For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
 + For detailed technical information, see the [AWS Encryption SDK reference](reference.md)\.

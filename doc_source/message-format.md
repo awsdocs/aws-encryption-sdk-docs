@@ -1,13 +1,15 @@
 # AWS Encryption SDK message format reference<a name="message-format"></a>
 
-****  
-The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\.  
-To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\.  
-For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.
 
-The encryption operations in the AWS Encryption SDK return a single data structure or *message* that contains the encrypted data \(ciphertext\) and all encrypted data keys\. To understand this data structure, or to build libraries that read and write it, you need to understand the message format\.
+|  | 
+| --- |
+|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.  | 
+
+The encryption operations in the AWS Encryption SDK return a single data structure or [encrypted message](concepts.md#message) that contains the encrypted data \(ciphertext\) and all encrypted data keys\. To understand this data structure, or to build libraries that read and write it, you need to understand the message format\.
 
 The message format consists of at least two parts: a *header* and a *body*\. In some cases, the message format consists of a third part, a *footer*\. The message format defines an ordered sequence of bytes in network byte order, also called big\-endian format\. The message format begins with the header, followed by the body, followed by the footer \(when there is one\)\.
+
+The [algorithms suites](algorithms-reference.md) supported by the AWS Encryption SDK use one of two message format versions\. Algorithm suites without [key commitment](concepts.md#key-commitment) use message format version 1\. Algorithm suites with key commitment use message format version 2\. 
 
 **Topics**
 + [Header structure](#header-structure)
@@ -16,46 +18,54 @@ The message format consists of at least two parts: a *header* and a *body*\. In 
 
 ## Header structure<a name="header-structure"></a>
 
-The message header contains the encrypted data key and information about how the message body is formed\. The following table describes the fields that form the header\. The bytes are appended in the order shown\.
+The message header contains the encrypted data key and information about how the message body is formed\. The following table describes the fields that form the header in message format versions 1 and 2\. The bytes are appended in the order shown\. 
+
+The **Not present** value indicates that the field doesn't exist in that version of the message format\. **Bold text** indicates values that are different in each version\.
+
+**Note**  
+You might need to scroll horizontally or vertically to see all of the data in this table\.
 
 
 **Header Structure**  
 
-| Field | Length \(bytes\) | 
-| --- | --- | 
-| [Version](#header-version) | 1 | 
-| [Type](#header-type) | 1 | 
-| [Algorithm ID](#header-algorithm-id) | 2 | 
-| [Message ID](#header-message-id) | 16 | 
-| [AAD Length](#header-aad-length) | 2When the [encryption context](concepts.md#encryption-context) is empty, the AAD Length is 0\. | 
-| [AAD](#header-aad) | Variable\. Equal to the value specified in the previous 2 bytes \(AAD Length\)\. When the [encryption context](concepts.md#encryption-context) is empty, there is no AAD field in the header\. | 
-| [Encrypted Data Key Count](#header-data-key-count) | 2 | 
-| [Encrypted Data Key\(s\)](#header-data-keys) | Variable\. Determined by the number of encrypted data keys and the length of each\. | 
-| [Content Type](#header-content-type) | 1 | 
-| [Reserved](#header-reserved) | 4 | 
-| [IV Length](#header-iv-length) | 1 | 
-| [Frame Length](#header-frame-length) | 4 | 
-| [Header Authentication](#header-authentication) | Variable\. Determined by the [algorithm](algorithms-reference.md) that generated the message\. | 
+| Field | Message format version 1Length \(bytes\) | Message format version 2Length \(bytes\) | 
+| --- | --- | --- | 
+| [Version](#header-version) | 1 | 1 | 
+| [Type](#header-type) | 1 | Not present | 
+| [Algorithm ID](#header-algorithm-id) | 2 | 2 | 
+| [Message ID](#header-message-id) | 16 | 32 | 
+| [AAD Length](#header-aad-length) | 2When the [encryption context](concepts.md#encryption-context) is empty, the value of the 2\-byte AAD Length field is 0\. | 2When the [encryption context](concepts.md#encryption-context) is empty, the value of the 2\-byte AAD Length field is 0\. | 
+| [AAD](#header-aad) | Variable\. The length of this field appears in the previous 2 bytes \(AAD Length field\)\. When the [encryption context](concepts.md#encryption-context) is empty, there is no AAD field in the header\. |  Variable\. The length of this field appears in the previous 2 bytes \(AAD Length field\)\. When the [encryption context](concepts.md#encryption-context) is empty, there is no AAD field in the header\.  | 
+| [Encrypted Data Key Count](#header-data-key-count) | 2 | 2 | 
+| [Encrypted Data Key\(s\)](#header-data-keys) | Variable\. Determined by the number of encrypted data keys and the length of each\. | Variable\. Determined by the number of encrypted data keys and the length of each\. | 
+| [Content Type](#header-content-type) | 1 | 1 | 
+| [Reserved](#header-reserved) | 4 | Not present | 
+| [IV Length](#header-iv-length) | 1 | Not present | 
+| [Frame Length](#header-frame-length) | 4 | 4 | 
+| [Algorithm Suite Data](#algorithm-suite-data) | Not present | Variable\. Determined by the [algorithm](algorithms-reference.md) that generated the message\. | 
+| [Header Authentication](#header-authentication) | Variable\. Determined by the [algorithm](algorithms-reference.md) that generated the message\. | Variable\. Determined by the [algorithm](algorithms-reference.md) that generated the message\. | 
 
 **Version**  <a name="header-version"></a>
-The version of this message format\. The current version is 1\.0, encoded as the byte `01` in hexadecimal notation\.
+The version of this message format\. The version is either 1 or 2 encoded as the byte `01` or `02` in hexadecimal notation
 
 **Type**  <a name="header-type"></a>
-The type of this message format\. The type indicates the kind of structure\. The only supported type is described as *customer authenticated encrypted data*\. Its type value is 128, encoded as byte `80` in hexadecimal notation\.
+The type of this message format\. The type indicates the kind of structure\. The only supported type is described as *customer authenticated encrypted data*\. Its type value is 128, encoded as byte `80` in hexadecimal notation\.  
+This field is not present in message format version 2\.
 
 **Algorithm ID**  <a name="header-algorithm-id"></a>
 An identifier for the algorithm used\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer\. For more information about the algorithms, see [AWS Encryption SDK algorithms reference](algorithms-reference.md)\.
 
 **Message ID**  <a name="header-message-id"></a>
-A randomly generated 128\-bit value that identifies the message\. The Message ID:  
+A randomly generated value that identifies the message\. The Message ID:  
 + Uniquely identifies the encrypted message\.
 + Weakly binds the message header to the message body\.
 + Provides a mechanism to securely reuse a data key with multiple encrypted messages\.
 + Protects against accidental reuse of a data key or the wearing out of keys in the AWS Encryption SDK\.
+This value is 128 bits in message format version 1 and 256 bits in version 2\.
 
 **AAD Length**  <a name="header-aad-length"></a>
 The length of the additional authenticated data \(AAD\)\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the AAD\.  
-When the [encryption context](concepts.md#encryption-context) is empty, the AAD Length is 0\.
+When the [encryption context](concepts.md#encryption-context) is empty, the value of the AAD Length field is 0\.
 
 **AAD**  <a name="header-aad"></a>
 The additional authenticated data\. The AAD is an encoding of the [encryption context](concepts.md#encryption-context), an array of key\-value pairs where each key and value is a string of UTF\-8 encoded characters\. The encryption context is converted to a sequence of bytes and used for the AAD value\. When the encryption context is empty, there is no AAD field in the header\.  
@@ -104,14 +114,20 @@ Framed data is divided into equal\-length parts; each part is encrypted separate
 Nonframed data is not divided; it is a single encrypted blob\. Non\-framed content is type 1, encoded as the byte `01` in hexadecimal notation\.
 
 **Reserved**  <a name="header-reserved"></a>
-A reserved sequence of 4 bytes\. This value must be 0\. It is encoded as the bytes `00 00 00 00` in hexadecimal notation \(that is, a 4\-byte sequence of a 32\-bit integer value equal to 0\)\.
+A reserved sequence of 4 bytes\. This value must be 0\. It is encoded as the bytes `00 00 00 00` in hexadecimal notation \(that is, a 4\-byte sequence of a 32\-bit integer value equal to 0\)\.  
+This field is not present in message format version 2\.
 
 **IV Length**  <a name="header-iv-length"></a>
-The length of the initialization vector \(IV\)\. It is a 1\-byte value interpreted as an 8\-bit unsigned integer that specifies the number of bytes that contain the IV\. This value is determined by the IV bytes value of the [algorithm](algorithms-reference.md) that generated the message\.
+The length of the initialization vector \(IV\)\. It is a 1\-byte value interpreted as an 8\-bit unsigned integer that specifies the number of bytes that contain the IV\. This value is determined by the IV bytes value of the [algorithm](algorithms-reference.md) that generated the message\.  
+This field is not present in message format version 2, which only supports algorithm suites that use deterministic IV values in the message header\.
 
 **Frame Length**  <a name="header-frame-length"></a>
 The length of each frame of framed data\. It is a 4\-byte value interpreted as a 32\-bit unsigned integer that specifies the number of bytes in each frame\. When the data is nonframed, that is, when the value of the `Content Type` field is 1, this value must be 0\.  
 Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
+
+**Algorithm Suite Data**  <a name="algorithm-suite-data"></a>
+Supplementary data needed by the [algorithm](algorithms-reference.md) that generated the message\. The length and contents are determined by the algorithm\. Its length might be 0\.  
+This field is not present in message format version 1\.
 
 **Header Authentication**  <a name="header-authentication"></a>
 The header authentication is determined by the [algorithm](algorithms-reference.md) that generated the message\. The header authentication is calculated over the entire header\. It consists of an IV and an authentication tag\. The bytes are appended in the order shown\.    
@@ -119,12 +135,13 @@ The header authentication is determined by the [algorithm](algorithms-reference.
 [\[See the AWS documentation website for more details\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/message-format.html)  
 **IV**  <a name="header-authentication-iv"></a>
 The initialization vector \(IV\) used to calculate the header authentication tag\.  
+This field is not present in the header of message format version 2\. Message format version 2 only supports algorithm suites that use deterministic IV values in the message header\.  
 **Authentication Tag**  <a name="header-authentication-tag"></a>
 The authentication value for the header\. It is used to authenticate the entire contents of the header\.
 
 ## Body structure<a name="body-structure"></a>
 
-The message body contains the encrypted data, called the *ciphertext*\. The structure of the body depends on the content type \(nonframed or framed\)\. The following sections describe the format of the message body for each content type\.
+The message body contains the encrypted data, called the *ciphertext*\. The structure of the body depends on the content type \(nonframed or framed\)\. The following sections describe the format of the message body for each content type\. The message body structure is the same in message format versions 1 and 2\.
 
 **Topics**
 + [Non\-framed data](#body-no-framing)
@@ -240,7 +257,7 @@ The authentication value for the frame\. It is used to authenticate the entire f
 
 ## Footer structure<a name="footer-structure"></a>
 
-When the [algorithms with signing](algorithms-reference.md) are used, the message format contains a footer\. The message footer contains a signature calculated over the message header and body\. The following table describes the fields that form the footer\. The bytes are appended in the order shown\.
+When the [algorithms with signing](algorithms-reference.md) are used, the message format contains a footer\. The message footer contains a signature calculated over the message header and body\. The following table describes the fields that form the footer\. The bytes are appended in the order shown\. The message footer structure is the same in message format versions 1 and 2\.
 
 
 **Footer Structure**  
