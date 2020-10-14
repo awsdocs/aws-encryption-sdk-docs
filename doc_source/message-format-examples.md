@@ -22,7 +22,7 @@ The following example shows the message format for framed data in [message forma
 +--------+
 01                                         Version (1.0)
 80                                         Type (128, customer authenticated encrypted data)
-0378                                       Algorithm ID (see )
+0378                                       Algorithm ID (see Algorithms reference)
 6E7C0FBD 4DF4A999 717C22A2 DDFE1A27        Message ID (random 128-bit value)
 008E                                       AAD Length (142)
 0004                                       AAD Key-Value Pair Count (4)
@@ -258,7 +258,7 @@ Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed d
 +--------+
 01                                         Version (1.0)
 80                                         Type (128, customer authenticated encrypted data)
-0378                                       Algorithm ID (see )
+0378                                       Algorithm ID (see Algorithms reference)
 B8929B01 753D4A45 C0217F39 404F70FF        Message ID (random 128-bit value)
 008E                                       AAD Length (142)
 0004                                       AAD Key-Value Pair Count (4)
