@@ -14,7 +14,7 @@ For AWS Encryption SDK for Java, AWS Encryption SDK for Python, and AWS Encrypti
 
  
 
-You might have code like the following in your application\. This example creates an AWS KMS regional discovery keyring that is limited to the specified AWS accounts and the US West \(Oregon\) \(us\-west\-2\) Region\. This example represents code in AWS Encryption SDK versions earlier than 1\.7\.0\. However, it is still valid in versions 1\.7\.*x* and later\. 
+You might have code like the following in your application\. This example creates an AWS KMS regional discovery keyring that is limited to the specified AWS accounts and the US West \(Oregon\) \(us\-west\-2\) Region\. This example represents code in AWS Encryption SDK versions earlier than 1\.7\.*x*\. However, it is still valid in versions 1\.7\.*x* and later\. 
 
 ------
 #### [ C ]

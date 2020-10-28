@@ -4,7 +4,8 @@ Upgrading from version 1\.7\.*x* to version 2\.0\.*x* is designed to help you im
 
 **Note**  
 Version 1\.7\.*x* indicates any version that begins with `1.7`\. To get 1\.7\.*x* features, use the latest 1\.7\.*x* version of the AWS Encryption SDK available for your programming language\.  
-Version 2\.0\.*x* indicates any version that begins with `2.0`\. To get features introduced in version 2\.0\.*x*, use the latest version of the AWS Encryption SDK available for your programming language\.
+Version 2\.0\.*x* indicates any version that begins with `2.0`\. To get features introduced in version 2\.0\.*x*, use the latest version of the AWS Encryption SDK available for your programming language\.  
+New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 The AWS Encryption SDK language implementations use [semantic versioning](https://semver.org/) to make it easier for you to identify the magnitude of changes in each release\. A change in the major version number, such as 1\.*x*\.*x* to 2\.*x*\.*x*, indicates a breaking change that is likely to require code changes and a planned deployment\. A change in a minor version, such as *x*\.1\.*x* to *x*\.2\.*x*, is always backward compatible, but might include deprecated elements\. 
 
@@ -17,13 +18,13 @@ For a detailed description of the changes for your programming language, see the
 The following list describes the major differences between the versions\. 
 
 **Topics**
-+ [Versions earlier than 1\.7\.0](#versions-earlier)
++ [Versions earlier than 1\.7\.*x*](#versions-earlier)
 + [Version 1\.7\.*x*](#version-1.7)
 + [Version 2\.0\.*x*](#version-2)
 
-## Versions earlier than 1\.7\.0<a name="versions-earlier"></a>
+## Versions earlier than 1\.7\.*x*<a name="versions-earlier"></a>
 
-Versions of the AWS Encryption SDK earlier than 1\.7\.0 provide important security features, including encryption with the Advanced Encryption Standard algorithm in Galois/Counter Mode \(AES\-GCM\), an HMAC\-based extract\-and\-expand key derivation function \(HKDF\), signing, and a 256\-bit encryption key\. However, these versions don't support [best practices](best-practices.md) that we recommend, including [key commitment](concepts.md#key-commitment)\. 
+Versions of the AWS Encryption SDK earlier than 1\.7\.*x* provide important security features, including encryption with the Advanced Encryption Standard algorithm in Galois/Counter Mode \(AES\-GCM\), an HMAC\-based extract\-and\-expand key derivation function \(HKDF\), signing, and a 256\-bit encryption key\. However, these versions don't support [best practices](best-practices.md) that we recommend, including [key commitment](concepts.md#key-commitment)\. 
 
 ## Version 1\.7\.*x*<a name="version-1.7"></a>
 
@@ -50,8 +51,8 @@ Specifying the key ID of the CMK is not required to decrypt ciphertext that was 
 
 **Decrypt ciphertext with key commitment**  
 Version 1\.7\.*x* can decrypt ciphertext that was encrypted with or without [key commitment](concepts.md#key-commitment)\. However, it cannot encrypt ciphertext with key commitment\. This property allows you to fully deploy applications that can decrypt ciphertext encrypted with key commitment before they ever encounter any such ciphertext\. Because this version decrypts messages that are encrypted without key commitment, you don't need to re\-encrypt any ciphertext\.  
-To implement this behavior, version 1\.7\.*x* includes a new [commitment policy](concepts.md#commitment-policy) configuration setting that determines whether the AWS Encryption SDK can encrypt or decrypt with key commitment\. In version 1\.7\.*x*, the only valid value for the commitment policy is `ForbidEncryptAllowDecrypt`\. This value prevents the AWS Encryption SDK from encrypting with either of the new algorithm suites that include key commitment\. It allows the AWS Encryption SDK to decrypt ciphertext with and without key commitment\.   
-Although there is only one valid commitment policy value in version 1\.7\.*x*, we require that you can set this value explicitly\. This prepares you for version 2\.0\.*x* where the default commitment policy setting requires key commitment when encrypting and decrypting\. Setting this value explicitly in version 1\.7\.*x* means that you control your commitment policy\. You determine when you start encrypting messages with key commitment and stop decrypting ciphertext without key commitment\. For details, see [Setting your commitment policy](migrate-commitment-policy.md)\.
+To implement this behavior, version 1\.7\.*x* includes a new [commitment policy](concepts.md#commitment-policy) configuration setting that determines whether the AWS Encryption SDK can encrypt or decrypt with key commitment\. In version 1\.7\.*x*, the only valid value for the commitment policy, `ForbidEncryptAllowDecrypt`, is used in all encrypt and decrypt operations\. This value prevents the AWS Encryption SDK from encrypting with either of the new algorithm suites that include key commitment\. It allows the AWS Encryption SDK to decrypt ciphertext with and without key commitment\.   
+Although there is only one valid commitment policy value in version 1\.7\.*x*, we require that you can set this value explicitly when you use the new APIs introduced in this release\. Setting the value explicitly prevents your commitment policy from changing automatically to `require-encrypt-require-decrypt` when you upgrade to version 2\.1\.*x*\. Instead, you can [migrate your commitment policy](migrate-commitment-policy.md) in stages\.
 
 **Algorithm suites with key commitment**  
 Version 1\.7\.*x* includes two new [algorithm suites](supported-algorithms.md) that support key commitment\. One includes signing; the other does not\. Like earlier supported algorithm suites, both of these new algorithm suites include encryption with AES\-GCM, a 256\-bit encryption key, and an HMAC\-based extract\-and\-expand key derivation function \(HKDF\)\.  

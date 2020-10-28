@@ -3,7 +3,8 @@
 Use the following examples to try the AWS Encryption CLI on the platform you prefer\. For help with master keys and other parameters, see [How to use the AWS Encryption CLI](crypto-cli-how-to.md)\. For a quick reference, see [AWS Encryption SDK CLI syntax and parameter reference](crypto-cli-reference.md)\.
 
 **Note**  
-The following examples use the syntax for versions 2\.0\.*x* of the AWS Encryption CLI\. 
+The following examples use the syntax for AWS Encryption CLI version 2\.1\.*x*\.   
+New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 **Topics**
 + [Encrypting a file](#cli-example-encrypt-file)
@@ -27,7 +28,7 @@ The second command encrypts the file contents\. The command uses the `--encrypt`
 
 The command uses the `--metadata-output` parameter to specify a text file for the metadata about the encryption operation\. As a best practice, the command uses the `--encryption-context` parameter to specify an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context)\. 
 
-This command also uses the `--commitment-policy` parameter to set the commitment policy explicitly\. This parameter is required in version 1\.7\.*x*\. Beginning in version 2\.0\.*x*, it is optional, but recommended\.
+This command also uses the [`--commitment-policy` parameter](crypto-cli-reference.md#syntax-commitment-policy) to set the commitment policy explicitly\. In version 1\.8\.*x*, this parameter is required when you use the `--wrapping-keys` parameter\. Beginning in version 2\.1\.*x*, the `--commitment-policy` parameter is optional, but recommended\.
 
 The value of the `--output` parameter, a dot \(\.\), tells the command to write the output file to the current directory\. 
 
@@ -119,7 +120,9 @@ This example uses the AWS Encryption CLI to decrypt the contents of the `Hello.t
 
 The decrypt command uses the `--decrypt` parameter to indicate the operation and `--input` parameter to identify the file to decrypt\. The value of the `--output` parameter is a dot that represents the current directory\. 
 
-The `--wrapping-keys` parameter with a **key** attribute specifies the wrapping key used to decrypt the encrypted message\. The `--wrapping-keys` parameter is required in a decrypt command\. If you are using AWS KMS CMKs, you can use the **key** attribute or the **discovery** attribute\. If you are using a custom master key provider, the **key** attribute is required\.
+The `--wrapping-keys` parameter with a **key** attribute specifies the wrapping key used to decrypt the encrypted message\. The `--wrapping-keys` parameter is required in a decrypt command\. If you are using AWS KMS CMKs, you can use the **key** attribute to specify CMKs for decrypting or the **discovery** attribute with a value of `true` \(but not both\)\. If you are using a custom master key provider, the **key** and **provider** attributes are required\. 
+
+The [`--commitment-policy` parameter](crypto-cli-reference.md#syntax-commitment-policy) is optional beginning in version 2\.1\.*x*, but it is recommended\. Using it explicitly makes your intent clear, even if you specify the default value, `require-encrypt-require-decrypt`\.
 
 The `--encryption-context` parameter is optional in the decrypt command, even when an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context) is provided in the encrypt command\. In this case, the decrypt command uses the same encryption context that was provided in the encrypt command\. Before decrypting, the AWS Encryption CLI verifies that the encryption context in the encrypted message includes a `purpose=test` pair\. If it does not, the decrypt command fails\.
 
@@ -234,7 +237,7 @@ The [`--wrapping-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), a
 
 The command also has a `--metadata-output` parameter to tell the AWS Encryption CLI where to write the metadata about the encryption operations\. The AWS Encryption CLI writes one metadata record for each file that was encrypted\.
 
-The [`--commitment-policy parameter`](crypto-cli-how-to.md#crypto-cli-commitment-policy) is optional beginning in version 2\.0\.*x*, but it is recommended\. If the command or script fails because it cannot decrypt a ciphertext, the explicit commitment\-policy setting might help you to detect the problem quickly\.
+The [`--commitment-policy parameter`](crypto-cli-how-to.md#crypto-cli-commitment-policy) is optional beginning in version 2\.1\.*x*, but it is recommended\. If the command or script fails because it cannot decrypt a ciphertext, the explicit commitment policy setting might help you to detect the problem quickly\.
 
 When the command completes, the AWS Encryption CLI writes the encrypted files to the `TestEnc` directory, but it does not return any output\. 
 
@@ -251,7 +254,7 @@ $ aws-encryption-cli --encrypt \
                      --input testdir --recursive\
                      --wrapping-keys key=$cmkArn \
                      --encryption-context dept=IT \
-                     --commitment-policy \
+                     --commitment-policy require-encrypt-require-decrypt \
                      --metadata-output ~/metadata \
                      --output testenc
 
@@ -270,7 +273,7 @@ PS C:\> aws-encryption-cli --encrypt `
                            --input .\TestDir --recursive `
                            --wrapping-keys key=$cmkArn `
                            --encryption-context dept=IT `
-                           --commitment-policy `
+                           --commitment-policy require-encrypt-require-decrypt `
                            --metadata-output .\Metadata\Metadata.txt `
                            --output .\TestEnc
 
@@ -429,7 +432,7 @@ The example consists of three commands:
 
   This decrypt command uses `--input -` to indicate that input is coming from the pipeline \(stdin\) and `--output -` to send the output to the pipeline \(stdout\)\. \(The input parameter takes the location of the input, not the actual input bytes, so you cannot use the `$encrypted` variable as the value of the `--input` parameter\.\) 
 
-  This example uses the **discovery** attribute of the `--wrapping-keys` parameter to allow the AWS Encryption CLI to use any CMK to decrypt the data\. It doesn't specify a commitment policy, so it uses the default value for version 2\.0\.*x* and later, `require-encrypt-require-decrypt`\.
+  This example uses the **discovery** attribute of the `--wrapping-keys` parameter to allow the AWS Encryption CLI to use any CMK to decrypt the data\. It doesn't specify a [commitment policy](concepts.md#commitment-policy), so it uses the default value for version 2\.1\.*x* and later, `require-encrypt-require-decrypt`\.
 
   Because the output was encrypted and then encoded, the decrypt command uses the `--decode` parameter to decode Base64\-encoded input before decrypting it\. You can also use the `--decode` parameter to decode Base64\-encoded input before encrypting it\.
 
@@ -465,7 +468,7 @@ $  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567
 
 $  echo 'Hello World' |
           aws-encryption-cli --encrypt --wrapping-keys key=$cmkArn --input - --output - --encode -S |
-          aws-encryption-cli --decrypt --wrapping-keys key=discovery=true --input - --output - --decode -S
+          aws-encryption-cli --decrypt --wrapping-keys discovery=true --input - --output - --decode -S
 Hello World
 ```
 

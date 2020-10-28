@@ -3,7 +3,11 @@
 The AWS Encryption SDK supports multiple interoperable [programming language implementations](programming-languages.md), each of which is developed in an open\-source repository on GitHub\. As a [best practice](best-practices.md), we recommend that you use the latest version of the AWS Encryption SDK for each language\. However, the 2\.0\.*x* version of the AWS Encryption SDK introduces significant new security features, some of which are breaking changes\. To provide a safe upgrade path to version 2\.0\.*x*, we provide a transition version, 1\.7\.*x*, in each programming language\. The topics in this section are designed to help you understand the changes, select the correct version for your application, and migrate safely and successfully to version 2\.0\.*x*\.
 
 **Important**  
-If you upgrade directly to version 2\.0\.*x* and enable all new features immediately, the AWS Encryption SDK won't be able to decrypt ciphertext encrypted under older versions of the AWS Encryption SDK\.
+If you upgrade directly to version 2\.0\.*x* and enable all new features immediately, the AWS Encryption SDK won't be able to decrypt ciphertext encrypted under older versions of the AWS Encryption SDK
+
+**Note**  
+AWS Encryption CLI: When reading this migration guide, use the 1\.7\.*x* migration instructions for AWS Encryption CLI 1\.8\.*x* and use the 2\.0\.*x* migration instructions for AWS Encryption CLI 2\.1\.*x*\.  
+New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 **New users**  
 If you're new to the AWS Encryption SDK, start with the latest version of the AWS Encryption SDK for your programming language\. The default values enable all security features of the AWS Encryption SDK, including encryption with signing, key derivation, and [key commitment](concepts.md#key-commitment)\.

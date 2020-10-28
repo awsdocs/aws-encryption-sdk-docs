@@ -66,7 +66,7 @@ In the AWS Encryption SDK, we distinguish *data keys* from *data encryption keys
 A *wrapping key* \(or *master key*\) is a key\-encryption key that the AWS Encryption SDK uses to encrypt the [data key](#DEK) that encrypts your data\. Each plaintext data key can be encrypted under one or more wrapping keys\. You determine which wrapping keys are used to protect your data when you configure a [keyring](#keyring) or [master key provider](#master-key-provider)\.
 
 **Note**  
-*Wrapping key* refers to the keys in a keyring or master key provider\. *Master key* is typically associated with the `MasterKey` class that you instantiate when you use a master key provider\. master keys and wrapping keys are key\-encryption keys that the AWS Encryption SDK uses to protect the data key that protects your data\.
+*Wrapping key* refers to the keys in a keyring or master key provider\. *Master key* is typically associated with the `MasterKey` class that you instantiate when you use a master key provider\.
 
 The AWS Encryption SDK supports several commonly used wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and raw RSA keys\. You can also extend or implement your own wrapping keys\. 
 
@@ -185,7 +185,7 @@ You might have to scroll horizontally or vertically to see the entire table\.
 | RequireEncryptRequireDecrypt | ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/icon-yes.png) | ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/icon-no.png) | ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/icon-yes.png) | ![\[Image NOT FOUND\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/icon-no.png) | 
 
 The commitment policy setting is introduced in AWS Encryption SDK version 1\.7\.*x*\. It's valid in all supported [programming languages](programming-languages.md)\.
-+ `ForbidEncryptAllowDecrypt` decrypts with or without key commitment, but it won't encrypt with key commitment\. This is the only valid value for commitment policy in version 1\.7\.*x*\. It's designed to prepare all hosts running your application to decrypt with key commitment before they ever encounter a ciphertext encrypted with key commitment\.
++ `ForbidEncryptAllowDecrypt` decrypts with or without key commitment, but it won't encrypt with key commitment\. This is the only valid value for commitment policy in version 1\.7\.*x* and it is used for all encrypt and decrypt operations\. It's designed to prepare all hosts running your application to decrypt with key commitment before they ever encounter a ciphertext encrypted with key commitment\. 
 + `RequireEncryptAllowDecrypt` always encrypts with key commitment\. It can decrypt with or without key commitment\. This value, introduced in version 2\.0\.*x*, lets you start encrypting with key commitment, but still decrypt legacy ciphertexts without key commitment\.
 + `RequireEncryptRequireDecrypt` encrypts and decrypts only with key commitment\. This value is the default for version 2\.0\.*x*\. Use this value when you are certain that all of your ciphertexts are encrypted with key commitment\.
 
