@@ -129,8 +129,8 @@ For a complete example, see [SetCommitmentPolicyExample\.java](https://github.co
 
 ```
 // Instantiate the client
-final AwsCrypto crypto = AwsCrypto().builder()
-    .withCommmitmentPolicy(CommitmentPolicy.ForbidEncryptAllowDecrypt)
+final AwsCrypto crypto = AwsCrypto.builder()
+    .withCommitmentPolicy(CommitmentPolicy.ForbidEncryptAllowDecrypt)
     .build();
 
 // Create a master key provider in strict mode
