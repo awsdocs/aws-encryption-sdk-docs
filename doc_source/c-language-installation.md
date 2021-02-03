@@ -364,3 +364,5 @@ The following instructions install the AWS Encryption SDK and its dependencies\.
 After you install the SDK, you can start building and using it\. This guide includes topics that help you to [understand keyrings](choose-keyring.md#using-keyrings), [choose a keyring](choose-keyring.md), learn the basic [programming patterns](c-language-using.md#c-language-using-pattern), and work through a [simple example](c-examples.md#c-example-strings)\. 
 
 For help compiling and building your applications, see the [README file](https://github.com/aws/aws-encryption-sdk-c/blob/master/README.md) in the `aws-encryption-sdk-c` repository\. 
+
+ 

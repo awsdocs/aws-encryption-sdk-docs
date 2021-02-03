@@ -120,7 +120,7 @@ This example uses the AWS Encryption CLI to decrypt the contents of the `Hello.t
 
 The decrypt command uses the `--decrypt` parameter to indicate the operation and `--input` parameter to identify the file to decrypt\. The value of the `--output` parameter is a dot that represents the current directory\. 
 
-The `--wrapping-keys` parameter with a **key** attribute specifies the wrapping key used to decrypt the encrypted message\. The `--wrapping-keys` parameter is required in a decrypt command\. If you are using AWS KMS CMKs, you can use the **key** attribute to specify CMKs for decrypting or the **discovery** attribute with a value of `true` \(but not both\)\. If you are using a custom master key provider, the **key** and **provider** attributes are required\. 
+The `--wrapping-keys` parameter with a **key** attribute specifies the wrapping key used to decrypt the encrypted message\. In decrypt commands with AWS KMS CMKs, the value of the key attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. The `--wrapping-keys` parameter is required in a decrypt command\. If you are using AWS KMS CMKs, you can use the **key** attribute to specify CMKs for decrypting or the **discovery** attribute with a value of `true` \(but not both\)\. If you are using a custom master key provider, the **key** and **provider** attributes are required\. 
 
 The [`--commitment-policy` parameter](crypto-cli-reference.md#syntax-commitment-policy) is optional beginning in version 2\.1\.*x*, but it is recommended\. Using it explicitly makes your intent clear, even if you specify the default value, `require-encrypt-require-decrypt`\.
 
@@ -319,7 +319,7 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-This decrypt command decrypts all of the files in the TestEnc directory and writes the plaintext files to the TestDec directory\. The `--wrapping-keys` parameter with a **key** attribute tells the AWS Encryption CLI which CMKs to use to decrypt the files\. The command uses the `--interactive` parameter to tell the AWS Encryption CLI to prompt you before overwriting a file with the same name\.
+This decrypt command decrypts all of the files in the TestEnc directory and writes the plaintext files to the TestDec directory\. The `--wrapping-keys` parameter with a **key** attribute and a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) value tells the AWS Encryption CLI which CMKs to use to decrypt the files\. The command uses the `--interactive` parameter to tell the AWS Encryption CLI to prompt you before overwriting a file with the same name\.
 
 This command also uses the encryption context that was provided when the files were encrypted\. When decrypting multiple files, the AWS Encryption CLI checks the encryption context of every file\. If the encryption context check on any file fails, the AWS Encryption CLI rejects the file, writes a warning, records the failure in the metadata, and then continues checking the remaining files\. If the AWS Encryption CLI fails to decrypt a file for any other reason, the entire decrypt command fails immediately\. 
 
@@ -380,7 +380,7 @@ These examples show you how to pipe input to commands \(stdin\) and write output
 This example pipes a plaintext string to an encrypt command and saves the encrypted message in a variable\. Then, it pipes the encrypted message in the variable to a decrypt command, which writes its output to the pipeline \(stdout\)\. 
 
 The example consists of three commands:
-+ The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
++ The first command saves the [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
 
 ------
 #### [ Bash ]
@@ -536,11 +536,11 @@ PS C:\> aws-encryption-cli --encrypt --input D:\Logs\Finance.log `
 
 ------
 
-This command decrypts the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. 
+This command decrypts the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. To decrypt data encrypted under three CMKs, you can specify the same three CMKs or any subset of them\. This example specifies only one of the CMKs\.
 
-To tell the AWS Encryption CLI which AWS KMS CMKs use to decrypt your data, use the **key** attribute of the `--wrapping-keys` parameter\. You must permission to call the [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the CMKs you specify\. For more information, see [ Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
+To tell the AWS Encryption CLI which AWS KMS CMKs to use to decrypt your data, use the **key** attribute of the `--wrapping-keys` parameter\. When decrypting with CMKs, the value of the **key** attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\.
 
-For example, to decrypt data encrypted under three CMKs, you can specify the same three CMKs or any subset of them\. This example specifies only one of the CMKs\.
+You must have permission to call the [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the CMKs you specify\. For more information, see [ Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
 
 ------
 #### [ Bash ]

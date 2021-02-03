@@ -39,7 +39,7 @@ The AWS Encryption SDK for Java is available through [Apache Maven](https://mave
 <dependency>
   <groupId>com.amazonaws</groupId>
   <artifactId>aws-encryption-sdk-java</artifactId>
-  <version>1.6.1</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 

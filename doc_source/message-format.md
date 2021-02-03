@@ -187,6 +187,8 @@ In framed data, the plaintext data is divided into equal\-length parts called *f
 **Note**  
 Whenever possible, use framed data\. The AWS Encryption SDK supports nonframed data only for legacy use\. Some language implementations of the AWS Encryption SDK can still generate nonframed ciphertext\. All supported language implementations can decrypt framed and nonframed ciphertext\.
 
+ 
+
 The [frame length](#header-frame-length), which is the length of the [encrypted content](#body-framed-regular-content) in the frame, can be different for each message\. The maximum number of bytes in a frame is 2^32 \- 1\. The maximum number of frames in a message is 2^32 \- 1\.
 
 There are two types of frames: *regular* and *final*\. Every message must consist of or include a final frame\. 

@@ -8,9 +8,9 @@ This topic explains how to install the AWS Encryption CLI\. For detailed informa
 
 ## Installing the prerequisites<a name="crypto-cli-prerequisites"></a>
 
-The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To use the AWS Encryption CLI, you need Python and `pip`, the Python package management tool\. Python and `pip` are available on all supported platforms\.
+The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To install the AWS Encryption CLI, you need Python and `pip`, the Python package management tool\. Python and `pip` are available on all supported platforms\.
 
-Before you install the AWS Encryption CLI, be sure that you have the following prerequisites\.
+Install the following prerequisites before you install the AWS Encryption CLI, 
 
 **Python**  
 The AWS Encryption CLI requires Python 2\.7, or Python 3\.4 or later\. Python is included in most Linux and macOS installations, although you might need to upgrade to one of the required versions\. However, you have to install Python on Windows, if it is not already installed\. To download Python, see [Python downloads](https://www.python.org/downloads/)\.  
@@ -34,8 +34,8 @@ PS C:\> dir HKCU:\Software\Python\PythonCore\version\InstallPath
 ```
 
 **pip**  
-`pip` is the Python package manager\. To install the AWS Encryption CLI and its dependencies, you need `pip` 8\.1 or later\.   
-For help installing or upgrading `pip`, see [Installation](https://pip.pypa.io/en/latest/installing/) in the `pip` documentation\.
+`pip` is the Python package manager\. To install the AWS Encryption CLI and its dependencies, you need `pip` 8\.1 or later\. For help installing or upgrading `pip`, see [Installation](https://pip.pypa.io/en/latest/installing/) in the `pip` documentation\.  
+On Linux installations, versions of `pip` earlier than 8\.1 can't build the **cryptography** library that the AWS Encryption CLI requires\. If you choose not to update your `pip` version, you can install the build tools separately\. For more information, see [Building cryptography on Linux](https://cryptography.io/en/latest/installation.html#building-cryptography-on-linux)\.
 
 **AWS Command Line Interface**  
 The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) with the AWS Encryption CLI\. If you are using a different [master key provider](concepts.md#master-key-provider), the AWS CLI is not required\.  
@@ -43,7 +43,7 @@ To use AWS KMS CMKs with the AWS Encryption CLI, you need to [install](https://d
 
 ## Installing the AWS Encryption CLI<a name="install-sdk-cli"></a>
 
-Use `pip` to install the AWS Encryption CLI and the Python [cryptography library](https://cryptography.io/en/latest/) that it requires\. 
+When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](http://boto3.amazonaws.com/v1/documentation/api/latest/)\.
 
 **Note**  
 If you are new to the AWS Encryption CLI, install the latest available version\.   
@@ -51,28 +51,47 @@ If you support commands and scripts designed for version of the AWS Encryption C
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.  
 For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to version 2\.0\.*x*](migration.md)\.
 
-The AWS Encryption CLI requires the **cryptography** library on all platforms\. All versions of `pip` install and build the **cryptography** library on Windows and OS X\. 
-
-On Linux, `pip` 8\.1 and later installs and builds the **cryptography** library\. If you are using an earlier version of `pip` and your Linux environment doesn't have the tools needed to build the **cryptography** library, you must install them\. For more information, see [Building cryptography on Linux](https://cryptography.io/en/latest/installation/#building-cryptography-on-linux)\.
-
-**To install the latest version**  
+**To install the latest version of the AWS Encryption CLI**  
 
 ```
 pip install aws-encryption-sdk-cli
 ```
 
-**To upgrade to the latest version**  
+**To upgrade to the latest version of the AWS Encryption CLI**  
 
 ```
 pip install --upgrade aws-encryption-sdk-cli
 ```
 
-**To find the version number of your AWS Encryption CLI and AWS Encryption SDK**  
+**To find the version numbers of your AWS Encryption CLI and AWS Encryption SDK**  
 
 ```
 aws-encryption-cli --version
+```
+The output lists the version numbers of both libraries\.  
 
+```
 aws-encryption-sdk-cli/2.1.0 aws-encryption-sdk/2.0.0
+```
+
+**To upgrade to the latest version of the AWS Encryption CLI**  
+
+```
+pip install --upgrade aws-encryption-sdk-cli
+```
+
+Installing the AWS Encryption CLI also installs the latest version of the AWS SDK for Python \(Boto3\), if it's not already installed\. If Boto3 is installed, the installer verifies the Boto3 version and updates it if required\.
+
+**To find your installed version of Boto3**  
+
+```
+pip show boto3
+```
+
+**To update to the latest version of Boto3**  
+
+```
+pip install --upgrade boto3
 ```
 
 To install the version of the AWS Encryption CLI currently in development, see the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.

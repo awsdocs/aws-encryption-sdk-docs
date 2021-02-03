@@ -29,7 +29,7 @@ pip install aws-encryption-sdk
 
 For more details about using pip to install and upgrade packages, see [Installing Packages](https://packaging.python.org/tutorials/installing-packages/)\.
 
-The SDK requires the [cryptography library](https://cryptography.io/en/latest/) on all platforms\. All versions of `pip` install and build the **cryptography** library on Windows\. `pip` 8\.1 and later installs and builds **cryptography** on Linux\. If you are using an earlier version of `pip` and your Linux environment doesn't have the tools needed to build the **cryptography** library, you need to install them\. For more information, see [Building Cryptography on Linux](https://cryptography.io/en/latest/installation/#building-cryptography-on-linux)\.
+The SDK requires the [cryptography library](https://cryptography.io/en/latest/) on all platforms\. All versions of `pip` install and build the **cryptography** library on Windows\. `pip` 8\.1 and later installs and builds **cryptography** on Linux\. If you are using an earlier version of `pip` and your Linux environment doesn't have the tools needed to build the **cryptography** library, you need to install them\. For more information, see [Building Cryptography on Linux](https://cryptography.io/en/latest/installation.html#building-cryptography-on-linux)\.
 
 For the latest development version of this SDK, go to the [aws\-encryption\-sdk\-python GitHub repository](https://github.com/aws/aws-encryption-sdk-python/)\.
 

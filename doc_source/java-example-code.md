@@ -2,6 +2,8 @@
 
 The following examples show you how to use the AWS Encryption SDK for Java to encrypt and decrypt data\. These examples show how to use [version 2\.0\.*x*](about-versions.md) and later of the AWS Encryption SDK for Java\. For examples that use earlier versions, find your release in the [Releases](https://github.com/aws/aws-encryption-sdk-java/releases) list of the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
 
+
+
 **Topics**
 + [Strings](#java-example-strings)
 + [Byte streams](#java-example-streams)
