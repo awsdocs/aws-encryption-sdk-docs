@@ -23,6 +23,7 @@ Need help?
 + [Symmetric and asymmetric encryption](#symmetric-key-encryption)
 + [Key commitment](#key-commitment)
 + [Commitment policy](#commitment-policy)
++ [Understanding Digital Signatures](#digital-sigs)
 
 ## Envelope encryption<a name="envelope-encryption"></a>
 
@@ -130,7 +131,7 @@ If you specify an algorithm suite, we recommend an algorithm suite that uses a [
 
 The cryptographic materials manager \(CMM\) assembles the cryptographic materials that are used to encrypt and decrypt data\. The *cryptographic materials* include plaintext and encrypted data keys, and an optional message signing key\. You never interact with the CMM directly\. The encryption and decryption methods handle it for you\.
 
-You can use the default CMM or the [caching CMM](data-key-caching.md) that the AWS Encryption SDK provides, or write a custom CMM\. And you can specify a CMM, but it's not required\. When you specify a keyring or master key provider, the AWS Encryption SDK creates a default CMM for you\. The default CMM gets the encryption or decryption materials from the keyring or master key provider that you specify\. This might involve a call to a cryptographic service, such as [AWS Key Management Service ](https://docs.aws.amazon.com/kms/latest/developerguide/)\(AWS KMS\)\.
+You can use the default CMM or the [caching CMM](data-key-caching.md) that the AWS Encryption SDK provides, or write a custom CMM\. And you can specify a CMM, but it's not required\. When you specify a keyring or master key provider, the AWS Encryption SDK creates a default CMM for you\. The default CMM gets the encryption or decryption materials from the keyring or master key provider that you specify\. This might involve a call to a cryptographic service, such as [AWS Key Management Service](https://docs.aws.amazon.com/kms/latest/developerguide/)\(AWS KMS\)\.
 
 Because the CMM acts as a liaison between the AWS Encryption SDK and a keyring \(or master key provider\), it is an ideal point for customization and extension, such as support for policy enforcement and caching\. The AWS Encryption SDK provides a caching CMM to support [data key caching\.](data-key-caching.md) 
 
@@ -192,3 +193,13 @@ The commitment policy setting is introduced in AWS Encryption SDK version 1\.7\.
 The commitment policy setting determines which algorithm suites you can use\. Beginning in version 1\.7\.*x*, the AWS Encryption SDK supports [algorithm suites](supported-algorithms.md) for key commitment; with and without signing\. If you specify an algorithm suite that conflicts with your commitment policy, the AWS Encryption SDK returns an error\. 
 
 For help setting your commitment policy, see [Setting your commitment policy](migrate-commitment-policy.md)\.
+
+## Understanding Digital Signatures<a name="digital-sigs"></a>
+
+To ensure the integrity of a digital message as it goes between systems, you can apply a digital signature to the message\. Digital signatures are always asymmetric\. You use your private key to create the signature, and append it to the original message\. Your recipient uses a public key to verify that the message has not been modified since you signed it\. 
+
+The AWS Encryption SDK encrypts your data using an authenticated encryption algorithm, AES\-GCM, and the decryption process verifies the integrity and authenticity of an encrypted message without using a digital signature\. But because AES\-GCM uses symmetric keys, anyone who can decrypt the data key used to decrypt the ciphertext could also manually create a new encrypted ciphertext, causing a potential security concern\. For instance, if you use an AWS KMS key as a wrapping key, this means that it is possible for a user with KMS Decrypt permissions to create encrypted ciphertexts without calling KMS Encrypt\. 
+
+To avoid this issue, the AWS Encryption SDK supports adding an Elliptic Curve Digital Signature Algorithm \(ECDSA\) signature to the end of encrypted messages\. When a signing algorithm suite is used, the AWS Encryption SDK generates a temporary private key and public key pair for each encrypted message\. The AWS Encryption SDK stores the public key in the encryption context of the data key and discards the private key, and no one can create another signature that verifies with the public key\. Because the algorithm binds the public key to the encrypted data key as additional authenticated data in the message header, a user who can only decrypt messages cannot alter the public key\. 
+
+Signature verification adds a significant performance cost on decryption\. If the users encrypting data and the users decrypting data are equally trusted, consider using an algorithm suite that does not include signing\.

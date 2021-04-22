@@ -19,7 +19,9 @@ The AWS Encryption SDK recommends an algorithm suite that derives an AES\-GCM en
 
 The HKDF helps you avoid accidental reuse of a data encryption key and reduces the risk of overusing a data key\. 
 
-For signing, this algorithm suite uses ECDSA with a cryptographic hash function algorithm \(SHA\-384\)\. ECDSA is used by default, even when it is not specified by the policy for the underlying master key\. Message signing verifies the identity of the message sender and adds message authenticity to the envelope encrypted data\. It is particularly useful when the authorization policy for a master key allows one set of users to encrypt data and a different set of users to decrypt data\. 
+For signing, this algorithm suite uses ECDSA with a cryptographic hash function algorithm \(SHA\-384\)\. ECDSA is used by default, even when it is not specified by the policy for the underlying master key\. Message signing verifies the message sender was authorized to encrypt messages and provides non\-repudiation\. It is particularly useful when the authorization policy for a master key allows one set of users to encrypt data and a different set of users to decrypt data\. 
+
+[Message signing](concepts.md#digital-sigs) verifies the message sender was authorized to encrypt messages and provides non\-repudiation\.
 
 Algorithm suites with key commitment ensure that each ciphertext decrypts to only one plaintext\. They do this by validating the identity of the data key used as input to the encryption algorithm\. When encrypting, these algorithm suites derive a key commitment string\. Before decrypting, they validate that the data key matches the key commitment string\. If it does not, the decrypt call fails\.
 

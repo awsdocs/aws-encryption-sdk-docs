@@ -43,7 +43,7 @@ To use AWS KMS CMKs with the AWS Encryption CLI, you need to [install](https://d
 
 ## Installing the AWS Encryption CLI<a name="install-sdk-cli"></a>
 
-When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](http://boto3.amazonaws.com/v1/documentation/api/latest/)\.
+When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](http://boto3.amazonaws.com/v1/documentation/api/latest/index.html)\.
 
 **Note**  
 If you are new to the AWS Encryption CLI, install the latest available version\.   

@@ -2,7 +2,7 @@
 
 This code sample creates a basic implementation of data key caching with a [local cache](data-caching-details.md#simplecache) in Java\. For details about the Java implementation of the AWS Encryption SDK, see [AWS Encryption SDK for Java](java.md)\.
 
-The code creates two instances of a local cache: one for data producers that are encrypting data and another for data consumers \(AWS Lambda functions\) that are decrypting data\. For implementation details, see the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/javadoc/) for the AWS Encryption SDK\.
+The code creates two instances of a local cache: one for data producers that are encrypting data and another for data consumers \(AWS Lambda functions\) that are decrypting data\. For implementation details, see the [Javadoc](https://aws.github.io/aws-encryption-sdk-java/) for the AWS Encryption SDK\.
 
 ## Producer<a name="producer-java"></a>
 
