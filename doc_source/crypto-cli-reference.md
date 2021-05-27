@@ -44,6 +44,7 @@ aws-encryption-cli --encrypt
                    --metadata-output <location> [--overwrite-metadata] | --suppress-metadata]
                    [--commitment-policy <commitment-policy>]
                    [--encryption-context <encryption_context> [<encryption_context> ...]]
+                   [--max-encrypted-data-keys <integer>]
                    [--algorithm <algorithm_suite>]
                    [--caching <attributes>] 
                    [--frame-length <length>]
@@ -56,7 +57,7 @@ The following syntax diagram shows the parameters that a decrypt command uses\.
 In version 1\.8\.*x*, the `--wrapping-keys` parameter is optional when decrypting, but recommended\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is required when encrypting and decrypting\. For AWS KMS customer master keys \(CMKs\), you can use the **key** attribute to specify wrapping keys \(best practice\) or set the **discovery** attribute to `true`, which doesn't limit the wrapping keys that the AWS Encryption CLI can use\.  
 
 ```
-aws-encryption-cli --decrypt
+aws-encryption-cli --decrypt (or [--decrypt-unsigned]) 
                    --input <input> [--recursive] [--decode]
                    --output <output> [--interactive] [--no-overwrite]  [--suffix [<suffix>]] [--encode]           
                    --wrapping-keys  [--wrapping-keys] ...
@@ -66,6 +67,8 @@ aws-encryption-cli --decrypt
                    --metadata-output <location> [--overwrite-metadata] | --suppress-metadata]
                    [--commitment-policy <commitment-policy>]
                    [--encryption-context <encryption_context> [<encryption_context> ...]]
+                   [--buffer]
+                   [--max-encrypted-data-keys <integer>]
                    [--caching <attributes>]
                    [--max-length <length>]
                    [-v | -vv | -vvv | -vvvv]
@@ -87,22 +90,26 @@ aws-encryption-cli `@<configuration_file>
 This list provides a basic description of the AWS Encryption CLI command parameters\. For a complete description, see the [aws\-encryption\-sdk\-cli documentation](http://aws-encryption-sdk-cli.readthedocs.io/en/latest/)\.
 
 **\-\-encrypt \(\-e\)**  
-Encrypts the input data\. Every command must have an `--encrypt` or `--decrypt` parameter\.
+Encrypts the input data\. Every command must have an `--encrypt`, or `--decrypt`, or `--decrypt-unsigned` parameter\.
 
 **\-\-decrypt \(\-d\)**  
-Decrypts the input data\. Every command must have an `--encrypt` or `--decrypt` parameter\.
+Decrypts the input data\. Every command must have an `--encrypt`, `--decrypt`, or `--decrypt-unsigned` parameter\.
+
+**\-\-decrypt\-unsigned \[Introduced in versions 1\.9\.*x* and 2\.2\.*x*\]**  
+The `--decrypt-unsigned` parameter decrypts ciphertext and ensures that messages are unsigned before decryption\. Use this parameter if you used the `--algorithm` parameter and selected an algorithm suite without digital signing to encrypt data\. If the ciphertext is signed, decryption fails\.  
+You can use `--decrypt` or `--decrypt-unsigned` for decryption but not both\.
 
 **\-\-wrapping\-keys \(\-w\) \[Introduced in version 1\.8\.*x*\]**  <a name="wrapping-keys"></a>
 Specifies the [wrapping keys](concepts.md#master-key) \(or *master keys*\) used in encryption and decryption operations\. You can use [multiple `--wrapping-keys` parameters](crypto-cli-how-to.md#cli-many-cmks) in each command\.   
-Beginning in version 2\.1\.*x*, a `--wrapping-keys` parameter is required in encrypt and decrypt commands\. In version 1\.8\.*x*, a `--wrapping-keys` \(or `--master-keys`\) parameter is required in encrypt commands\. In version 1\.8\.*x* decrypt commands, a `--wrapping-keys` parameter is optional but recommended\.   
+Beginning in version 2\.1\.*x*, the AWS Encryption CLI requires the `--wrapping-keys` parameter for encrypt and decrypt commands\. In version 1\.8\.*x*, the AWS Encryption CLI does not require `--wrapping-keys` \(or `--master-keys`\) parameter for encrypt commands\. In version 1\.8\.*x* decrypt commands, a `--wrapping-keys` parameter is optional but recommended\.   
 When using a custom master key provider, encrypt and decrypt commands require **key** and **provider** attributes\. When using AWS KMS customer master keys, encrypt commands require a **key** attribute\. Decrypt commands can include a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute when decrypting is an [AWS Encryption SDK best practice](best-practices.md)\. It is particularly important if you're decrypting batches of unfamiliar messages, such as those in an Amazon S3 bucket or an Amazon SQS queue\.  
 **Attributes**: The value of the `--wrapping-keys` parameter consists of the following attributes\. The format is `attribute_name=value`\.     
 **key**  
 Identifies the wrapping key used in the operation\. The format is a **key**=ID pair\. You can specify multiple **key** attributes in each `--wrapping-keys` parameter value\.  
-+ **Encrypt commands**: The **key** attribute is required in all encrypt commands\. When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For descriptions of the AWS KMS key identifiers, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\. 
++ **Encrypt commands**: All encrypt commands require the **key** attribute \. When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For descriptions of the AWS KMS key identifiers, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\. 
 + **Decrypt commands**: When decrypting with AWS KMS customer master keys \(CMKs\), the `--wrapping-keys` parameter requires a **key** attribute with a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) value or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute is an [AWS Encryption SDK best practice](best-practices.md)\. When decrypting with a custom master key provider, the **key** attribute is required\.
 **Note**  
-To specify an AWS KMS wrapping key in a decrypt command, the value of the **key** attribute must be a key ARN\. If you use a key ID, alias name, or alias ARN, the wrapping key isn't recognized\.
+To specify an AWS KMS wrapping key in a decrypt command, the value of the **key** attribute must be a key ARN\. If you use a key ID, alias name, or alias ARN, the AWS Encryption CLI does not recognize the wrapping key\.
 You can specify multiple **key** attributes in each `--wrapping-keys` parameter value\. However, any **provider**, **region**, and **profile** attributes in a `--wrapping-keys` parameter apply to all wrapping keys in that parameter value\. To specify wrapping keys with different attribute values, use multiple `--wrapping-keys` parameters in the command\.  
 **discovery**  
 Allows the AWS Encryption CLI to use any AWS KMS customer master key \(CMK\) to decrypt the message\. The **discovery** value can be `true` or `false`\. The default value is `false`\. The **discovery** attribute is valid only in decrypt commands and only when the master key provider is AWS KMS\.   
@@ -182,6 +189,14 @@ Specifies an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-con
 + In a decrypt command, enter `name=value` pairs, `name` elements with no values, or both\.
 If the `name` or `value` in a `name=value` pair includes spaces or special characters, enclose the entire pair in quotation marks\. For example, `--encryption-context "department=software development"`\.
 
+**\-\-buffer \(\-b\) \[Introduced in versions 1\.9\.*x* and 2\.2\.*x*\]**  
+Returns plaintext only after all input is processed, including verifying the digital signature if one is present\.
+
+**\-\-max\-encrypted\-data\-keys \[Introduced in versions 1\.9\.*x* and 2\.2\.*x*\]**  
+Specifies the maximum number of encrypted data keys in an encrypted message\. This parameter is optional\.   
+Valid values are 1 – 65,535\. If you omit this parameter, the AWS Encryption CLI does not enforce any maximum\. An encrypted message can hold up to 65,535 \(2^16 \- 1\) encrypted data keys\.  
+You can use this parameter in encrypt commands to prevent a malformed message\. You can use it in decrypt commands to detect malicious messages and avoid decrypting messages with numerous encrypted data keys that you can't decrypt\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
 **\-\-help \(\-h\)**  
 Prints usage and syntax at the command line\.
 
@@ -215,7 +230,7 @@ Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/use
 
 **\-\-algorithm**  
 Specifies an alternate [algorithm suite](concepts.md#crypto-algorithm)\. This parameter is optional and valid only in encrypt commands\.   
-If you omit this parameter, the AWS Encryption CLI uses one of the default algorithm suites for the AWS Encryption SDK introduced in version 1\.8\.*x*\. The defaults both use AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. One uses key commitment; one does not\. The choice of default algorithm suite is determined by the [commitment policy](concepts.md#commitment-policy) for the command\.  
+If you omit this parameter, the AWS Encryption CLI uses one of the default algorithm suites for the AWS Encryption SDK introduced in version 1\.8\.*x*\. Both default algorithms use AES\-GCM with an [HKDF](https://en.wikipedia.org/wiki/HKDF), an ECDSA signature, and a 256\-bit encryption key\. One uses key commitment; one does not\. The choice of default algorithm suite is determined by the [commitment policy](concepts.md#commitment-policy) for the command\.  
 The default algorithm suites are recommended for most encryption operations\. For a list of valid values, see the values for the `algorithm` parameter in [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/index.html#execution)\.
 
 **\-\-frame\-length**  

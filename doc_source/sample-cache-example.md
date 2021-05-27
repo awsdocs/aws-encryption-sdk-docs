@@ -4,7 +4,7 @@ This example uses [data key caching](data-key-caching.md) with a [local cache](d
 
 In this scenario, multiple data producers generate data, encrypt it, and write to a [Kinesis stream](https://aws.amazon.com/kinesis/streams/) in each Region\. [AWS Lambda](https://aws.amazon.com/lambda/) functions \(consumers\) decrypt the streams and write plaintext data to a DynamoDB table in the Region\. Data producers and consumers use the AWS Encryption SDK and an [AWS KMS master key provider](concepts.md#master-key-provider)\. To reduce calls to KMS, each producer and consumer has their own local cache\.
 
-You can find the source code for these examples in [Java](sample-cache-example-java.md) and [Python](sample-cache-example-python.md)\. The sample also includes a AWS CloudFormation template that defines the resources for the samples\.
+You can find the source code for these examples in [Java and Python](sample-cache-example-code.md)\. The sample also includes a AWS CloudFormation template that defines the resources for the samples\.
 
 ![\[This diagram shows how data producers and consumers use the AWS KMS, Amazon Kinesis Data Streams, and Amazon DynamoDB.\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/simplecache-example.png)
 

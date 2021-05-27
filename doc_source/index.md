@@ -1,7 +1,7 @@
 # AWS Encryption SDK Developer Guide
 
 -----
-*****Copyright &copy;  Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
+*****Copyright &copy; Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
 Amazon's trademarks and trade dress may not be used in 
@@ -21,6 +21,7 @@ Amazon's trademarks and trade dress may not be used in
 + [Getting started with the AWS Encryption SDK](getting-started.md)
 + [Best practices for the AWS Encryption SDK](best-practices.md)
 + [Using keyrings](choose-keyring.md)
++ [Configuring the AWS Encryption SDK](configure.md)
 + [AWS Encryption SDK programming languages](programming-languages.md)
    + [AWS Encryption SDK for C](c-language.md)
       + [Installing the AWS Encryption SDK for C](c-language-installation.md)
@@ -46,11 +47,10 @@ Amazon's trademarks and trade dress may not be used in
    + [Setting cache security thresholds](thresholds.md)
    + [Data key caching details](data-caching-details.md)
    + [Data key caching example](sample-cache-example.md)
-      + [Data key caching example in Java](sample-cache-example-java.md)
-      + [Data key caching example in Python](sample-cache-example-python.md)
-      + [Local cache example AWS CloudFormation template](sample-cache-example-cloudformation.md)
+      + [Data key caching example code](sample-cache-example-code.md)
+      + [Data key caching example: AWS CloudFormation template](sample-cache-example-cloudformation.md)
++ [Versions of the AWS Encryption SDK](about-versions.md)
 + [Migrating to AWS Encryption SDK Version 2.0.x](migration.md)
-   + [Versions of the AWS Encryption SDK](about-versions.md)
    + [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)
    + [Updating AWS KMS master key providers](migrate-mkps-v2.md)
    + [Updating AWS KMS keyrings](migrate-keyrings-v2.md)

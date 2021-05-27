@@ -6,6 +6,7 @@ The examples in this section show how to use [version 2\.0\.*x*](about-versions.
 
 For complete and tested examples of using data key caching in the AWS Encryption SDK, see:
 + C/C\+\+: [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp)
++ Java: [SimpleDataKeyCachingExample\.java](https://github.com/aws/aws-encryption-sdk-java/blob/master/src/examples/java/com/amazonaws/crypto/examples/SimpleDataKeyCachingExample.java)
 + JavaScript Browser: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/caching_cmm.ts)
 + JavaScript Node\.js: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/caching_cmm.ts)
 + Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/data_key_caching_basic.py)
@@ -349,7 +350,7 @@ The example creates a [local cache](data-caching-details.md#simplecache) and a [
 
 To run these examples, you need to supply the [Amazon Resource Name \(ARN\) of an AWS KMS CMK](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)\. Be sure that you have [permission to use the CMK](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to generate a data key\.
 
-For more detailed, real\-world examples of creating and using a data key cache, see [Data key caching example in Java](sample-cache-example-java.md) for Java, [Data key caching example in Python](sample-cache-example-python.md) for Python, and [caching\_cmm\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/caching_cmm.cpp) for C/C\+\+\.
+For more detailed, real\-world examples of creating and using a data key cache, see [Data key caching example code](sample-cache-example-code.md)\.
 
 ------
 #### [ C ]

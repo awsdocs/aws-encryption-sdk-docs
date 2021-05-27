@@ -46,12 +46,22 @@ The `--master-keys` parameter is deprecated in version 1\.8\.*x* of the AWS Encr
 
   If you don't use the **key** attribute, you must set the [**discovery** attribute](#discovery-cli-attribute) of the `--wrapping-keys` parameter to `true`, which lets the AWS Encryption CLI decrypt using any wrapping key that encrypted the message\. 
 
+  As a best practice, use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Specify the expected number of encrypted data keys \(one for each wrapping key used in encryption\) or a reasonable maximum \(such as 5\)\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
+  The `--buffer` parameter returns plaintext only after all input is processed, including verifying the digital signature if one is present\. 
+
+  The `--decrypt-unsigned` parameter decrypts ciphertext and ensures that messages are unsigned before decryption\. Use this parameter if you used the `--algorithm` parameter and selected an algorithm suite without digital signing to encrypt data\. If the ciphertext is signed, decryption fails\.
+
+  You can use `--decrypt` or `--decrypt-unsigned` for decryption but not both\.
+
   ```
   aws-encryption-cli --decrypt --input myEncryptedMessage \
                      --wrapping-keys key=1234abcd-12ab-34cd-56ef-1234567890ab \
                      --output myPlaintextData \
                      --metadata-output ~/metadata \
-                     --encryption-context purpose=test
+                     --max-encrypted-data-keys 1 \
+                     --buffer \
+                     --encryption-context purpose=test \ 
                      --commitment-policy require-encrypt-require-decrypt
   ```
 

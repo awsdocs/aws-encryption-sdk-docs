@@ -108,6 +108,10 @@ public class BasicEncryptionExample {
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt byte streams\. This example does not use AWS\. It uses the Java Cryptography Extension \(JCE\) to protect the master key\.
 
+When encrypting, this example uses the `AwsCrypto.builder() .withEncryptionAlgorithm()` method to specify an algorithm suite without [digital signatures](concepts.md#digital-sigs)\. When decrypting, to ensure that the ciphertext is unsigned, this example uses the `createUnsignedMessageDecryptingStream()` method\. The `createUnsignedMessageDecryptingStream()` method, introduced in AWS Encryption SDK 1\.9\.*x* and 2\.2\.*x*, fails if it encounters a ciphertext with a digital signature\. 
+
+If you're encrypting with the default algorithm suite, which includes digital signatures, use the `createDecryptingStream()` method instead, as shown in the next example\.
+
 ```
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
@@ -125,6 +129,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.amazonaws.encryptionsdk.AwsCrypto;
+import com.amazonaws.encryptionsdk.CryptoAlgorithm;
 import com.amazonaws.encryptionsdk.CryptoInputStream;
 import com.amazonaws.encryptionsdk.MasterKey;
 import com.amazonaws.encryptionsdk.jce.JceMasterKey;
@@ -164,8 +169,11 @@ public class FileStreamingExample {
         // that this client will only decrypt encrypted messages that were created with a committing algorithm suite.
         // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
         // or `AwsCrypto.standard()`.
+        // This also chooses to encrypt with an algorithm suite that doesn't include signing for faster decryption.
+        // The use case assumes that the contexts that encrypt and decrypt are equally trusted.
         final AwsCrypto crypto = AwsCrypto.builder()
                 .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+                .withEncryptionAlgorithm(CryptoAlgorithm.ALG_AES_256_GCM_HKDF_SHA512_COMMIT_KEY)
                 .build();
 
         // Create an encryption context to identify this ciphertext
@@ -175,7 +183,6 @@ public class FileStreamingExample {
         //loading it all at once.
         FileInputStream in = new FileInputStream(srcFile);
         CryptoInputStream<JceMasterKey> encryptingStream = crypto.createEncryptingStream(masterKey, in, context);
-
         FileOutputStream out = new FileOutputStream(srcFile + ".encrypted");
         IOUtils.copy(encryptingStream, out);
         encryptingStream.close();
@@ -183,13 +190,15 @@ public class FileStreamingExample {
 
         // Decrypt the file. Verify the encryption context before returning the plaintext.
         in = new FileInputStream(srcFile + ".encrypted");
-        CryptoInputStream<JceMasterKey> decryptingStream = crypto.createDecryptingStream(masterKey, in);
+        // Since we encrypted using an unsigned algorithm suite, we can use the recommended
+        // createUnsignedMessageDecryptingStream method that only accepts unsigned messages.
+        CryptoInputStream<JceMasterKey> decryptingStream = crypto.createUnsignedMessageDecryptingStream(masterKey, in);
         // Does it contain the expected encryption context?
         if (!"FileStreaming".equals(decryptingStream.getCryptoResult().getEncryptionContext().get("Example"))) {
             throw new IllegalStateException("Bad encryption context");
         }
 
-        // Return the plaintext data
+        // Write the plaintext data to disk.
         out = new FileOutputStream(srcFile + ".decrypted");
         IOUtils.copy(decryptingStream, out);
         decryptingStream.close();
@@ -213,12 +222,16 @@ public class FileStreamingExample {
 
 The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses a CMK in [AWS KMS](https://aws.amazon.com/kms/) and an RSA key pair as the master keys\.
 
+This example encrypts with the [default algorithm suite](supported-algorithms.md), which includes a [digital signature](concepts.md#digital-sigs)\. When streaming, the AWS Encryption SDK releases plaintext after integrity checks, but before it has verified the digital signature\. To avoid using the plaintext until the signature is verified, this example buffers the plaintext, and writes it to disk only when decryption and verification are complete\. 
+
 ```
 // Copyright Amazon.com Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 
 package com.amazonaws.crypto.examples;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.security.GeneralSecurityException;
@@ -314,7 +327,7 @@ public class EscrowedEncryptExample {
         final FileInputStream in = new FileInputStream(fileName);
         final FileOutputStream out = new FileOutputStream(fileName + ".encrypted");
         final CryptoOutputStream<?> encryptingStream = crypto.createEncryptingStream(provider, out);
-
+        // Buffer the data in memory before writing to disk. This ensures verfication of the digital signature before returning plaintext.
         IOUtils.copy(in, encryptingStream);
         in.close();
         encryptingStream.close();
@@ -354,10 +367,16 @@ public class EscrowedEncryptExample {
         // use an encryption context. For an example, see the other SDK samples.
         final FileInputStream in = new FileInputStream(fileName + ".encrypted");
         final FileOutputStream out = new FileOutputStream(fileName + ".decrypted");
-        final CryptoOutputStream<?> decryptingStream = crypto.createDecryptingStream(provider, out);
+        // Since we are using a signing algorithm suite, we avoid streaming plaintext directly to the output file.
+        // This ensures that the trailing signature is verified before writing any untrusted plaintext to disk.
+        final ByteArrayOutputStream plaintextBuffer = new ByteArrayOutputStream();
+        final CryptoOutputStream<?> decryptingStream = crypto.createDecryptingStream(provider, plaintextBuffer);
         IOUtils.copy(in, decryptingStream);
         in.close();
         decryptingStream.close();
+        final ByteArrayInputStream plaintextReader = new ByteArrayInputStream(plaintextBuffer.toByteArray());
+        IOUtils.copy(plaintextReader, out);
+        out.close();
     }
 
     private static void escrowDecrypt(final String fileName) throws Exception {

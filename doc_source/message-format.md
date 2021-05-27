@@ -86,7 +86,7 @@ The length of the value for the key\-value pair\. It is a 2\-byte value interpre
 The value for the key\-value pair\. It is a sequence of UTF\-8 encoded bytes\.
 
 **Encrypted Data Key Count**  <a name="header-data-key-count"></a>
-The number of encrypted data keys\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of encrypted data keys\.
+The number of encrypted data keys\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of encrypted data keys\. The maximum number of encrypted data keys in each message is 65,535 \(2^16 \- 1\)\.
 
 **Encrypted Data Key\(s\)**  <a name="header-data-keys"></a>
 A sequence of encrypted data keys\. The length of the sequence is determined by the number of encrypted data keys and the length of each\. The sequence contains at least one encrypted data key\.  
@@ -259,7 +259,7 @@ The authentication value for the frame\. It is used to authenticate the entire f
 
 ## Footer structure<a name="footer-structure"></a>
 
-When the [algorithms with signing](algorithms-reference.md) are used, the message format contains a footer\. The message footer contains a signature calculated over the message header and body\. The following table describes the fields that form the footer\. The bytes are appended in the order shown\. The message footer structure is the same in message format versions 1 and 2\.
+When the [algorithms with signing](algorithms-reference.md) are used, the message format contains a footer\. The message footer contains a [digital signature](concepts.md#digital-sigs) calculated over the message header and body\. The following table describes the fields that form the footer\. The bytes are appended in the order shown\. The message footer structure is the same in message format versions 1 and 2\.
 
 
 **Footer Structure**  
@@ -273,4 +273,4 @@ When the [algorithms with signing](algorithms-reference.md) are used, the messag
 The length of the signature\. It is a 2\-byte value interpreted as a 16\-bit unsigned integer that specifies the number of bytes that contain the signature\.
 
 **Signature**  <a name="footer-signature"></a>
-The signature\. It is used to authenticate the header and body of the message\.
+The signature\.

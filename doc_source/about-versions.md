@@ -1,13 +1,8 @@
 # Versions of the AWS Encryption SDK<a name="about-versions"></a>
 
-Upgrading from version 1\.7\.*x* to version 2\.0\.*x* is designed to help you implement AWS Encryption SDK [best practices](best-practices.md) in your application\. 
-
-**Note**  
-Version 1\.7\.*x* indicates any version that begins with `1.7`\. To get 1\.7\.*x* features, use the latest 1\.7\.*x* version of the AWS Encryption SDK available for your programming language\.  
-Version 2\.0\.*x* indicates any version that begins with `2.0`\. To get features introduced in version 2\.0\.*x*, use the latest version of the AWS Encryption SDK available for your programming language\.  
-New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
-
 The AWS Encryption SDK language implementations use [semantic versioning](https://semver.org/) to make it easier for you to identify the magnitude of changes in each release\. A change in the major version number, such as 1\.*x*\.*x* to 2\.*x*\.*x*, indicates a breaking change that is likely to require code changes and a planned deployment\. A change in a minor version, such as *x*\.1\.*x* to *x*\.2\.*x*, is always backward compatible, but might include deprecated elements\. 
+
+Whenever possible, use the latest version of the AWS Encryption SDK in your chosen programming language\. However, some upgrades include new features that require an intermediate step to avoid errors in encrypting or decrypting\. For example, versions 1\.7\.*x* and 1\.8\.*x* are designed to be transitional versions that help you upgrade from versions earlier than 1\.7\.*x* to version 2\.0\.*x* and later\.
 
 For a detailed description of the changes for your programming language, see the Changelog for each language\. 
 + C — [CHANGELOG\.md](https://github.com/aws/aws-encryption-sdk-c/blob/master/CHANGELOG.md)
@@ -15,12 +10,20 @@ For a detailed description of the changes for your programming language, see the
 + Python — [CHANGELOG\.rst](https://github.com/aws/aws-encryption-sdk-python/blob/master/CHANGELOG.rst)
 + AWS Encryption CLI — [Versions of the AWS Encryption CLI](crypto-cli-versions.md) and [CHANGELOG\.rst](https://github.com/aws/aws-encryption-sdk-cli/blob/master/CHANGELOG.rst)
 
-The following list describes the major differences between the versions\. 
+**Note**  
+The *x* in a version number represents any patch of the major and minor version\. For example, version 1\.7\.*x* represents all versions that begin with 1\.7, including 1\.7\.1 and 1\.7\.9\.  
+New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
+
+The following list describes the major differences between supported versions of the AWS Encryption SDK\. 
 
 **Topics**
 + [Versions earlier than 1\.7\.*x*](#versions-earlier)
 + [Version 1\.7\.*x*](#version-1.7)
++ [Version 1\.8\.*x*](#version-1.8)
++ [Version 1\.9\.*x*](#ver19)
 + [Version 2\.0\.*x*](#version-2)
++ [Version 2\.1\.*x*](#version-2.1)
++ [Version 2\.2\.*x*](#version2.2.x)
 
 ## Versions earlier than 1\.7\.*x*<a name="versions-earlier"></a>
 
@@ -61,9 +64,23 @@ However, the default algorithm suite used for encryption does not change\. These
 **CMM implementation changes**  
 Version 1\.7\.*x* introduces changes to the Default cryptographic materials manager \(CMM\) interface to support key commitment\. This change affects you only if you have written a custom CMM\. For details, see the API documentation or GitHub repository for your [programming language](programming-languages.md)\.
 
+## Version 1\.8\.*x*<a name="version-1.8"></a>
+
+For the AWS Encryption CLI, version 1\.8\.*x* is the transition version between versions earlier than 1\.7\.*x* and versions 2\.1\.*x* and later\. For the AWS Encryption CLI, version 1\.8\.*x* is fully backward compatible; it does not introduce any breaking changes or change the behavior of the AWS Encryption SDK\. It's also forwards compatible; it allows you to update your code so it's compatible with version 2\.0\.*x*\. It includes new features, but doesn't fully enable them\. It requires configuration values that prevent you from immediately adopting all new features until you are ready\.
+
+For information about version 1\.8\.*x* of the AWS Encryption CLI, see [Version 1\.7\.*x*](#version-1.7)\.
+
+## Version 1\.9\.*x*<a name="ver19"></a>
+
+Version 1\.9\.*x* supports the digital signature security improvements found in Version 2\.2\.*x*\. If you currently use digital signatures with your applications and use AWS Encryption SDK versions earlier than Version 2\.0\.*x*, you should upgrade to Version 1\.9\.*x* to take advantage of the improvements\.
+
+Version 1\.9\.*x* also supports limiting the number of encrypted data keys in messages you decrypt from untrusted sources\. This best practice feature allows you to detect a misconfigured master key provider or keyring when encrypting messages or a potentially malicious cipher text when decrypting messages\.
+
+See [Version 2\.2\.*x*](#version2.2.x) for more information\.
+
 ## Version 2\.0\.*x*<a name="version-2"></a>
 
-Version 2\.0\.*x* supports all of the security features offered in the AWS Encryption SDK, including specified wrapping keys and key commitment\. To support these features, version 2\.0\.*x* includes breaking changes for earlier versions of the AWS Encryption SDK\. You can prepare for these changes by deploying version 1\.7\.*x*\. Version 2\.0\.*x* includes all of the new features introduced in version 1\.7\.*x* with the following additions and changes\.
+Version 2\.0\.*x* supports new security features offered in the AWS Encryption SDK, including specified wrapping keys and key commitment\. To support these features, version 2\.0\.*x* includes breaking changes for earlier versions of the AWS Encryption SDK\. You can prepare for these changes by deploying version 1\.7\.*x*\. Version 2\.0\.*x* includes all of the new features introduced in version 1\.7\.*x* with the following additions and changes\.
 
 **AWS KMS master key providers**  
 The original AWS KMS master key provider constructors that were deprecated in version 1\.7\.*x* are removed in version 2\.0\.*x*\. You must explicitly construct AWS KMS master key providers in [strict mode or discovery mode](migrate-mkps-v2.md)\.
@@ -76,3 +93,23 @@ In version 2\.0\.*x*, the commitment policy setting has three valid values:
 + `RequireEncryptAllowDecrypt` — The AWS Encryption SDK must encrypt with key commitment\. It can decrypt ciphertexts encrypted with or without key commitment\. 
 + `RequireEncryptRequireDecrypt` \(default\) — The AWS Encryption SDK must encrypt with key commitment\. It only decrypts ciphertexts with key commitment\. 
 If you are migrating from an earlier version of the AWS Encryption SDK to version 2\.0\.*x*, set the commitment policy to a value that assures that you can decrypt all existing ciphertexts that your application might encounter\. You are likely to adjust this setting over time\.
+
+## Version 2\.1\.*x*<a name="version-2.1"></a>
+
+For the AWS Encryption CLI, version 2\.1\.*x* is the version that includes specified wrapping keys and key commitment\. This is equivalent to version 2\.0\.*x* in other programming languages\.
+
+For information about version 2\.1\.*x* of the AWS Encryption CLI, see [Version 2\.0\.*x*](#version-2)\.
+
+## Version 2\.2\.*x*<a name="version2.2.x"></a>
+
+Version 2\.2\.*x* supports all of the security features offered in the previous versions of the AWS Encryption SDK including digital signatures\. 
+
+**Digital signatures**  
+To improve handling of [digital signatures](concepts.md#digital-sigs) when decrypting, the AWS Encryption SDK includes the following features:
++ *non\-streaming mode* — returns plaintext only after processing all input, including verifying the digital signature if present\. This feature prevents you from using plaintext before verifying the digital signature\. Use this feature whenever you decrypt data encrypted with digital signatures \(the default algorithm suite\)\. For example, because the AWS Encryption CLI always processes data in streaming mode, use the `--buffer` parameter when decrypting ciphertext with digital signatures\.
++ *unsigned\-only decryption mode* — this feature only decrypts unsigned ciphertext\. If decryption encounters a digital signature in the ciphertext, the operation fails\. Use this feature to avoid unintentionally processing plaintext from signed messages before verifying the signature\.
+
+**Limiting encrypted data keys**  
+You can limit the number of [encrypted data keys](configure.md#config-limit-keys) in an encrypted message to help you detect a misconfigured master key provider or keyring when encrypting or a malicious ciphertext when decrypting messages\.
+
+You should limit encrypted data keys when you decrypt messages from an untrusted source\. It prevents unnecessary, expensive, and potentially exhaustive calls to your key infrastructure\.

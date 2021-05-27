@@ -128,6 +128,10 @@ The `--encryption-context` parameter is optional in the decrypt command, even wh
 
 The `--metadata-output` parameter specifies a file for metadata about the decryption operation\. The value of the `--output` parameter, a dot \(\.\), writes the output file to the current directory\. 
 
+As a best practice, use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Specify the expected number of encrypted data keys \(one for each wrapping key used in encryption\) or a reasonable maximum \(such as 5\)\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
+The `--buffer` returns plaintext only after all input is processed, including verifying the digital signature if one is present\.
+
 ------
 #### [ Bash ]
 
@@ -141,6 +145,8 @@ $ aws-encryption-cli --decrypt \
                      --commitment-policy require-encrypt-require-decrypt \
                      --encryption-context purpose=test \
                      --metadata-output ~/metadata \
+                     --max-encrypted-data-keys 1 \
+                     --buffer \
                      --output .
 ```
 
@@ -157,6 +163,8 @@ PS C:\> aws-encryption-cli --decrypt `
                            --commitment-policy require-encrypt-require-decrypt `
                            --encryption-context purpose=test `
                            --metadata-output $home\Metadata.txt `
+                           --max-encrypted-data-keys 1 `
+                           --buffer `
                            --output .
 ```
 
@@ -340,6 +348,8 @@ $ aws-encryption-cli --decrypt \
                      --encryption-context dept=IT \
                      --commitment-policy require-encrypt-require-decrypt \
                      --metadata-output ~/metadata \
+                     --max-encrypted-data-keys 1 \
+                     --buffer \
                      --output testdec --interactive
 
 $ ls testdec
@@ -359,6 +369,8 @@ PS C:\> aws-encryption-cli --decrypt `
                            --encryption-context dept=IT `
                            --commitment-policy require-encrypt-require-decrypt `
                            --metadata-output $home\Metadata.txt `
+                           --max-encrypted-data-keys 1 `
+                           --buffer `
                            --output C:\TestDec --interactive
 
 PS C:\> dir .\TestDec
@@ -442,7 +454,7 @@ The example consists of three commands:
 #### [ Bash ]
 
   ```
-  $  echo $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=true --input - --output - --decode -S
+  $  echo $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=true --input - --output - --decode - --buffer -S
   Hello World
   ```
 
@@ -450,7 +462,7 @@ The example consists of three commands:
 #### [ PowerShell ]
 
   ```
-  PS C:\> $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=$true --input - --output - --decode -S
+  PS C:\> $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=$true --input - --output - --decode - --buffer -S
   Hello World
   ```
 
@@ -542,6 +554,8 @@ To tell the AWS Encryption CLI which AWS KMS CMKs to use to decrypt your data, u
 
 You must have permission to call the [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the CMKs you specify\. For more information, see [ Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
 
+As a best practice, this examples use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Even though this example uses only one wrapping key for decryption, the encrypted message has three \(3\) encrypted data keys; one for each of the three wrapping keys used when encrypting\. Specify the expected number of encrypted data keys or a reasonable maximum value, such as 5\. If you specify a maximum value less than 3, the command fails\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
 ------
 #### [ Bash ]
 
@@ -550,6 +564,8 @@ $ aws-encryption-cli --decrypt --input /archive/finance.log \
                      --wrapping-keys key=$cmk1 \
                      --output /finance --suffix '.clear' \
                      --metadata-output ~/metadata \
+                     --max-encrypted-data-keys 3 \
+                     --buffer \
                      --encryption-context class=log
 ```
 
@@ -562,6 +578,8 @@ PS C:\> aws-encryption-cli --decrypt `
                            --wrapping-keys key=$cmk1 `
                            --output D:\Finance --suffix '.clear' `
                            --metadata-output .\Metadata\Metadata.txt `
+                           --max-encrypted-data-keys 3 `
+                           --buffer `
                            --encryption-context class=log
 ```
 
@@ -577,6 +595,66 @@ When you compress and encrypt files, be sure to compress before you encrypt\. Pr
 
 **Warning**  
 Be careful when compressing data that includes both secrets and data that might be controlled by a malicious actor\. The final size of the compressed data might inadvertently reveal sensitive information about its contents\.
+
+------
+#### [ Bash ]
+
+```
+# Continue running even if an operation fails.
+set +e
+
+dir=$1
+encryptionContext=$2
+s3bucket=$3
+s3folder=$4
+masterKeyProvider="aws-kms"
+metadataOutput="/tmp/metadata-$(date +%s)"
+
+compress(){
+    gzip -qf $1
+}
+
+encrypt(){
+    # -e encrypt
+    # -i input
+    # -o output
+    # --metadata-output unique file for metadata
+    # -m masterKey read from environment variable
+    # -c encryption context read from the second argument.
+    # -v be verbose
+    aws-encryption-cli -e -i ${1} -o $(dirname ${1}) --metadata-output ${metadataOutput} -m key="${masterKey}" provider="${masterKeyProvider}" -c "${encryptionContext}" -v
+}
+
+
+s3put (){
+    # copy file argument 1 to s3 location passed into the script.
+    aws s3 cp ${1} ${s3bucket}/${s3folder}
+}
+
+# Validate all required arguments are present.
+if [ "${dir}" ] && [ "${encryptionContext}" ] && [ "${s3bucket}" ] && [ "${s3folder}" ] && [ "${masterKey}" ]; then
+
+# Is $dir a valid directory?
+test -d "${dir}"
+if [ $? -ne 0 ]; then
+    echo "Input is not a directory; exiting"
+    exit 1
+fi
+
+# Iterate over all the files in the directory, except *gz and *encrypted (in case of a re-run).
+for f in $(find ${dir} -type f \( -name "*" ! -name \*.gz ! -name \*encrypted \) ); do
+    echo "Working on $f"
+    compress ${f}
+    encrypt ${f}.gz
+    rm -f ${f}.gz
+    s3put ${f}.gz.encrypted
+done;
+else
+    echo "Arguments: <Directory> <encryption context> <s3://bucketname> <s3 folder>"
+    echo " and ENV var \$masterKey must be set"
+    exit 255
+fi
+```
 
 ------
 #### [ PowerShell ]
@@ -687,66 +765,6 @@ PROCESS {
         }
     }
 }
-```
-
-------
-#### [ Bash ]
-
-```
-# Continue running even if an operation fails.
-set +e
-
-dir=$1
-encryptionContext=$2
-s3bucket=$3
-s3folder=$4
-masterKeyProvider="aws-kms"
-metadataOutput="/tmp/metadata-$(date +%s)"
-
-compress(){
-    gzip -qf $1
-}
-
-encrypt(){
-    # -e encrypt
-    # -i input
-    # -o output
-    # --metadata-output unique file for metadata
-    # -m masterKey read from environment variable
-    # -c encryption context read from the second argument.
-    # -v be verbose
-    aws-encryption-cli -e -i ${1} -o $(dirname ${1}) --metadata-output ${metadataOutput} -m key="${masterKey}" provider="${masterKeyProvider}" -c "${encryptionContext}" -v
-}
-
-
-s3put (){
-    # copy file argument 1 to s3 location passed into the script.
-    aws s3 cp ${1} ${s3bucket}/${s3folder}
-}
-
-# Validate all required arguments are present.
-if [ "${dir}" ] && [ "${encryptionContext}" ] && [ "${s3bucket}" ] && [ "${s3folder}" ] && [ "${masterKey}" ]; then
-
-# Is $dir a valid directory?
-test -d "${dir}"
-if [ $? -ne 0 ]; then
-    echo "Input is not a directory; exiting"
-    exit 1
-fi
-
-# Iterate over all the files in the directory, except *gz and *encrypted (in case of a re-run).
-for f in $(find ${dir} -type f \( -name "*" ! -name \*.gz ! -name \*encrypted \) ); do
-    echo "Working on $f"
-    compress ${f}
-    encrypt ${f}.gz
-    rm -f ${f}.gz
-    s3put ${f}.gz.encrypted
-done;
-else
-    echo "Arguments: <Directory> <encryption context> <s3://bucketname> <s3 folder>"
-    echo " and ENV var \$masterKey must be set"
-    exit 255
-fi
 ```
 
 ------

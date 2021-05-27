@@ -2,6 +2,8 @@
 
 The AWS Encryption SDK supports multiple interoperable [programming language implementations](programming-languages.md), each of which is developed in an open\-source repository on GitHub\. As a [best practice](best-practices.md), we recommend that you use the latest version of the AWS Encryption SDK for each language\. However, the 2\.0\.*x* version of the AWS Encryption SDK introduces significant new security features, some of which are breaking changes\. To provide a safe upgrade path to version 2\.0\.*x*, we provide a transition version, 1\.7\.*x*, in each programming language\. The topics in this section are designed to help you understand the changes, select the correct version for your application, and migrate safely and successfully to version 2\.0\.*x*\.
 
+For information about significant versions of the AWS Encryption SDK, see [Versions of the AWS Encryption SDK](about-versions.md)\.
+
 **Important**  
 If you upgrade directly to version 2\.0\.*x* and enable all new features immediately, the AWS Encryption SDK won't be able to decrypt ciphertext encrypted under older versions of the AWS Encryption SDK
 
@@ -19,7 +21,6 @@ However, version 2\.0\.*x* of the AWS Encryption SDK includes breaking changes t
 For more information about the AWS Encryption SDK security features that underlie these changes, see [Improved client\-side encryption: Explicit KeyIds and key commitment](http://aws.amazon.com/blogs/security/improved-client-side-encryption-explicit-keyids-and-key-commitment/) in the *AWS Security Blog*\.
 
 **Topics**
-+ [Versions of the AWS Encryption SDK](about-versions.md)
 + [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)
 + [Updating AWS KMS master key providers](migrate-mkps-v2.md)
 + [Updating AWS KMS keyrings](migrate-keyrings-v2.md)

@@ -23,7 +23,7 @@ Need help?
 + [Symmetric and asymmetric encryption](#symmetric-key-encryption)
 + [Key commitment](#key-commitment)
 + [Commitment policy](#commitment-policy)
-+ [Understanding Digital Signatures](#digital-sigs)
++ [Digital signatures](#digital-sigs)
 
 ## Envelope encryption<a name="envelope-encryption"></a>
 
@@ -113,7 +113,7 @@ For examples of submitting and verifying an encryption context in your code, see
 
 When you encrypt data with the AWS Encryption SDK, it returns an encrypted message\.
 
-An *encrypted message* is a portable [formatted data structure](message-format.md) that includes the encrypted data along with encrypted copies of the data keys, the algorithm ID, and, optionally, an encryption context and a message signature\. Encrypt operations in the AWS Encryption SDK return an encrypted message and decrypt operations take an encrypted message as input\. 
+An *encrypted message* is a portable [formatted data structure](message-format.md) that includes the encrypted data along with encrypted copies of the data keys, the algorithm ID, and, optionally, an [encryption context](#encryption-context) and a [digital signature](#digital-sigs)\. Encrypt operations in the AWS Encryption SDK return an encrypted message and decrypt operations take an encrypted message as input\. 
 
 Combining the encrypted data and its encrypted data keys streamlines the decryption operation and frees you from having to store and manage encrypted data keys independently of the data that they encrypt\.
 
@@ -123,9 +123,9 @@ For technical information about the encrypted message, see [Encrypted Message Fo
 
 The AWS Encryption SDK uses an algorithm suite to encrypt and sign the data in the [encrypted message](#message) that the encrypt and decrypt operations return\. The AWS Encryption SDK supports several [algorithm suites](supported-algorithms.md)\. All of the supported suites use Advanced Encryption Standard \(AES\) as the primary algorithm, and combine it with other algorithms and values\. 
 
-The AWS Encryption SDK establishes a recommended algorithm suite as the default for all encryption operations\. The default might change as standards and best practices improve\. You can specify an alternate algorithm suite in requests to encrypt data or when creating a [cryptographic materials manager \(CMM\)](#crypt-materials-manager), but unless an alternate is required for your situation, it is best to use the default\. The current default is AES\-GCM with an HMAC\-based extract\-and\-expand key derivation function \([HKDF](https://en.wikipedia.org/wiki/HKDF)\), Elliptic Curve Digital Signature Algorithm \(ECDSA\) signing, and a 256\-bit encryption key\. 
+The AWS Encryption SDK establishes a recommended algorithm suite as the default for all encryption operations\. The default might change as standards and best practices improve\. You can specify an alternate algorithm suite in requests to encrypt data or when creating a [cryptographic materials manager \(CMM\)](#crypt-materials-manager), but unless an alternate is required for your situation, it is best to use the default\. The current default is AES\-GCM with an HMAC\-based extract\-and\-expand [key derivation function](https://en.wikipedia.org/wiki/HKDF) \([HKDF](https://en.wikipedia.org/wiki/HKDF)\), [key commitment](#key-commitment), an [Elliptic Curve Digital Signature Algorithm \(ECDSA\)](#digital-sigs) signature, and a 256\-bit encryption key\. 
 
-If you specify an algorithm suite, we recommend an algorithm suite that uses a [key derivation function](https://en.wikipedia.org/wiki/HKDF) and a message signing algorithm\. Algorithm suites that have neither feature are supported only for backward compatibility\.
+If your application requires high performance and the users who are encrypting data and those who are decrypting data are equally trusted, you might consider specifying an algorithm suite without a digital signature\. However, we strongly recommend an algorithm suite that includes key commitment and a key derivation function\. Algorithm suites without these features are supported only for backward compatibility\.
 
 ## Cryptographic materials manager<a name="crypt-materials-manager"></a>
 
@@ -194,7 +194,7 @@ The commitment policy setting determines which algorithm suites you can use\. Be
 
 For help setting your commitment policy, see [Setting your commitment policy](migrate-commitment-policy.md)\.
 
-## Understanding Digital Signatures<a name="digital-sigs"></a>
+## Digital signatures<a name="digital-sigs"></a>
 
 To ensure the integrity of a digital message as it goes between systems, you can apply a digital signature to the message\. Digital signatures are always asymmetric\. You use your private key to create the signature, and append it to the original message\. Your recipient uses a public key to verify that the message has not been modified since you signed it\. 
 

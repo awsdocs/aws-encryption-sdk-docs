@@ -36,43 +36,30 @@ For example, the following session uses the allocator and the keyring that was d
 struct aws_cryptosdk_session * session = aws_cryptosdk_session_new_from_keyring_2(allocator, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
 ```
 
-3\. Set the message size\.  
-When encrypting data, you need to call the `aws_cryptosdk_session_set_message_size` method, which tells the AWS Encryption SDK the length of the plaintext data\. You can call this method before or during the session processing, but you must call it once\. Otherwise, the session processing method doesn't know where the input data ends\.  
-Don't call this method when decrypting\. The AWS Encryption SDK uses the footer in the [encrypted message](message-format.md) to determine where the ciphertext ends\.  
-
-```
-const char *plaintext = "Hello world!";
-const size_t plaintext_len = strlen(plaintext);
-
-aws_cryptosdk_session_set_message_size(session, plaintext_length)
-```
-
-4\. Encrypt or decrypt the data\.  
-To process the data in the session, use the `aws_cryptosdk_session_process` method\. If the input buffer is large enough to hold the entire plaintext, and the output buffer is large enough to hold the entire ciphertext, you need to call the method only once\. However, if you need to handle streaming data, you can call the method in a loop\. For an example, see the [file\_streaming\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/file_streaming.cpp) example\.  
+3\. Encrypt or decrypt the data\.  
+To process the data in the session, use the `aws_cryptosdk_session_process` method\. If the input buffer is large enough to hold the entire plaintext, and the output buffer is large enough to hold the entire ciphertext, you can call `aws_cryptosdk_session_process_full`\. However, if you need to handle streaming data, you can call `aws_cryptosdk_session_process` in a loop\. For an example, see the [file\_streaming\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/file_streaming.cpp) example\. The `aws_cryptosdk_session_process_full` is introduced in AWS Encryption SDK versions 1\.9\.*x* and 2\.2\.*x*\.  
 When the session is configured to encrypt data, the plaintext fields describe the input and the ciphertext fields describe the output\. The `plaintext` field holds the message that you want to encrypt and the `ciphertext` field gets the [encrypted message](message-format.md) that the encrypt method returns\.   
 
 ```
 // Encrypting data
-aws_cryptosdk_session_process(session,
-                              ciphertext,
-                              ciphertext_buffer_size,
-                              ciphertext_length,
-                              plaintext,
-                              plaintext_length,
-                              &plaintext_consumed)
+aws_cryptosdk_session_process_full(session,
+                                   ciphertext,
+                                   ciphertext_buffer_size,
+                                   &ciphertext_length,
+                                   plaintext,
+                                   plaintext_length)
 ```
 When the session is configured to decrypt data, the ciphertext fields describe the input and the plaintext fields describe the output\. The `ciphertext` field holds the [encrypted message](message-format.md) that the encrypt method returned, and the `plaintext` field gets the plaintext message that the decrypt method returns\.  
-To decrypt the data, call the `aws_cryptosdk_session_process` method\.  
+To decrypt the data, call the `aws_cryptosdk_session_process_full` method\.  
 
 ```
 // Decrypting data
-aws_cryptosdk_session_process(session,
-                              plaintext,
-                              plaintext_buffer_size,
-                              plaintext_length,
-                              ciphertext,
-                              ciphertext_length,
-                              &ciphertext_consumed)
+aws_cryptosdk_session_process_full(session,
+                                   plaintext,
+                                   plaintext_buffer_size,
+                                   &plaintext_length,
+                                   ciphertext,
+                                   ciphertext_length)
 ```
 
 ## Reference counting<a name="c-language-using-release"></a>
