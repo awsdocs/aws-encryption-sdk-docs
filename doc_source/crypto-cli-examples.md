@@ -22,7 +22,7 @@ This example uses the AWS Encryption CLI to encrypt the contents of the `hello.t
 
 When you run an encrypt command on a file, the AWS Encryption CLI gets the contents of the file, generates a unique [data key](concepts.md#DEK), encrypts the file contents under the data key, and then writes the [encrypted message](concepts.md#message) to a new file\. 
 
-The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\. For details about the key identifiers for an AWS KMS customer master key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
+The first command saves the key ARN of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\. When encrypting with a CMK, you can identify it by using a key ID, key ARN, alias name, or alias ARN\. For details about the key identifiers for an AWS KMS customer master key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 
 The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--wrapping-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the CMK represented by the key ARN\. 
 

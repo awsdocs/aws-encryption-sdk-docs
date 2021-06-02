@@ -101,7 +101,7 @@ $ cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-12345678
 $ aws-encryption-cli --encrypt \
                      --input hello.txt \
                      --wrapping-keys key=$cmkArn \
-                     --commitment-policy=forbid-encrypt-allow-decrypt \
+                     --commitment-policy forbid-encrypt-allow-decrypt \
                      --metadata-output ~/metadata \
                      --encryption-context purpose=test \
                      --output .
@@ -110,7 +110,7 @@ $ aws-encryption-cli --encrypt \
 $ aws-encryption-cli --decrypt \
                      --input hello.txt.encrypted \
                      --wrapping-keys key=$cmkArn \
-                     --commitment-policy=forbid-encrypt-allow-decrypt \
+                     --commitment-policy forbid-encrypt-allow-decrypt \
                      --encryption-context purpose=test \
                      --metadata-output ~/metadata \
                      --output .

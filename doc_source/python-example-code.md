@@ -14,6 +14,8 @@ The examples in this section show how to use [version 2\.0\.*x*](about-versions.
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. This example uses a customer master key \(CMK\) in [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as the master key\.
 
+When encrypting, the `StrictAwsKmsMasterKeyProvider` constructor takes a key ID, key ARN, alias name, or alias ARN\. When decrypting, [it requires a key ARN](concepts.md#specifying-keys)\. In this case, because the `keyArn` parameter is used for encrypting and decrypting, its value must be a key ARN\. For information about IDs for AWS KMS keys, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
+
 ```
 # Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
@@ -322,9 +324,9 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
 
 ## Using data key caching to encrypt messages<a name="python-example-caching"></a>
 
-The following example shows how to use [data key caching](data-key-caching.md) in the AWS Encryption SDK for Python\. It is designed to show you how to configure an instance of the [local cache](data-caching-details.md#simplecache) \(LocalCryptoMaterialsCache\) with the required capacity value and an instance of the [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) with [cache security thresholds](thresholds.md)\.
+The following example shows how to use [data key caching](data-key-caching.md) in the AWS Encryption SDK for Python\. It is designed to show you how to configure an instance of the [local cache](data-caching-details.md#simplecache) \(LocalCryptoMaterialsCache\) with the required capacity value and an instance of the [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) with [cache security thresholds](thresholds.md)\. 
 
-This very basic example creates a function that encrypts a fixed string\. It lets you specify an AWS KMS customer master key, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data key caching example code](sample-cache-example-code.md)\.
+This very basic example creates a function that encrypts a fixed string\. It lets you specify an AWS KMS CMK, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data key caching example code](sample-cache-example-code.md)\.
 
 Although it is optional, this example also uses an [encryption context](concepts.md#encryption-context) as additional authenticated data\. When you decrypt data that was encrypted with an encryption context, be sure that your application verifies that the encryption context is the one that you expect before returning the plaintext data to your caller\. An encryption context is a best practice element of any encryption or decryption operation, but it plays a special role in data key caching\. For details, see [Encryption Context: How to Select Cache Entries](data-caching-details.md#caching-encryption-context)\.
 

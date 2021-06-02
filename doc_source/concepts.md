@@ -14,8 +14,7 @@ Need help?
 + [Envelope encryption](#envelope-encryption)
 + [Data key](#DEK)
 + [Wrapping key](#master-key)
-+ [Keyring \(C and JavaScript\)](#keyring)
-+ [Master key provider \(Java and Python\)](#master-key-provider)
++ [Keyrings and master key providers](#keyring)
 + [Encryption context](#encryption-context)
 + [Encrypted message](#message)
 + [Algorithm suite](#crypto-algorithm)
@@ -27,29 +26,24 @@ Need help?
 
 ## Envelope encryption<a name="envelope-encryption"></a>
 
-The security of your encrypted data depends in part on protecting the data key that can decrypt it\. One accepted best practice for protecting the data key is to encrypt it\. To do this, you need another encryption key, known as a *key\-encryption key* or [wrapping key](#master-key)\. The practice of using a wrapping key to encrypt data keys is known as *envelope encryption*\. The benefits of envelope encryption include the following\.
+The security of your encrypted data depends in part on protecting the data key that can decrypt it\. One accepted best practice for protecting the data key is to encrypt it\. To do this, you need another encryption key, known as a *key\-encryption key* or [wrapping key](#master-key)\. The practice of using a wrapping key to encrypt data keys is known as *envelope encryption*\.
 
 **Protecting data keys**  
-When you encrypt a data key, you don't have to worry about where to store it because the data key is inherently protected by encryption\. You can safely store the encrypted data key with the encrypted data\. The AWS Encryption SDK does this for you\. It saves the encrypted data and the encrypted data key together in an [encrypted message](#message)\.
+The AWS Encryption SDK encrypts each message with a unique data key\. Then it encrypts the data key under the wrapping key you specify\. It stores the encrypted data key with the encrypted data in the encrypted message that it returns\.  
+To specify your wrapping key, you use a [keyring](#keyring) or [master key provider](#master-key-provider)\.  
+
+![\[Envelope encryption with the AWS Encryption SDK\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/envelope-encryption-70.png)
 
 **Encrypting the same data under multiple wrapping keys**  
-Encryption operations can be time\-consuming, particularly when the data being encrypted are large objects\. Instead of reencrypting raw data multiple times with different keys, you can reencrypt only the data keys that protect the raw data\. 
+You can encrypt the data key under multiple wrapping keys\. You might want to provide different wrapping keys for different users, or wrapping keys of different types, or in different locations\. Each of the wrapping keys encrypts the same data key\. The AWS Encryption SDK stores all of the encrypted data keys with the encrypted data in the encrypted message\.   
+To decrypt the data, you need to provide a wrapping key that can decrypt one of the encrypted data keys\.  
+
+![\[Each wrapping key encrypts the same data key, resulting in one encrypted data key for each wrapping key\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/multiple-wrapping-keys-70.png)
 
 **Combining the strengths of multiple algorithms**  
-In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. You might want to combine the strengths of each\. For example, you might encrypt raw data with symmetric key encryption, and then encrypt the data key with public key encryption\.
-
-The AWS Encryption SDK uses envelope encryption\. It encrypts your data with a data key\. Then, it encrypts the data key with a wrapping key\. The AWS Encryption SDK returns the encrypted data and the encrypted data keys in a single [encrypted message](#message), as shown in the following diagram\. 
-
-![\[Envelope encryption with the AWS Encryption SDK\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/envelope-encryption.png)
-
-If you have multiple wrapping keys, each of them can encrypt the plaintext data key\. The encrypted message that the AWS Encryption SDK returns contains the encrypted data and the collection of encrypted data keys\. Any one of the wrapping keys can decrypt one of the encrypted data keys, which can then decrypt the data\. 
-
-When you use envelope encryption, you need to protect your wrapping keys from unauthorized access\. You can do this in any of the following ways:
-+ Use a web service designed for this purpose, such as [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\.
-+ Use a [hardware security module \(HSM\)](https://en.wikipedia.org/wiki/Hardware_security_module) such as those offered by [AWS CloudHSM](https://aws.amazon.com/cloudhsm/)\.
-+ Use other key management tools and services\.
-
-If you don't have a key management system, we recommend AWS KMS\. The AWS Encryption SDK integrates with AWS KMS to help you protect and use your wrapping keys\. However, the AWS Encryption SDK does not require AWS or any AWS service\.
+In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. You might want to combine the strengths of each\. For example, you might encrypt raw data with symmetric key encryption, and then encrypt the data key with public key encryption\.  
+To encrypt your data, by default, the AWS Encryption SDK uses a sophisticated [algorithm suite](supported-algorithms.md) with AES\-GCM symmetric encryption, a key derivation function \(HKDF\), and signing\. To encrypt the data key, you can specify a [symmetric or asymmetric encryption algorithm](#symmetric-key-encryption) appropriate to your wrapping key\.   
+In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. To combine the strengths of each, you can your encrypt your data with symmetric key encryption, and then encrypt the data key with public key encryption\.
 
 ## Data key<a name="DEK"></a>
 
@@ -57,10 +51,12 @@ A *data key* is an encryption key that the AWS Encryption SDK uses to encrypt yo
 
 You don't need to specify, generate, implement, extend, protect or use data keys\. The AWS Encryption SDK does that work for you when you call the encrypt and decrypt operations\. 
 
-To protect your data keys, the AWS Encryption SDK encrypts them under one or more *key\-encryption keys* known as [master keys or wrapping keys](#master-key)\. After the AWS Encryption SDK uses your plaintext data keys to encrypt your data, it removes them from memory as soon as possible\. Then it stores the encrypted data keys with the encrypted data in the [encrypted message](#message) that the encrypt operations return\. For details, see [How the AWS Encryption SDK works](how-it-works.md)\.
+To protect your data keys, the AWS Encryption SDK encrypts them under one or more *key\-encryption keys* known as [wrapping keys](#master-key) or master keys\. After the AWS Encryption SDK uses your plaintext data keys to encrypt your data, it removes them from memory as soon as possible\. Then it stores the encrypted data keys with the encrypted data in the [encrypted message](#message) that the encrypt operations return\. For details, see [How the AWS Encryption SDK works](how-it-works.md)\.
 
 **Tip**  
 In the AWS Encryption SDK, we distinguish *data keys* from *data encryption keys*\. Several of the supported [algorithm suites](#crypto-algorithm), including the default suite, use a [key derivation function](https://en.wikipedia.org/wiki/Key_derivation_function) that prevents the data key from hitting its cryptographic limits\. The key derivation function takes the data key as input and returns a data encryption key that is actually used to encrypt the data\. For this reason, we often say that data is encrypted "under" a data key rather than "by" the data key\.
+
+Each encrypted data key includes metadata, including the identifier of the wrapping key that encrypted it\. This metadata makes it easier for the AWS Encryption SDK to identify valid wrapping keys when decrypting\.
 
 ## Wrapping key<a name="master-key"></a>
 
@@ -71,21 +67,34 @@ A *wrapping key* \(or *master key*\) is a key\-encryption key that the AWS Encry
 
 The AWS Encryption SDK supports several commonly used wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and raw RSA keys\. You can also extend or implement your own wrapping keys\. 
 
-## Keyring \(C and JavaScript\)<a name="keyring"></a>
+When you use envelope encryption, you need to protect your wrapping keys from unauthorized access\. You can do this in any of the following ways:
++ Use a web service designed for this purpose, such as [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\.
++ Use a [hardware security module \(HSM\)](https://en.wikipedia.org/wiki/Hardware_security_module) such as those offered by [AWS CloudHSM](https://aws.amazon.com/cloudhsm/)\.
++ Use other key management tools and services\.
 
-A *keyring* generates, encrypts, and decrypts data keys\. When you define a keyring, you can specify the wrapping keys that encrypt your data keys\. Most keyrings specify at least one wrapping key or a service that provides and protects wrapping keys\. You can also define a keyring with no wrapping keys or a more complex keyring with additional configuration options\. For help choosing and using the keyrings that the AWS Encryption SDK defines, see [Using keyrings](choose-keyring.md)\.
+If you don't have a key management system, we recommend AWS KMS\. The AWS Encryption SDK integrates with AWS KMS to help you protect and use your wrapping keys\. However, the AWS Encryption SDK does not require AWS or any AWS service\.
 
-You can use the keyrings that the AWS Encryption SDK provides or write your own compatible custom keyrings\. You can use a single keyring with one or more wrapping keys of the same type\. Or, you can combine keyrings of the same type or a different type into a [multi\-keyring](choose-keyring.md#use-multi-keyring)\. The multi\-keyring returns a copy of the data key encrypted by each of the wrapping keys in each of the keyrings that comprise the multi\-keyring\. When you use a multi\-keyring to encrypt data, you can decrypt the data using a keyring configured with any one of the wrapping keys in the multi\-keyring\.
+## Keyrings and master key providers<a name="keyring"></a>
 
-The keyrings that the AWS Encryption SDK provides are compatible with master key providers in the AWS Encryption SDK for Java and the AWS Encryption SDK for Python\. However, you must specify the same key material and use a keyring that is compatible with the master key provider, subject to language constraints\. Any minor incompatibility due to language constraints is explained in the topic about the language implementation\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\. 
+To specify the wrapping keys you use for encryption and decryption, you use a keyring \(C and JavaScript\) or a master key provider \(Java, Python, CLI\)\. You can use the keyrings and master key providers that the AWS Encryption SDK provides or design your own implementations\. The AWS Encryption SDK provides keyrings and master key providers that are compatible with each other subject to language constraints\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\. 
 
-## Master key provider \(Java and Python\)<a name="master-key-provider"></a>
+A *keyring* generates, encrypts, and decrypts data keys\. When you define a keyring, you can specify the [wrapping keys](#master-key) that encrypt your data keys\. Most keyrings specify at least one wrapping key or a service that provides and protects wrapping keys\. You can also define a keyring with no wrapping keys or a more complex keyring with additional configuration options\. For help choosing and using the keyrings that the AWS Encryption SDK defines, see [Using keyrings](choose-keyring.md)\. Keyrings are supported in C and JavaScript\.
 
-A *master key provider* returns master keys or objects that identify or represent master keys\. Each master key is associated with one master key provider, but a master key provider typically provides multiple master keys\. You can use the master key providers that the AWS Encryption SDK provides or design your own custom master key providers\.
+A *master key provider* is an alternative to a keyring\. The master key provider returns the wrapping keys \(or master keys\) you specify\. Each master key is associated with one master key provider, but a master key provider typically provides multiple master keys\. Master key providers are supported in Java, Python, and the AWS Encryption CLI\. 
 
-Master key providers in the AWS Encryption SDK for Java and AWS Encryption SDK for Python are compatible with keyrings in the all language implementations, subject to language constraints\. However, you must specify the same key material and use a keyring that is compatible with the master key provider\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
+You must specify a keyring \(or master key provider\) for encryption\. You can specify the same keyring \(or master key provider\), or a different one, for decryption\. When encrypting, the AWS Encryption SDK uses all of the wrapping keys you specify to encrypt the data key\. When decrypting, the AWS Encryption SDK uses only the wrapping keys you specify to decrypt an encrypted data key\. Specifying wrapping keys for decryption is optional, but it's a AWS Encryption SDK [best practice](best-practices.md)\. 
 
-When you use a master key and master key provider, you can also specify a [cryptographic materials manager](#crypt-materials-manager) \(CMM\)\. However, if you specify a master key provider, the AWS Encryption SDK creates a Default CMM for you\. 
+### Specifying wrapping keys<a name="specifying-keys"></a>
+
+To specify the wrapping keys in a keyring \(or master key provider\), you must use an identifier that the keyring understands\. 
+
+For raw AES and raw RSA wrapping keys in a keyring, you must specify a namespace and a name\. \(In master key providers, the `Provider ID` is the equivalent of the namespace and the `Key ID` is the equivalent of the name\.\) When decrypting, you must use the exact same namespace and name for each raw wrapping key\. If you use a different namespace or name, the AWS Encryption SDK will not recognize or use the wrapping key, even if the key material is the same\.
+
+When the wrapping key is an AWS KMS customer master key \(CMK\), use the AWS KMS key identifiers\. For details, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
++ For encryption, the key identifiers you use differ with the language implementation\. For example, when encrypting in JavaScript, you can use any valid key identifier \(key ID, key ARN, alias name, or alias ARN\) for a CMK wrapping key\. When encrypting in C, you can only use a key ID or key ARN\.
++ When decrypting, you must use a key ARN\. 
+
+  When the AWS Encryption SDK encrypts a data key with a CMK wrapping key, it stores the key ARN of the CMK in the metadata of the encrypted data key\. When decrypting in strict mode, the AWS Encryption SDK verifies that the same key ARN appears in the keyring \(or master key provider\) before it attempts to decrypt the encrypted data key\. If you use a different key identifier, the AWS Encryption SDK will not recognize or use the CMK, even if it's the same key\.
 
 ## Encryption context<a name="encryption-context"></a>
 

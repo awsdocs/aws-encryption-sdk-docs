@@ -83,7 +83,7 @@ For detailed information about permissions for AWS KMS customer master keys, see
 
 An AWS KMS keyring can include one or more AWS KMS customer master keys \(CMKs\)\. To specify a CMK in an AWS KMS keyring, use a supported AWS KMS key identifier\. The key identifiers you can use to identify a CMK in a keyring vary with the operation and the language implementation\. For details about the key identifiers for a AWS KMS CMK, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 + In an encryption keyring, you can use a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-ARN) to identify CMKs\. Some language implementations allow other formats\.
-+ In a decryption keyring, you must use a key ARN to identify CMKs\. This requirement applies to all language implementations of the AWS Encryption SDK\.
++ In a decryption keyring, you must use a key ARN to identify CMKs\. This requirement applies to all language implementations of the AWS Encryption SDK\. For details, see [Specifying wrapping keys](concepts.md#specifying-keys)\.
 + In a keyring used for encryption and decryption, you must use a key ARN to identify CMKs\. This requirement applies to all language implementations of the AWS Encryption SDK\.
 
 ### Encrypting with an AWS KMS keyring<a name="kms-keyring-encrypt"></a>
