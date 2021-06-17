@@ -6,6 +6,10 @@ Use the following examples to try the AWS Encryption CLI on the platform you pre
 The following examples use the syntax for AWS Encryption CLI version 2\.1\.*x*\.   
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
+For an example showing how to use the security feature that limits encrypted data keys, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
+For an example showing how to use AWS KMS multi\-Region keys, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+
 **Topics**
 + [Encrypting a file](#cli-example-encrypt-file)
 + [Decrypting a file](#cli-example-decrypt-file)
@@ -410,7 +414,7 @@ The example consists of three commands:
 
 ------
 
-   
+   
 + The second command pipes the `Hello World` string to the encrypt command and saves the result in the `$encrypted` variable\. 
 
   The `--input` and `--output` parameters are required in all AWS Encryption CLI commands\. To indicate that input is being piped to the command \(stdin\), use a hyphen \(`-`\) for the value of the `--input` parameter\. To send the output to the command line \(stdout\), use a hyphen for the value of the `--output` parameter\. 
@@ -439,7 +443,7 @@ The example consists of three commands:
 
 ------
 
-   
+   
 + The third command pipes the encrypted message in the `$encrypted` variable to the decrypt command\. 
 
   This decrypt command uses `--input -` to indicate that input is coming from the pipeline \(stdin\) and `--output -` to send the output to the pipeline \(stdout\)\. \(The input parameter takes the location of the input, not the actual input bytes, so you cannot use the `$encrypted` variable as the value of the `--input` parameter\.\) 
@@ -454,7 +458,7 @@ The example consists of three commands:
 #### [ Bash ]
 
   ```
-  $  echo $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=true --input - --output - --decode - --buffer -S
+  $  echo $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=true --input - --output - --decode --buffer -S
   Hello World
   ```
 
@@ -462,7 +466,7 @@ The example consists of three commands:
 #### [ PowerShell ]
 
   ```
-  PS C:\> $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=$true --input - --output - --decode - --buffer -S
+  PS C:\> $encrypted | aws-encryption-cli --decrypt --wrapping-keys discovery=$true --input - --output - --decode --buffer -S
   Hello World
   ```
 

@@ -20,7 +20,7 @@ For complete and tested examples of using data key caching in the AWS Encryption
 These step\-by\-step instructions show you how to create the components that you need to implement data key caching\.
 + [Create a data key cache](data-caching-details.md#simplecache)\. In these examples, we use the local cache that the AWS Encryption SDK provides\. We limit the cache to 10 data keys\.
 
-   
+   
 
 ------
 #### [ C ]
@@ -73,10 +73,10 @@ These step\-by\-step instructions show you how to create the components that you
 
 ------
 
-   
+   
 + Create a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C and JavaScript\)\. These examples use an AWS Key Management Service \(AWS KMS\) master key provider or a compatible [AWS KMS keyring](choose-keyring.md#use-kms-keyring)\.
 
-   
+   
 
 ------
 #### [ C ]
@@ -152,14 +152,14 @@ These step\-by\-step instructions show you how to create the components that you
 
 ------
 
-   
+   
 + [Create a caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\)\. 
 
-   
+   
 
   Associate your caching CMM with your cache and your master key provider or keyring\. Then, [set cache security thresholds](thresholds.md) on the caching CMM\. 
 
-   
+   
 
 ------
 #### [ C ]

@@ -7,6 +7,10 @@ Version 2\.1\.*x* of the AWS Encryption CLI introduces new security features to 
 For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to version 2\.0\.*x*](migration.md)\.  
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
+For an example showing how to use the security feature that limits encrypted data keys, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
+For an example showing how to use AWS KMS multi\-Region keys, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+
 **Topics**
 + [How to encrypt and decrypt data](#crypto-cli-e-d-intro)
 + [How to specify wrapping keys](#crypto-cli-master-key)
@@ -37,7 +41,7 @@ The `--master-keys` parameter is deprecated in version 1\.8\.*x* of the AWS Encr
 
   The AWS Encryption CLI encrypts your data under a unique data key\. Then it encrypts the data key under the wrapping keys you specify\. It returns an [encrypted message](concepts.md#message) and metadata about the operation\. The encrypted message contains your encrypted data \(*ciphertext*\) and an encrypted copy of the data key\. You don't have to worry about storing, managing, or losing the data key\.
 
-   
+   
 + When you decrypt data, you pass in your encrypted message, the optional encryption context, and location for the plaintext output and the metadata\. You also specify the wrapping keys that the AWS Encryption CLI can use to decrypt the message, or tell the AWS Encryption CLI it can use any wrapping keys that encrypted the message\.
 
   Beginning in version 1\.8\.*x*, the `--wrapping-keys` parameter is optional when decrypting, but recommended\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is required when encrypting and decrypting\.
@@ -242,7 +246,7 @@ You can the output location in several ways\.
 
   For example, if you encrypt `file.txt`, the encrypt command creates `file.txt.encrypted`\. If you decrypt `file.txt.encrypted`, the decrypt command creates `file.txt.encrypted.decrypted`\.
 
-   
+   
 + Write to the command line \(stdout\)\. Enter a value of `-` for the `--output` parameter\. You can use `--output -` to pipe output to another command or program\.
 
   ```

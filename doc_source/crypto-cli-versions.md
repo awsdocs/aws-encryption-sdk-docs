@@ -37,3 +37,11 @@ The following lists describe the change to the AWS Encryption CLI in versions 1\
   + `require-encrypt-allow-decrypt`
   + `require-encrypt-require decrypt` \(Default\)
 + The `--commitment-policy` parameter is optional in version 2\.1\.*x*\. The default value is `require-encrypt-require-decrypt`\.
+
+## Version 1\.9\.*x* and 2\.2\.*x* changes to the AWS Encryption CLI<a name="cli-changes-2.2"></a>
++ Adds the `--decrypt-unsigned` parameter\. For details, see [Version 2\.2\.*x*](about-versions.md#version2.2.x)\.
++ Adds the `--buffer` parameter\. For details, see [Version 2\.2\.*x*](about-versions.md#version2.2.x)\.
++ Adds the `--max-encrypted-data-keys` parameter\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+
+## Version 3\.0\.*x* changes to the AWS Encryption CLI<a name="cli-changes-v3"></a>
++ Adds support for AWS KMS multi\-Region keys\. For details, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.

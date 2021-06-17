@@ -24,6 +24,8 @@ The following list describes the major differences between supported versions of
 + [Version 2\.0\.*x*](#version-2)
 + [Version 2\.1\.*x*](#version-2.1)
 + [Version 2\.2\.*x*](#version2.2.x)
++ [Version 2\.3\.*x*](#version2.3)
++ [Version 3\.0\.*x*](#version3.0)
 
 ## Versions earlier than 1\.7\.*x*<a name="versions-earlier"></a>
 
@@ -110,6 +112,20 @@ To improve handling of [digital signatures](concepts.md#digital-sigs) when decry
 + *unsigned\-only decryption mode* — this feature only decrypts unsigned ciphertext\. If decryption encounters a digital signature in the ciphertext, the operation fails\. Use this feature to avoid unintentionally processing plaintext from signed messages before verifying the signature\.
 
 **Limiting encrypted data keys**  
-You can limit the number of [encrypted data keys](configure.md#config-limit-keys) in an encrypted message to help you detect a misconfigured master key provider or keyring when encrypting or a malicious ciphertext when decrypting messages\.
+You can [limit the number of encrypted data keys](configure.md#config-limit-keys) in an encrypted message\. This feature can help you detect a misconfigured master key provider or keyring when encrypting, or identify a malicious ciphertext when decrypting\.
 
 You should limit encrypted data keys when you decrypt messages from an untrusted source\. It prevents unnecessary, expensive, and potentially exhaustive calls to your key infrastructure\.
+
+## Version 2\.3\.*x*<a name="version2.3"></a>
+
+Adds support for AWS KMS multi\-Region keys\. For details, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+
+**Note**  
+The AWS Encryption CLI supports multi\-Region keys beginning in [version 3\.0\.*x*](#version3.0)\.
+
+## Version 3\.0\.*x*<a name="version3.0"></a>
+
+Adds support for AWS KMS multi\-Region keys to the AWS Encryption CLI\. For details, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+
+**Note**  
+Multi\-Region keys are supported in other versions of the AWS Encryption SDK beginning in [version 2\.3\.*x*](#version2.3)\.

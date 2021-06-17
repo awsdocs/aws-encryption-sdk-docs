@@ -35,7 +35,7 @@ The AWS Encryption SDK is supported in several [programming languages](programmi
 However, the AWS Encryption SDK cannot interoperate with other libraries\. Because each library returns encrypted data in a different format, you cannot encrypt with one library and decrypt with another\.
 
 **DynamoDB Encryption Client and Amazon S3 client\-side encryption**  <a name="ESDK-DDBEC"></a>
-The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. And these libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
+The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. And these libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
 
 **AWS Key Management Service \(AWS KMS\)**  <a name="ESDK-KMS"></a>
 The AWS Encryption SDK can use [AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/) [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) and [data keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys) to protect your data\. For example, you can configure the AWS Encryption SDK to encrypt your data under one or more CMKs in your AWS account\. However, you must use the AWS Encryption SDK to decrypt that data\.   

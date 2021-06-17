@@ -103,6 +103,7 @@ You can use `--decrypt` or `--decrypt-unsigned` for decryption but not both\.
 Specifies the [wrapping keys](concepts.md#master-key) \(or *master keys*\) used in encryption and decryption operations\. You can use [multiple `--wrapping-keys` parameters](crypto-cli-how-to.md#cli-many-cmks) in each command\.   
 Beginning in version 2\.1\.*x*, the AWS Encryption CLI requires the `--wrapping-keys` parameter for encrypt and decrypt commands\. In version 1\.8\.*x*, the AWS Encryption CLI does not require `--wrapping-keys` \(or `--master-keys`\) parameter for encrypt commands\. In version 1\.8\.*x* decrypt commands, a `--wrapping-keys` parameter is optional but recommended\.   
 When using a custom master key provider, encrypt and decrypt commands require **key** and **provider** attributes\. When using AWS KMS customer master keys, encrypt commands require a **key** attribute\. Decrypt commands can include a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute when decrypting is an [AWS Encryption SDK best practice](best-practices.md)\. It is particularly important if you're decrypting batches of unfamiliar messages, such as those in an Amazon S3 bucket or an Amazon SQS queue\.  
+For an example showing how to use AWS KMS multi\-Region keys as wrapping keys, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.  
 **Attributes**: The value of the `--wrapping-keys` parameter consists of the following attributes\. The format is `attribute_name=value`\.     
 **key**  
 Identifies the wrapping key used in the operation\. The format is a **key**=ID pair\. You can specify multiple **key** attributes in each `--wrapping-keys` parameter value\.  
@@ -186,7 +187,7 @@ For detailed information about setting your commitment policy, see [Migrating to
 **\-\-encryption\-context \(\-c\)**  
 Specifies an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context) for the operation\. This parameter is not required, but it is recommended\.   
 + In an `--encrypt` command, enter one or more `name=value` pairs\. Use spaces to separate the pairs\.
-+ In a decrypt command, enter `name=value` pairs, `name` elements with no values, or both\.
++ In a `--decrypt` command, enter `name=value` pairs, `name` elements with no values, or both\.
 If the `name` or `value` in a `name=value` pair includes spaces or special characters, enclose the entire pair in quotation marks\. For example, `--encryption-context "department=software development"`\.
 
 **\-\-buffer \(\-b\) \[Introduced in versions 1\.9\.*x* and 2\.2\.*x*\]**  
@@ -195,7 +196,7 @@ Returns plaintext only after all input is processed, including verifying the dig
 **\-\-max\-encrypted\-data\-keys \[Introduced in versions 1\.9\.*x* and 2\.2\.*x*\]**  
 Specifies the maximum number of encrypted data keys in an encrypted message\. This parameter is optional\.   
 Valid values are 1 – 65,535\. If you omit this parameter, the AWS Encryption CLI does not enforce any maximum\. An encrypted message can hold up to 65,535 \(2^16 \- 1\) encrypted data keys\.  
-You can use this parameter in encrypt commands to prevent a malformed message\. You can use it in decrypt commands to detect malicious messages and avoid decrypting messages with numerous encrypted data keys that you can't decrypt\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+You can use this parameter in encrypt commands to prevent a malformed message\. You can use it in decrypt commands to detect malicious messages and avoid decrypting messages with numerous encrypted data keys that you can't decrypt\. For details and an example, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
 
 **\-\-help \(\-h\)**  
 Prints usage and syntax at the command line\.

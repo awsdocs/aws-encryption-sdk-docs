@@ -55,6 +55,8 @@ When decrypting, the Java and Python implementations behave like the [AWS KMS di
 
 An AWS KMS keyring uses AWS Key Management Service \(AWS KMS\) symmetric [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) to generate, encrypt, and decrypt data keys\. AWS KMS protects your master keys and performs cryptographic operations within the FIPS boundary\. We recommend that you use a AWS KMS keyring, or a keyring with similar security properties, whenever possible\.
 
+You can use an AWS KMS multi\-Region key in an AWS KMS keyring or master key provider beginning in [version 2\.3\.*x*](about-versions.md#version2.3) of the AWS Encryption SDK and [version 3\.0\.*x*](about-versions.md#version3.0) of the AWS Encryption CLI\. For details and examples of using the new multi\-Region\-aware symbol, see [Using multi\-Region KMS keys](configure.md#config-mrks)\. For information about multi\-Region keys, see [Using multi\-Region keys](https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html) in the *AWS Key Management Service Developer Guide*\.
+
 **Note**  
 All mentions of *KMS keyrings* in the AWS Encryption SDK refer to AWS KMS keyrings\.
 
