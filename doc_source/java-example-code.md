@@ -74,6 +74,19 @@ public class BasicEncryptionExample {
         // To encrypt and decrypt with this master key provider, use an AWS KMS key ARN to identify the CMKs.
         // In strict mode, the decrypt operation requires a key ARN.
         final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(keyArn);
+        
+        OR
+        
+        // We can configure the KmsMasterKeyProvider to use specific credentials. 
+        // If a builder was previously set, this will override it.
+        // You can create an AWSCredentials object using AWS SDK for Java1.x
+        // Add access key and secret key of your IAM role
+        AWScredentials awsCredentials = new BasicAWSCredentials(accessKey,secretKey);
+        // now using this create a KmsMasterKeyProvider Object
+        final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder()
+                                                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)
+                                                .withDefaultRegion(region) // specify region
+                                                .buildStrict(keyArn); // pass the key ARN
 
         // 3. Create an encryption context
         // Most encrypted data should have an associated encryption context
