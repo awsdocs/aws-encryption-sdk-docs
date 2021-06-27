@@ -84,7 +84,7 @@ public class BasicEncryptionExample {
         AWScredentials awsCredentials = new BasicAWSCredentials(accessKey,secretKey);
         // now using this create a KmsMasterKeyProvider Object
         final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder()
-                                                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)
+                                                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                                                 .withDefaultRegion(region) // specify region
                                                 .buildStrict(keyArn); // pass the key ARN
 
