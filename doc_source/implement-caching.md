@@ -20,7 +20,7 @@ For complete and tested examples of using data key caching in the AWS Encryption
 These step\-by\-step instructions show you how to create the components that you need to implement data key caching\.
 + [Create a data key cache](data-caching-details.md#simplecache)\. In these examples, we use the local cache that the AWS Encryption SDK provides\. We limit the cache to 10 data keys\.
 
-   
+   
 
 ------
 #### [ C ]
@@ -73,10 +73,10 @@ These step\-by\-step instructions show you how to create the components that you
 
 ------
 
-   
+   
 + Create a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C and JavaScript\)\. These examples use an AWS Key Management Service \(AWS KMS\) master key provider or a compatible [AWS KMS keyring](choose-keyring.md#use-kms-keyring)\.
 
-   
+   
 
 ------
 #### [ C ]
@@ -84,9 +84,9 @@ These step\-by\-step instructions show you how to create the components that you
   ```
   // Create an AWS KMS keyring
   //   The input is the Amazon Resource Name (ARN) 
-  //   of an AWS KMS customer master key (CMK)
+  //   of an AWS KMS key
   
-  struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(kms_cmk_arn);
+  struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(kms_key_arn);
   ```
 
 ------
@@ -95,15 +95,15 @@ These step\-by\-step instructions show you how to create the components that you
   ```
   // Create an AWS KMS master key provider
   //   The input is the Amazon Resource Name (ARN) 
-  //   of an AWS KMS customer master key (CMK)
+  //   of an AWS KMS key
   
-  MasterKeyProvider<KmsMasterKey> keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsCmkArn);
+  MasterKeyProvider<KmsMasterKey> keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsKeyArn);
   ```
 
 ------
 #### [ JavaScript Browser ]
 
-  In the browser, you must inject your credentials securely\. This example defines credentials in a webpack \(kms\.webpack\.config\) that resolves credentials at runtime\. It creates an AWS KMS client provider instance from an AWS KMS client and the credentials\. Then, when it creates the keyring, it passes the client provider to the constructor along with the AWS KMS customer master key \(`generatorKeyId)`\.
+  In the browser, you must inject your credentials securely\. This example defines credentials in a webpack \(kms\.webpack\.config\) that resolves credentials at runtime\. It creates an AWS KMS client provider instance from an AWS KMS client and the credentials\. Then, when it creates the keyring, it passes the client provider to the constructor along with the AWS KMS key \(`generatorKeyId)`\.
 
   ```
   const { accessKeyId, secretAccessKey, sessionToken } = credentials
@@ -117,9 +117,9 @@ These step\-by\-step instructions show you how to create the components that you
     })
   
   /*  Create an AWS KMS keyring
-   *  You must configure the AWS KMS keyring with your AWS KMS CMKs.
+   *  You must configure the AWS KMS keyring with at least one AWS KMS key
    *  The input is the Amazon Resource Name (ARN) 
-   */ of an AWS KMS customer master key (CMK)
+   */ of an AWS KMS key
   
   const keyring = new KmsKeyringBrowser({
       clientProvider,
@@ -134,7 +134,7 @@ These step\-by\-step instructions show you how to create the components that you
   ```
   /* Create an AWS KMS keyring
    *   The input is the Amazon Resource Name (ARN) 
-  */   of an AWS KMS customer master key (CMK)
+  */   of an AWS KMS key
   
   const keyring = new KmsKeyringNode({ generatorKeyId })
   ```
@@ -145,21 +145,21 @@ These step\-by\-step instructions show you how to create the components that you
   ```
   # Create an AWS KMS master key provider
   #  The input is the Amazon Resource Name (ARN) 
-  #  of an AWS KMS customer master key (CMK)
+  #  of an AWS KMS key
   
-  key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_cmk_arn])
+  key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_key_arn])
   ```
 
 ------
 
-   
+   
 + [Create a caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\)\. 
 
-   
+   
 
   Associate your caching CMM with your cache and your master key provider or keyring\. Then, [set cache security thresholds](thresholds.md) on the caching CMM\. 
 
-   
+   
 
 ------
 #### [ C ]
@@ -346,9 +346,9 @@ encrypted_message, header = client.encrypt(
 
 This simple code example uses data key caching when encrypting a string\. It combines the code from the [step\-by\-step procedure](#implement-caching-steps) into test code that you can run\.
 
-The example creates a [local cache](data-caching-details.md#simplecache) and a [master key provider](concepts.md#master-key-provider) or [keyring](concepts.md#keyring) for an AWS KMS [customer master key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMK\)\. Then, it uses the local cache and master key provider or keyring to create a caching CMM with appropriate [security thresholds](thresholds.md)\. In Java and Python, the encryption request specifies the caching CMM, the plaintext data to encrypt, and an [encryption context](data-caching-details.md#caching-encryption-context)\. In C, the caching CMM is specified in the session, and the session is provided to the encryption request\.
+The example creates a [local cache](data-caching-details.md#simplecache) and a [master key provider](concepts.md#master-key-provider) or [keyring](concepts.md#keyring) for an AWS KMS key\. Then, it uses the local cache and master key provider or keyring to create a caching CMM with appropriate [security thresholds](thresholds.md)\. In Java and Python, the encryption request specifies the caching CMM, the plaintext data to encrypt, and an [encryption context](data-caching-details.md#caching-encryption-context)\. In C, the caching CMM is specified in the session, and the session is provided to the encryption request\.
 
-To run these examples, you need to supply the [Amazon Resource Name \(ARN\) of an AWS KMS CMK](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)\. Be sure that you have [permission to use the CMK](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to generate a data key\.
+To run these examples, you need to supply the [Amazon Resource Name \(ARN\) of an AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)\. Be sure that you have [permission to use the AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-users) to generate a data key\.
 
 For more detailed, real\-world examples of creating and using a data key cache, see [Data key caching example code](sample-cache-example-code.md)\.
 
@@ -379,7 +379,7 @@ void encrypt_with_caching(
     uint8_t *ciphertext,     // output will go here (assumes ciphertext_capacity bytes already allocated)
     size_t *ciphertext_len,  // length of output will go here
     size_t ciphertext_capacity,
-    const char *kms_cmk_arn,
+    const char *kms_key_arn,
     int max_entry_age,
     int cache_capacity) {
     const uint64_t MAX_ENTRY_MSGS = 100;
@@ -387,7 +387,7 @@ void encrypt_with_caching(
     struct aws_allocator *allocator = aws_default_allocator();
 
     // Create a keyring
-    struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(kms_cmk_arn);
+    struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(kms_key_arn);
 
     // Create a cache
     struct aws_cryptosdk_materials_cache *cache = aws_cryptosdk_materials_cache_local_new(allocator, cache_capacity);
@@ -463,13 +463,13 @@ import com.amazonaws.encryptionsdk.CommitmentPolicy;
 
 /**
  * <p>
- * Encrypts a string using an AWS KMS customer master key (CMK) and data key caching
+ * Encrypts a string using an AWS KMS key and data key caching
  *
  * <p>
  * Arguments:
  * <ol>
- * <li>KMS CMK ARN: To find the Amazon Resource Name of your AWS KMS customer master key (CMK),
- *     see 'Viewing Keys' at http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html
+ * <li>KMS Key ARN: To find the Amazon Resource Name of your AWS KMS key,
+ *     see 'Find the key ID and ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
  * <li>Max entry age: Maximum time (in seconds) that a cached entry can be used
  * <li>Cache capacity: Maximum number of entries in the cache
  * </ol>
@@ -482,7 +482,7 @@ public class SimpleDataKeyCachingExample {
      */
     private static final int MAX_ENTRY_MSGS = 100;
 
-    public static byte[] encryptWithCaching(String kmsCmkArn, int maxEntryAge, int cacheCapacity) {
+    public static byte[] encryptWithCaching(String kmsKeyArn, int maxEntryAge, int cacheCapacity) {
         // Plaintext data to be encrypted
         byte[] myData = "My plaintext data".getBytes(StandardCharsets.UTF_8);
 
@@ -494,7 +494,7 @@ public class SimpleDataKeyCachingExample {
         final Map<String, String> encryptionContext = Collections.singletonMap("purpose", "test");
 
         // Create a master key provider
-        MasterKeyProvider<KmsMasterKey> keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsCmkArn);
+        MasterKeyProvider<KmsMasterKey> keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsKeyArn);
 
         // Create a cache
         CryptoMaterialsCache cache = new LocalCryptoMaterialsCache(cacheCapacity);
@@ -563,23 +563,23 @@ declare const credentials: {
 
 /* This is done to facilitate testing. */
 export async function testCachingCMMExample() {
-  /* This example uses a KMS keyring. The generator key in a KMS keyring generates and encrypts the data key.
-   * The caller needs kms:GenerateDataKey permission on the CMK in generatorKeyId.
+  /* This example uses an AWS KMS keyring. The generator key in a AWS KMS keyring generates and encrypts the data key.
+   * The caller needs kms:GenerateDataKey permission on the AWS KMS key in generatorKeyId.
    */
   const generatorKeyId =
     'arn:aws:kms:us-west-2:658956600833:alias/EncryptDecrypt'
 
   /* Adding additional KMS keys that can decrypt.
-   * The caller must have kms:Encrypt permission for every CMK in keyIds.
+   * The caller must have kms:Encrypt permission for every AWS KMS key in keyIds.
    * You might list several keys in different AWS Regions.
    * This allows you to decrypt the data in any of the represented Regions.
    * In this example, the generator key
-   * and the additional key are actually the same CMK.
-   * In `generatorId`, this CMK is identified by its alias ARN.
-   * In `keyIds`, this CMK is identified by its key ARN.
-   * In practice, you would specify different CMKs,
+   * and the additional key are actually the same AWS KMS key.
+   * In `generatorId`, this AWS KMS key is identified by its alias ARN.
+   * In `keyIds`, this AWS KMS key is identified by its key ARN.
+   * In practice, you would specify different AWS KMS keys,
    * or omit the `keyIds` parameter.
-   * This is *only* to demonstrate how the CMK ARNs are configured.
+   * This is *only* to demonstrate how the AWS KMS key ARNs are configured.
    */
   const keyIds = [
     'arn:aws:kms:us-west-2:658956600833:key/b3537ef1-d8dc-4780-9f5a-55776cbb2f7f',
@@ -607,7 +607,7 @@ export async function testCachingCMMExample() {
     },
   })
 
-  /* You must configure the KMS keyring with your KMS CMKs */
+  /* You must configure the KMS keyring with your AWS KMS keys */
   const keyring = new KmsKeyringBrowser({
     clientProvider,
     generatorKeyId,
@@ -774,29 +774,29 @@ const { encrypt, decrypt } = buildClient(
 )
 
 export async function cachingCMMNodeSimpleTest() {
-  /* A KMS CMK is required to generate the data key.
-   * You need kms:GenerateDataKey permission on the CMK in generatorKeyId.
+  /* An AWS KMS key is required to generate the data key.
+   * You need kms:GenerateDataKey permission on the AWS KMS key in generatorKeyId.
    */
   const generatorKeyId =
     'arn:aws:kms:us-west-2:658956600833:alias/EncryptDecrypt'
 
-  /* Adding alternate KMS keys that can decrypt.
-   * Access to kms:Encrypt is required for every CMK in keyIds.
+  /* Adding alternate AWS KMS keys that can decrypt.
+   * Access to kms:Encrypt is required for every AWS KMS key in keyIds.
    * You might list several keys in different AWS Regions.
    * This allows you to decrypt the data in any of the represented Regions.
    * In this example, the generator key
-   * and the additional key are actually the same CMK.
-   * In `generatorId`, this CMK is identified by its alias ARN.
-   * In `keyIds`, this CMK is identified by its key ARN.
-   * In practice, you would specify different CMKs,
+   * and the additional key are actually the same AWS KMS key.
+   * In `generatorId`, this AWS KMS key is identified by its alias ARN.
+   * In `keyIds`, this AWS KMS key is identified by its key ARN.
+   * In practice, you would specify different AWS KMS keys,
    * or omit the `keyIds` parameter.
-   * This is *only* to demonstrate how the CMK ARNs are configured.
+   * This is *only* to demonstrate how the AWS KMS key ARNs are configured.
    */
   const keyIds = [
     'arn:aws:kms:us-west-2:658956600833:key/b3537ef1-d8dc-4780-9f5a-55776cbb2f7f',
   ]
 
-  /* The KMS keyring must be configured with the desired CMKs
+  /* The AWS KMS keyring must be configured with the desired AWS KMS keys
    * This example passes the keyring to the caching CMM
    * instead of using it directly.
    */
@@ -945,10 +945,10 @@ import aws_encryption_sdk
 from aws_encryption_sdk import CommitmentPolicy
 
 
-def encrypt_with_caching(kms_cmk_arn, max_age_in_cache, cache_capacity):
-    """Encrypts a string using an AWS KMS customer master key (CMK) and data key caching.
+def encrypt_with_caching(kms_key_arn, max_age_in_cache, cache_capacity):
+    """Encrypts a string using an AWS KMS key and data key caching.
 
-    :param str kms_cmk_arn: Amazon Resource Name (ARN) of the AWS KMS customer master key (CMK)
+    :param str kms_key_arn: Amazon Resource Name (ARN) of the AWS KMS key
     :param float max_age_in_cache: Maximum time in seconds that a cached entry can be used
     :param int cache_capacity: Maximum number of entries to retain in cache at once
     """
@@ -966,8 +966,8 @@ def encrypt_with_caching(kms_cmk_arn, max_age_in_cache, cache_capacity):
     # commitment policy, REQUIRE_ENCRYPT_REQUIRE_DECRYPT is used by default.
     client = aws_encryption_sdk.EncryptionSDKClient(commitment_policy=CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT)
 
-    # Create a master key provider for the KMS customer master key (CMK)
-    key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_cmk_arn])
+    # Create a master key provider for the AWS KMS key
+    key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_key_arn])
 
     # Create a local cache
     cache = aws_encryption_sdk.LocalCryptoMaterialsCache(cache_capacity)

@@ -28,7 +28,7 @@ The AWS Encryption SDK provides methods that encrypt strings, byte arrays, and b
 
 1. The encryption method returns an [encrypted message](concepts.md#message) that contains the encrypted data, the encrypted data key, and other metadata, including the encryption context, if one was used\. 
 
-   The metadata includes useful information, including an identifier for each wrapping key that encrypted a data key\. \(If the wrapping key is an AWS KMS customer master key, the AWS Encryption SDK stores its key ARN\.\) This information helps the AWS Encryption SDK decrypt the data\.
+   The metadata includes useful information, including an identifier for each wrapping key that encrypted a data key\. \(If the wrapping key is an AWS KMS key the AWS Encryption SDK stores its key ARN\.\) This information helps the AWS Encryption SDK decrypt the data\.
 
 ## How the AWS Encryption SDK decrypts an encrypted message<a name="decrypt-workflow"></a>
 
@@ -48,13 +48,13 @@ The AWS Encryption SDK provides methods that decrypt the [encrypted message](con
 
 1. If you are decrypting in *strict mode*, that is, if you specify wrapping keys for decryption, the AWS Encryption SDK first verifies that the wrapping key that encrypted the data key is present in the keyring or master key provider\. 
 
-   The AWS Encryption SDK gets the ID of the wrapping key from the metadata of the encrypted data key\. Then it looks for a matching wrapping key ID in the keyring or master key provider\. If the wrapping key is an AWS KMS customer master key \(CMK\), it gets the key ARN of the CMK from the metadata, and looks for the same key ARN in the keyring or master key provider\. 
+   The AWS Encryption SDK gets the ID of the wrapping key from the metadata of the encrypted data key\. Then it looks for a matching wrapping key ID in the keyring or master key provider\. If the wrapping key is an AWS KMS key, it gets the key ARN of the AWS KMS key from the metadata, and looks for the same key ARN in the keyring or master key provider\. 
 
    If it can't find the wrapping key in the keyring or master key provider, it skips and goes to the next encrypted data key\.
 
 1. If the AWS Encryption SDK finds the wrapping key in the keyring or master key provider, it attempts to use that wrapping key to decrypt the data key\. 
 
-   Beginning in [version 1\.7\.*x*](about-versions.md#version-1.7) of the AWS Encryption SDK, if you use an AWS Key Management Service \(AWS KMS\) keyring or master key provider, the AWS Encryption SDK always passes the key ARN of the CMK wrapping key to the `KeyId` parameter of the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation\. This is an AWS KMS best practice that assures that you decrypt the encrypted data key with the wrapping key you intend to use\.
+   Beginning in [version 1\.7\.*x*](about-versions.md#version-1.7) of the AWS Encryption SDK, if you use an AWS Key Management Service \(AWS KMS\) keyring or master key provider, the AWS Encryption SDK always passes the key ARN of the AWS KMS key to the `KeyId` parameter of the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation\. This is an AWS KMS best practice that assures that you decrypt the encrypted data key with the wrapping key you intend to use\.
 
    If the encrypted data key is decrypted successfully, the keyring or master key provider passes the decryption materials back to the CMM, including the plaintext data key\. The CMM passes the decryption materials to the decryption method\.
 

@@ -14,14 +14,14 @@ You can find more examples of using the AWS Encryption SDK for JavaScript in the
 
 The following example shows you how to use the AWS Encryption SDK for JavaScript to encrypt and decrypt a short string or byte array\. 
 
-This example features an [AWS KMS keyring](choose-keyring.md#use-kms-keyring), a type of keyring that uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) to generate and encrypt data keys\. For help creating a CMK, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying CMKs in an AWS KMS keyring, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)
+This example features an [AWS KMS keyring](choose-keyring.md#use-kms-keyring), a type of keyring that uses an AWS KMS key to generate and encrypt data keys\. For help creating an AWS KMS key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)
 
 Step 1: Construct the keyring\.  
 Create an AWS KMS keyring for encryption\.   
-When encrypting with an AWS KMS keyring, you must specify a *generator key*, that is, an AWS KMS CMK that is used to generate the plaintext data key and encrypt it\. You can also specify zero or more *additional keys* that encrypt the same plaintext data key\. The keyring returns the plaintext data key and one encrypted copy of that data key for each CMK in the keyring, including the generator key\. To decrypt the data, you need to decrypt any one of the encrypted data keys\.  
-To specify the CMKs for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use [any supported AWS KMS key identifier](choose-keyring.md#kms-keyring-id)\. This example uses a generator key, which is identified by its [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-ARN), and one additional key, which is identified by a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\.  
-If you plan to reuse your AWS KMS keyring for decrypting, you must use key ARNs to identify the CMKs in the keyring\.
-Before running this code, replace the example CMK identifiers with valid identifiers\. You must have the [permissions required to use the CMKs](choose-keyring.md#kms-keyring-permissions) in the keyring\.  
+When encrypting with an AWS KMS keyring, you must specify a *generator key*, that is, an AWS KMS key that is used to generate the plaintext data key and encrypt it\. You can also specify zero or more *additional keys* that encrypt the same plaintext data key\. The keyring returns the plaintext data key and one encrypted copy of that data key for each AWS KMS key in the keyring, including the generator key\. To decrypt the data, you need to decrypt any one of the encrypted data keys\.  
+To specify the AWS KMS keys for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use [any supported AWS KMS key identifier](choose-keyring.md#kms-keyring-id)\. This example uses a generator key, which is identified by its [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-ARN), and one additional key, which is identified by a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\.  
+If you plan to reuse your AWS KMS keyring for decrypting, you must use key ARNs to identify the AWS KMS keys in the keyring\.
+Before running this code, replace the example AWS KMS key identifiers with valid identifiers\. You must have the [permissions required to use the AWS KMS keys](choose-keyring.md#kms-keyring-permissions) in the keyring\.  
 Begin by providing your credentials to the browser\. The AWS Encryption SDK for JavaScript examples use the [webpack\.DefinePlugin](https://webpack.js.org/plugins/define-plugin/), which replaces the credential constants with your actual credentials\. But you can use any method to provide your credentials\. Then, use the credentials to create an AWS KMS client\.  
 
 ```
@@ -35,7 +35,7 @@ const clientProvider = getClient(KMS, {
   }
 })
 ```
-Next, specify the AWS KMS CMKs for the generator key and additional key\. Then, create an AWS KMS keyring using the AWS KMS client and the CMKs\.  
+Next, specify the AWS KMS keys for the generator key and additional key\. Then, create an AWS KMS keyring using the AWS KMS client and the AWS KMS keys\.  
 
 ```
 const generatorKeyId = 'arn:aws:kms:us-west-2:111122223333:alias/EncryptDecrypt'
@@ -96,10 +96,10 @@ In this example, we decrypt the data that we encrypted in the [Encrypting data w
 
 Step 1: Construct the keyring\.  
 To decrypt the data, pass in the [encrypted message](concepts.md#message) \(`result`\) that the `encrypt` function returned\. The encrypted message includes the encrypted data, the encrypted data keys, and important metadata, including the encryption context and signature\.  
-You must also specify an [AWS KMS keyring](choose-keyring.md#use-kms-keyring) when decrypting\. You can use the same keyring that was used to encrypt the data or a different keyring\. To succeed, at least one CMK in the decryption keyring must be able to decrypt one of the encrypted data keys in the encrypted message\. Because no data keys are generated, you do not need to specify a generator key in a decryption keyring\. If you do, the generator key and additional keys are treated the same way\.  
-To specify a CMK for a decryption keyring in the AWS Encryption SDK for JavaScript, you must use the [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. Otherwise, the CMK is not recognized\. For help identifying CMKs in an AWS KMS keyring, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)  
-If you use the same keyring for encrypting and decrypting, use key ARNs to identify the CMKs in the keyring\.
-In this example, we create a keyring that includes only one of the CMKs in the encryption keyring\. Before running this code, replace the example key ARN with a valid one\. You must have `kms:Decrypt` permission on the CMK\.  
+You must also specify an [AWS KMS keyring](choose-keyring.md#use-kms-keyring) when decrypting\. You can use the same keyring that was used to encrypt the data or a different keyring\. To succeed, at least one AWS KMS key in the decryption keyring must be able to decrypt one of the encrypted data keys in the encrypted message\. Because no data keys are generated, you do not need to specify a generator key in a decryption keyring\. If you do, the generator key and additional keys are treated the same way\.  
+To specify an AWS KMS key for a decryption keyring in the AWS Encryption SDK for JavaScript, you must use the [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. Otherwise, the AWS KMS key is not recognized\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)  
+If you use the same keyring for encrypting and decrypting, use key ARNs to identify the AWS KMS keys in the keyring\.
+In this example, we create a keyring that includes only one of the AWS KMS keys in the encryption keyring\. Before running this code, replace the example key ARN with a valid one\. You must have `kms:Decrypt` permission on the AWS KMS key\.  
 Begin by providing your credentials to the browser\. The AWS Encryption SDK for JavaScript examples use the [webpack\.DefinePlugin](https://webpack.js.org/plugins/define-plugin/), which replaces the credential constants with your actual credentials\. But you can use any method to provide your credentials\. Then, use the credentials to create an AWS KMS client\.  
 
 ```
@@ -113,7 +113,7 @@ const clientProvider = getClient(KMS, {
   }
 })
 ```
-Next, create an AWS KMS keyring using the AWS KMS client\. This example uses just one of the CMKs from the encryption keyring\.  
+Next, create an AWS KMS keyring using the AWS KMS client\. This example uses just one of the AWS KMS keys from the encryption keyring\.  
 
 ```
 const keyIds = ['arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab']

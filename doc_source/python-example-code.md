@@ -12,7 +12,7 @@ The examples in this section show how to use [version 2\.0\.*x*](about-versions.
 
 ## Encrypting and decrypting strings<a name="python-example-strings"></a>
 
-The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. This example uses a customer master key \(CMK\) in [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as the master key\.
+The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. This example uses an AWS KMS key in [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as the master key\.
 
 When encrypting, the `StrictAwsKmsMasterKeyProvider` constructor takes a key ID, key ARN, alias name, or alias ARN\. When decrypting, [it requires a key ARN](concepts.md#specifying-keys)\. In this case, because the `keyArn` parameter is used for encrypting and decrypting, its value must be a key ARN\. For information about IDs for AWS KMS keys, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 
@@ -35,9 +35,9 @@ from aws_encryption_sdk import CommitmentPolicy
 
 
 def cycle_string(key_arn, source_plaintext, botocore_session=None):
-    """Encrypts and then decrypts a string under an AWS KMS customer master key (CMK).
+    """Encrypts and then decrypts a string under an AWS KMS key.
 
-    :param str key_arn: Amazon Resource Name (ARN) of the AWS KMS CMK
+    :param str key_arn: Amazon Resource Name (ARN) of the AWS KMS key
     :param bytes source_plaintext: Data to encrypt
     :param botocore_session: existing botocore session instance
     :type botocore_session: botocore.session.Session
@@ -180,7 +180,7 @@ def cycle_file(source_plaintext_filename):
 
 ## Encrypting and decrypting byte streams with multiple master key providers<a name="python-example-multiple-providers"></a>
 
-The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses an AWS KMS customer master key \(CMK\) and an RSA key pair as the master keys\.
+The following example shows you how to use the AWS Encryption SDK with more than one master key provider\. Using more than one master key provider creates redundancy if one master key provider is unavailable for decryption\. This example uses an AWS KMS key and an RSA key pair as the master keys\.
 
 This example encrypts with the [default algorithm suite](supported-algorithms.md), which includes a [digital signature](concepts.md#digital-sigs)\. When streaming, the AWS Encryption SDK releases plaintext after integrity checks, but before it has verified the digital signature\. To avoid using the plaintext until the signature is verified, this example buffers the plaintext, and writes it to disk only when decryption and verification are complete\. 
 
@@ -252,7 +252,7 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
     key provider. Both master key providers are used to encrypt the plaintext file, so either one alone
     can decrypt it.
 
-    :param str key_arn: Amazon Resource Name (ARN) of the AWS KMS customer master key (CMK)
+    :param str key_arn: Amazon Resource Name (ARN) of the AWS KMS key
     (http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)
     :param str source_plaintext_filename: Filename of file to encrypt
     :param botocore_session: existing botocore session instance
@@ -326,7 +326,7 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
 
 The following example shows how to use [data key caching](data-key-caching.md) in the AWS Encryption SDK for Python\. It is designed to show you how to configure an instance of the [local cache](data-caching-details.md#simplecache) \(LocalCryptoMaterialsCache\) with the required capacity value and an instance of the [caching cryptographic materials manager](data-caching-details.md#caching-cmm) \(caching CMM\) with [cache security thresholds](thresholds.md)\. 
 
-This very basic example creates a function that encrypts a fixed string\. It lets you specify an AWS KMS CMK, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data key caching example code](sample-cache-example-code.md)\.
+This very basic example creates a function that encrypts a fixed string\. It lets you specify an AWS KMS key, the required cache size \(capacity\), and a maximum age value\. For a more complex, real\-world example of data key caching, see [Data key caching example code](sample-cache-example-code.md)\.
 
 Although it is optional, this example also uses an [encryption context](concepts.md#encryption-context) as additional authenticated data\. When you decrypt data that was encrypted with an encryption context, be sure that your application verifies that the encryption context is the one that you expect before returning the plaintext data to your caller\. An encryption context is a best practice element of any encryption or decryption operation, but it plays a special role in data key caching\. For details, see [Encryption Context: How to Select Cache Entries](data-caching-details.md#caching-encryption-context)\.
 
@@ -348,10 +348,10 @@ import aws_encryption_sdk
 from aws_encryption_sdk import CommitmentPolicy
 
 
-def encrypt_with_caching(kms_cmk_arn, max_age_in_cache, cache_capacity):
-    """Encrypts a string using an AWS KMS customer master key (CMK) and data key caching.
+def encrypt_with_caching(kms_key_arn, max_age_in_cache, cache_capacity):
+    """Encrypts a string using an AWS KMS key and data key caching.
 
-    :param str kms_cmk_arn: Amazon Resource Name (ARN) of the AWS KMS customer master key (CMK)
+    :param str kms_key_arn: Amazon Resource Name (ARN) of the AWS KMS key
     :param float max_age_in_cache: Maximum time in seconds that a cached entry can be used
     :param int cache_capacity: Maximum number of entries to retain in cache at once
     """
@@ -369,8 +369,8 @@ def encrypt_with_caching(kms_cmk_arn, max_age_in_cache, cache_capacity):
     # commitment policy, REQUIRE_ENCRYPT_REQUIRE_DECRYPT is used by default.
     client = aws_encryption_sdk.EncryptionSDKClient(commitment_policy=CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT)
 
-    # Create a master key provider for the KMS customer master key (CMK)
-    key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_cmk_arn])
+    # Create a master key provider for the AWS KMS key
+    key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_key_arn])
 
     # Create a local cache
     cache = aws_encryption_sdk.LocalCryptoMaterialsCache(cache_capacity)

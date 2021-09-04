@@ -95,12 +95,12 @@ This example sets the commitment policy\. It also uses the `--wrapping-keys` par
 
 ```
 \\ To run this example, replace the fictitious key ARN with a valid value. 
-$ cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$ keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 \\ Encrypt your plaintext data - no change to algorithm suite used
 $ aws-encryption-cli --encrypt \
                      --input hello.txt \
-                     --wrapping-keys key=$cmkArn \
+                     --wrapping-keys key=$keyArn \
                      --commitment-policy forbid-encrypt-allow-decrypt \
                      --metadata-output ~/metadata \
                      --encryption-context purpose=test \
@@ -109,7 +109,7 @@ $ aws-encryption-cli --encrypt \
 \\ Decrypt your ciphertext - supports key commitment on 1.7 and later
 $ aws-encryption-cli --decrypt \
                      --input hello.txt.encrypted \
-                     --wrapping-keys key=$cmkArn \
+                     --wrapping-keys key=$keyArn \
                      --commitment-policy forbid-encrypt-allow-decrypt \
                      --encryption-context purpose=test \
                      --metadata-output ~/metadata \
@@ -134,10 +134,10 @@ final AwsCrypto crypto = AwsCrypto.builder()
     .build();
 
 // Create a master key provider in strict mode
-String awsKmsCmk = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";
+String awsKmsKey = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";
 
 KmsMasterKeyProvider masterKeyProvider = KmsMasterKeyProvider.builder()
-    .buildStrict(awsKmsCmk);
+    .buildStrict(awsKmsKey);
 
 // Encrypt your plaintext data
 CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(
@@ -187,7 +187,7 @@ Beginning in version 1\.7\.*x* of the AWS Encryption SDK for Python, you set the
 
 In version 1\.7\.*x*, the `EncryptionSDKClient` constructor requires the `CommitmentPolicy.ForbidEncryptAllowDecrypt` enumerated value\. Beginning in version 2\.0\.*x*, the commitment policy argument is optional and the default value is `CommitmentPolicy.RequireEncryptRequireDecrypt`\.
 
-This example uses the new `EncryptionSDKClient` constructor and sets the commitment policy to the 1\.7\.*x* default value\. The constructor instantiates a client that represents the AWS Encryption SDK\. When you call the `encrypt`, `decrypt`, or `stream` methods on this client, they enforce the commitment policy that you set\. This example also uses the new constructor for the `StrictAwsKmsMasterKeyProvider` class, which specifies AWS KMS CMKs when encrypting and decrypting\. 
+This example uses the new `EncryptionSDKClient` constructor and sets the commitment policy to the 1\.7\.*x* default value\. The constructor instantiates a client that represents the AWS Encryption SDK\. When you call the `encrypt`, `decrypt`, or `stream` methods on this client, they enforce the commitment policy that you set\. This example also uses the new constructor for the `StrictAwsKmsMasterKeyProvider` class, which specifies AWS KMS keys when encrypting and decrypting\. 
 
 For a complete example, see [set\_commitment\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/set_commitment.py)\.
 
@@ -196,9 +196,9 @@ For a complete example, see [set\_commitment\.py](https://github.com/aws/aws-enc
 client = EncryptionSDKClient(CommitmentPolicy.ForbidEncryptAllowDecrypt)
 
 // Create a master key provider in strict mode
-aws_kms_cmk = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+aws_kms_key = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
 aws_kms_strict_master_key_provider = StrictAwsKmsMasterKeyProvider(
-        key_ids=[aws_kms_cmk]
+        key_ids=[aws_kms_key]
 )
 
 # Encrypt your plaintext data

@@ -11,7 +11,7 @@ The AWS Encryption SDK answers questions like the following for you:
 + How do I ensure that the intended recipient can read my encrypted data?
 + How can I ensure my encrypted data is not modified between the time it is written and when it is read?
 
-With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java or Python\) or a keyring \(C or JavaScript\) that determines which master keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
+With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java or Python\) or a [keyring](concepts.md#keyring) \(C or JavaScript\) that determines which master keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
 
 Without the AWS Encryption SDK, you might spend more effort on building an encryption solution than on the core functionality of your application\. The AWS Encryption SDK answers these questions by providing the following things\.
 
@@ -21,12 +21,12 @@ The AWS Encryption SDK encrypts your data using a secure, authenticated, symmetr
 
 **A framework for protecting data keys with master keys**  
 The AWS Encryption SDK protects the data keys that encrypt your data by encrypting them under one or more master keys\. By providing a framework to encrypt data keys with more than one master key, the AWS Encryption SDK helps make your encrypted data portable\.   
-For example, you can encrypt data under multiple AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\), each in a different AWS Region\. Then you can copy the encrypted data to any of the regions and use the CMK in that region to decrypt it\. You can also encrypt data under a CMK in AWS KMS and a master key in an on\-premises HSM, enabling you to later decrypt the data even if one of the options is unavailable\.
+For example, you can encrypt data under multiple AWS KMS keys, each in a different AWS Region\. Then you can copy the encrypted data to any of the regions and use the AWS KMS key in that region to decrypt it\. You can also encrypt data under an AWS KMS key in AWS KMS and a master key in an on\-premises HSM, enabling you to later decrypt the data even if one of the options is unavailable\.
 
 **A formatted message that stores encrypted data keys with the encrypted data**  
 The AWS Encryption SDK stores the encrypted data and encrypted data key together in an [encrypted message](concepts.md#message) that uses a defined data format\. This means you don't need to keep track of or protect the data keys that encrypt your data because the AWS Encryption SDK does it for you\.
 
-Some language implementations of the AWS Encryption SDK require an AWS SDK, but the AWS Encryption SDK doesn't require an AWS account and it doesn't depend on any AWS service\. You need an AWS account only if you choose to use [AWS Key Management Service](https://docs.aws.amazon.com/kms/latest/developerguide/) \(AWS KMS\) customer master keys to protect your data\.
+Some language implementations of the AWS Encryption SDK require an AWS SDK, but the AWS Encryption SDK doesn't require an AWS account and it doesn't depend on any AWS service\. You need an AWS account only if you choose to use [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#kms-keys) to protect your data\.
 
 ## Compatibility with encryption libraries and services<a name="intro-compatibility"></a>
 
@@ -35,12 +35,12 @@ The AWS Encryption SDK is supported in several [programming languages](programmi
 However, the AWS Encryption SDK cannot interoperate with other libraries\. Because each library returns encrypted data in a different format, you cannot encrypt with one library and decrypt with another\.
 
 **DynamoDB Encryption Client and Amazon S3 client\-side encryption**  <a name="ESDK-DDBEC"></a>
-The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. And these libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
+The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. And these libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
 
 **AWS Key Management Service \(AWS KMS\)**  <a name="ESDK-KMS"></a>
-The AWS Encryption SDK can use [AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/) [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\) and [data keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys) to protect your data\. For example, you can configure the AWS Encryption SDK to encrypt your data under one or more CMKs in your AWS account\. However, you must use the AWS Encryption SDK to decrypt that data\.   
+The AWS Encryption SDK can use [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) and [data keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys) to protect your data\. For example, you can configure the AWS Encryption SDK to encrypt your data under one or more AWS KMS keys in your AWS account\. However, you must use the AWS Encryption SDK to decrypt that data\.   
 The AWS Encryption SDK cannot decrypt the ciphertext that the AWS KMS [Encrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html) or [ReEncrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_ReEncrypt.html) operations return\. Similarly, the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\.  
-The AWS Encryption SDK supports only [symmetric CMKs](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#symmetric-cmks)\. You cannot use an [asymmetric CMK](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#asymmetric-cmks) for encryption or signing in the AWS Encryption SDK\. The AWS Encryption SDK generates its own ECDSA signing keys for [algorithm suites](supported-algorithms.md) that sign messages\.
+The AWS Encryption SDK supports only [symmetric AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#symmetric-cmks)\. You cannot use an [asymmetric AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#asymmetric-cmks) for encryption or signing in the AWS Encryption SDK\. The AWS Encryption SDK generates its own ECDSA signing keys for [algorithm suites](supported-algorithms.md) that sign messages\.
 
 For help deciding which library or service to use, see [How to Choose an Encryption Tool or Service](https://docs.aws.amazon.com/crypto/latest/userguide/awscryp-overview.html) in *AWS Cryptographic Services and Tools*\.
 

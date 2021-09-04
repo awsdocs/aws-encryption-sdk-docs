@@ -6,9 +6,9 @@ Use the following examples to try the AWS Encryption CLI on the platform you pre
 The following examples use the syntax for AWS Encryption CLI version 2\.1\.*x*\.   
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
-For an example showing how to use the security feature that limits encrypted data keys, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+For an example showing how to use the security feature that limits encrypted data keys, see [Limit encrypted data keys](configure.md#config-limit-keys)\.
 
-For an example showing how to use AWS KMS multi\-Region keys, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+For an example showing how to use AWS KMS multi\-Region keys, see [Use multi\-Region AWS KMS keys](configure.md#config-mrks)\.
 
 **Topics**
 + [Encrypting a file](#cli-example-encrypt-file)
@@ -26,9 +26,9 @@ This example uses the AWS Encryption CLI to encrypt the contents of the `hello.t
 
 When you run an encrypt command on a file, the AWS Encryption CLI gets the contents of the file, generates a unique [data key](concepts.md#DEK), encrypts the file contents under the data key, and then writes the [encrypted message](concepts.md#message) to a new file\. 
 
-The first command saves the key ARN of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\. When encrypting with a CMK, you can identify it by using a key ID, key ARN, alias name, or alias ARN\. For details about the key identifiers for an AWS KMS customer master key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
+The first command saves the key ARN of an AWS KMS key in the `$keyArn` variable\. When encrypting with an AWS KMS key, you can identify it by using a key ID, key ARN, alias name, or alias ARN\. For details about the key identifiers for an AWS KMS key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 
-The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--wrapping-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the CMK represented by the key ARN\. 
+The second command encrypts the file contents\. The command uses the `--encrypt` parameter to specify the operation and the `--input` parameter to indicate the file to encrypt\. The [`--wrapping-keys` parameter](crypto-cli-how-to.md#crypto-cli-master-key), and its required **key** attribute, tell the command to use the AWS KMS key represented by the key ARN\. 
 
 The command uses the `--metadata-output` parameter to specify a text file for the metadata about the encryption operation\. As a best practice, the command uses the `--encryption-context` parameter to specify an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context)\. 
 
@@ -41,11 +41,11 @@ The value of the `--output` parameter, a dot \(\.\), tells the command to write 
 
 ```
 \\ To run this example, replace the fictitious key ARN with a valid value.
-$ cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$ keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $ aws-encryption-cli --encrypt \
                      --input hello.txt \
-                     --wrapping-keys key=$cmkArn \
+                     --wrapping-keys key=$keyArn \
                      --metadata-output ~/metadata \
                      --encryption-context purpose=test \
                      --commitment-policy require-encrypt-require-decrypt \
@@ -57,11 +57,11 @@ $ aws-encryption-cli --encrypt \
 
 ```
 # To run this example, replace the fictitious key ARN with a valid value.
-PS C:\> $CmkArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+PS C:\> $keyArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
 
 PS C:\> aws-encryption-cli --encrypt `
                            --input Hello.txt `
-                           --wrapping-keys key=$CmkArn `
+                           --wrapping-keys key=$keyArn `
                            --metadata-output $home\Metadata.txt `
                            --commitment-policy require-encrypt-require-decrypt `
                            --encryption-context purpose=test `
@@ -124,7 +124,7 @@ This example uses the AWS Encryption CLI to decrypt the contents of the `Hello.t
 
 The decrypt command uses the `--decrypt` parameter to indicate the operation and `--input` parameter to identify the file to decrypt\. The value of the `--output` parameter is a dot that represents the current directory\. 
 
-The `--wrapping-keys` parameter with a **key** attribute specifies the wrapping key used to decrypt the encrypted message\. In decrypt commands with AWS KMS CMKs, the value of the key attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. The `--wrapping-keys` parameter is required in a decrypt command\. If you are using AWS KMS CMKs, you can use the **key** attribute to specify CMKs for decrypting or the **discovery** attribute with a value of `true` \(but not both\)\. If you are using a custom master key provider, the **key** and **provider** attributes are required\. 
+The `--wrapping-keys` parameter with a **key** attribute specifies the wrapping key used to decrypt the encrypted message\. In decrypt commands with AWS KMS keys, the value of the key attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. The `--wrapping-keys` parameter is required in a decrypt command\. If you are using AWS KMS keys, you can use the **key** attribute to specify AWS KMS keys for decrypting or the **discovery** attribute with a value of `true` \(but not both\)\. If you are using a custom master key provider, the **key** and **provider** attributes are required\. 
 
 The [`--commitment-policy` parameter](crypto-cli-reference.md#syntax-commitment-policy) is optional beginning in version 2\.1\.*x*, but it is recommended\. Using it explicitly makes your intent clear, even if you specify the default value, `require-encrypt-require-decrypt`\.
 
@@ -132,7 +132,7 @@ The `--encryption-context` parameter is optional in the decrypt command, even wh
 
 The `--metadata-output` parameter specifies a file for metadata about the decryption operation\. The value of the `--output` parameter, a dot \(\.\), writes the output file to the current directory\. 
 
-As a best practice, use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Specify the expected number of encrypted data keys \(one for each wrapping key used in encryption\) or a reasonable maximum \(such as 5\)\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+As a best practice, use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Specify the expected number of encrypted data keys \(one for each wrapping key used in encryption\) or a reasonable maximum \(such as 5\)\. For details, see [Limit encrypted data keys](configure.md#config-limit-keys)\.
 
 The `--buffer` returns plaintext only after all input is processed, including verifying the digital signature if one is present\.
 
@@ -141,11 +141,11 @@ The `--buffer` returns plaintext only after all input is processed, including ve
 
 ```
 \\ To run this example, replace the fictitious key ARN with a valid value.
-$ cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$ keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $ aws-encryption-cli --decrypt \
                      --input hello.txt.encrypted \
-                     --wrapping-keys key=$cmkArn \
+                     --wrapping-keys key=$keyArn \
                      --commitment-policy require-encrypt-require-decrypt \
                      --encryption-context purpose=test \
                      --metadata-output ~/metadata \
@@ -159,11 +159,11 @@ $ aws-encryption-cli --decrypt \
 
 ```
 \\ To run this example, replace the fictitious key ARN with a valid value.
-PS C:\> $cmkArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+PS C:\> $keyArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
 
 PS C:\> aws-encryption-cli --decrypt `
                            --input Hello.txt.encrypted `
-                           --wrapping-keys key=$cmkArn `
+                           --wrapping-keys key=$keyArn `
                            --commitment-policy require-encrypt-require-decrypt `
                            --encryption-context purpose=test `
                            --metadata-output $home\Metadata.txt `
@@ -241,7 +241,7 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
+The first command saves the [Amazon Resource Name \(ARN\)](https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html#find-cmk-id-arn) of an AWS KMS key in the `$keyArn` variable\.
 
 The second command encrypts the content of files in the `TestDir` directory and writes the files of encrypted content to the `TestEnc` directory\. If the `TestEnc` directory doesn't exist, the command fails\. Because the input location is a directory, the `--recursive` parameter is required\. 
 
@@ -260,11 +260,11 @@ The final command lists the files in the `TestEnc` directory\. There is one outp
 
 ```
 # To run this example, replace the fictitious key ARN with a valid master key identifier.
-$  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$  keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $ aws-encryption-cli --encrypt \
                      --input testdir --recursive\
-                     --wrapping-keys key=$cmkArn \
+                     --wrapping-keys key=$keyArn \
                      --encryption-context dept=IT \
                      --commitment-policy require-encrypt-require-decrypt \
                      --metadata-output ~/metadata \
@@ -279,11 +279,11 @@ cool-new-thing.py.encrypted  employees.csv.encrypted  hello.txt.encrypted
 
 ```
 # To run this example, replace the fictitious key ARN with a valid master key identifier.
-PS C:\> $cmkArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+PS C:\> $keyArn = arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 PS C:\> aws-encryption-cli --encrypt `
                            --input .\TestDir --recursive `
-                           --wrapping-keys key=$cmkArn `
+                           --wrapping-keys key=$keyArn `
                            --encryption-context dept=IT `
                            --commitment-policy require-encrypt-require-decrypt `
                            --metadata-output .\Metadata\Metadata.txt `
@@ -331,7 +331,7 @@ Mode                LastWriteTime         Length Name
 
 ------
 
-This decrypt command decrypts all of the files in the TestEnc directory and writes the plaintext files to the TestDec directory\. The `--wrapping-keys` parameter with a **key** attribute and a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) value tells the AWS Encryption CLI which CMKs to use to decrypt the files\. The command uses the `--interactive` parameter to tell the AWS Encryption CLI to prompt you before overwriting a file with the same name\.
+This decrypt command decrypts all of the files in the TestEnc directory and writes the plaintext files to the TestDec directory\. The `--wrapping-keys` parameter with a **key** attribute and a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) value tells the AWS Encryption CLI which AWS KMS keys to use to decrypt the files\. The command uses the `--interactive` parameter to tell the AWS Encryption CLI to prompt you before overwriting a file with the same name\.
 
 This command also uses the encryption context that was provided when the files were encrypted\. When decrypting multiple files, the AWS Encryption CLI checks the encryption context of every file\. If the encryption context check on any file fails, the AWS Encryption CLI rejects the file, writes a warning, records the failure in the metadata, and then continues checking the remaining files\. If the AWS Encryption CLI fails to decrypt a file for any other reason, the entire decrypt command fails immediately\. 
 
@@ -344,11 +344,11 @@ The decrypt command does not return any output, but you can use a directory list
 
 ```
 # To run this example, replace the fictitious key ARN with a valid master key identifier.
-$ cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$ keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $ aws-encryption-cli --decrypt \
                      --input testenc --recursive \
-                     --wrapping-keys key=$cmkArn \
+                     --wrapping-keys key=$keyArn \
                      --encryption-context dept=IT \
                      --commitment-policy require-encrypt-require-decrypt \
                      --metadata-output ~/metadata \
@@ -365,11 +365,11 @@ cool-new-thing.py.encrypted.decrypted  hello.txt.encrypted.decrypted  employees.
 
 ```
 # To run this example, replace the fictitious key ARN with a valid master key identifier.
-PS C:\> $cmkArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+PS C:\> $keyArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
 
 PS C:\> aws-encryption-cli --decrypt `
                            --input C:\TestEnc --recursive `
-                           --wrapping-keys key=$cmkArn `
+                           --wrapping-keys key=$keyArn `
                            --encryption-context dept=IT `
                            --commitment-policy require-encrypt-require-decrypt `
                            --metadata-output $home\Metadata.txt `
@@ -396,25 +396,25 @@ These examples show you how to pipe input to commands \(stdin\) and write output
 This example pipes a plaintext string to an encrypt command and saves the encrypted message in a variable\. Then, it pipes the encrypted message in the variable to a decrypt command, which writes its output to the pipeline \(stdout\)\. 
 
 The example consists of three commands:
-+ The first command saves the [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) of an AWS KMS customer master key \(CMK\) in the `$cmkArn` variable\.
++ The first command saves the [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) of an AWS KMS key in the `$keyArn` variable\.
 
 ------
 #### [ Bash ]
 
   ```
-  $  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+  $  keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
   ```
 
 ------
 #### [ PowerShell ]
 
   ```
-  PS C:\> $cmkArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+  PS C:\> $keyArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
   ```
 
 ------
 
-   
+   
 + The second command pipes the `Hello World` string to the encrypt command and saves the result in the `$encrypted` variable\. 
 
   The `--input` and `--output` parameters are required in all AWS Encryption CLI commands\. To indicate that input is being piped to the command \(stdin\), use a hyphen \(`-`\) for the value of the `--input` parameter\. To send the output to the command line \(stdout\), use a hyphen for the value of the `--output` parameter\. 
@@ -429,7 +429,7 @@ The example consists of three commands:
   ```
   $ encrypted=$(echo 'Hello World' | aws-encryption-cli --encrypt -S \
                                                         --input - --output - --encode \
-                                                        --wrapping-keys key=$cmkArn )
+                                                        --wrapping-keys key=$keyArn )
   ```
 
 ------
@@ -438,17 +438,17 @@ The example consists of three commands:
   ```
   PS C:\> $encrypted = 'Hello World' | aws-encryption-cli --encrypt -S `
                                                           --input - --output - --encode `
-                                                          --wrapping-keys key=$cmkArn
+                                                          --wrapping-keys key=$keyArn
   ```
 
 ------
 
-   
+   
 + The third command pipes the encrypted message in the `$encrypted` variable to the decrypt command\. 
 
   This decrypt command uses `--input -` to indicate that input is coming from the pipeline \(stdin\) and `--output -` to send the output to the pipeline \(stdout\)\. \(The input parameter takes the location of the input, not the actual input bytes, so you cannot use the `$encrypted` variable as the value of the `--input` parameter\.\) 
 
-  This example uses the **discovery** attribute of the `--wrapping-keys` parameter to allow the AWS Encryption CLI to use any CMK to decrypt the data\. It doesn't specify a [commitment policy](concepts.md#commitment-policy), so it uses the default value for version 2\.1\.*x* and later, `require-encrypt-require-decrypt`\.
+  This example uses the **discovery** attribute of the `--wrapping-keys` parameter to allow the AWS Encryption CLI to use any AWS KMS key to decrypt the data\. It doesn't specify a [commitment policy](concepts.md#commitment-policy), so it uses the default value for version 2\.1\.*x* and later, `require-encrypt-require-decrypt`\.
 
   Because the output was encrypted and then encoded, the decrypt command uses the `--decode` parameter to decode Base64\-encoded input before decrypting it\. You can also use the `--decode` parameter to decode Base64\-encoded input before encrypting it\.
 
@@ -480,10 +480,10 @@ As in the previous example, the `--input` and `--output` parameters have a `-` v
 #### [ Bash ]
 
 ```
-$  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$  keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $  echo 'Hello World' |
-          aws-encryption-cli --encrypt --wrapping-keys key=$cmkArn --input - --output - --encode -S |
+          aws-encryption-cli --encrypt --wrapping-keys key=$keyArn --input - --output - --encode -S |
           aws-encryption-cli --decrypt --wrapping-keys discovery=true --input - --output - --decode -S
 Hello World
 ```
@@ -492,10 +492,10 @@ Hello World
 #### [ PowerShell ]
 
 ```
-PS C:\> $cmkArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+PS C:\> $keyArn = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
 
 PS C:\> 'Hello World' |
-               aws-encryption-cli --encrypt --wrapping-keys key=$cmkArn --input - --output - --encode -S |
+               aws-encryption-cli --encrypt --wrapping-keys key=$keyArn --input - --output - --encode -S |
                aws-encryption-cli --decrypt --wrapping-keys discovery=$true --input - --output - --decode -S
 Hello World
 ```
@@ -518,54 +518,54 @@ It writes the encrypted message to the `Archive` directory\. The command uses th
 
 The command uses the `--wrapping-keys` parameter with three **key** attributes\. You can also use multiple `--wrapping-keys` parameters in the same command\. 
 
-To encrypt the log file, the AWS Encryption CLI asks the first wrapping key in the list, `$cmk1`, to generate the data key that it uses to encrypt the data\. Then, it uses each of the other wrapping keys to encrypt a plaintext copy of the same data key\. The encrypted message in the output file includes all three of the encrypted data keys\. 
+To encrypt the log file, the AWS Encryption CLI asks the first wrapping key in the list, `$key1`, to generate the data key that it uses to encrypt the data\. Then, it uses each of the other wrapping keys to encrypt a plaintext copy of the same data key\. The encrypted message in the output file includes all three of the encrypted data keys\. 
 
 ------
 #### [ Bash ]
 
 ```
-$ cmk1=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
-$ cmk2=arn:aws:kms:us-east-2:111122223333:key/0987ab65-43cd-21ef-09ab-87654321cdef
-$ cmk3=arn:aws:kms:ap-southeast-1:111122223333:key/1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d
+$ key1=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$ key2=arn:aws:kms:us-east-2:111122223333:key/0987ab65-43cd-21ef-09ab-87654321cdef
+$ key3=arn:aws:kms:ap-southeast-1:111122223333:key/1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d
 
 $ aws-encryption-cli --encrypt --input /logs/finance.log \
                                --output /archive --suffix \
                                --encryption-context class=log \
                                --metadata-output ~/metadata \
-                               --wrapping-keys key=$cmk1 key=$cmk2 key=$cmk3
+                               --wrapping-keys key=$key1 key=$key2 key=$key3
 ```
 
 ------
 #### [ PowerShell ]
 
 ```
-PS C:\> $cmk1 = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
-PS C:\> $cmk2 = 'arn:aws:kms:us-east-2:111122223333:key/0987ab65-43cd-21ef-09ab-87654321cdef'
-PS C:\> $cmk3 = 'arn:aws:kms:ap-southeast-1:111122223333:key/1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d'
+PS C:\> $key1 = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+PS C:\> $key2 = 'arn:aws:kms:us-east-2:111122223333:key/0987ab65-43cd-21ef-09ab-87654321cdef'
+PS C:\> $key3 = 'arn:aws:kms:ap-southeast-1:111122223333:key/1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d'
 
 PS C:\> aws-encryption-cli --encrypt --input D:\Logs\Finance.log `
                            --output D:\Archive --suffix `
                            --encryption-context class=log `
                            --metadata-output $home\Metadata.txt `
-                           --wrapping-keys key=$cmk1 key=$cmk2 key=$cmk3
+                           --wrapping-keys key=$key1 key=$key2 key=$key3
 ```
 
 ------
 
-This command decrypts the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. To decrypt data encrypted under three CMKs, you can specify the same three CMKs or any subset of them\. This example specifies only one of the CMKs\.
+This command decrypts the encrypted copy of the `Finance.log` file and writes it to a `Finance.log.clear` file in the `Finance` directory\. To decrypt data encrypted under three AWS KMS keys, you can specify the same three AWS KMS keys or any subset of them\. This example specifies only one of the AWS KMS keys\.
 
-To tell the AWS Encryption CLI which AWS KMS CMKs to use to decrypt your data, use the **key** attribute of the `--wrapping-keys` parameter\. When decrypting with CMKs, the value of the **key** attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\.
+To tell the AWS Encryption CLI which AWS KMS keys to use to decrypt your data, use the **key** attribute of the `--wrapping-keys` parameter\. When decrypting with AWS KMS keys, the value of the **key** attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\.
 
-You must have permission to call the [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the CMKs you specify\. For more information, see [ Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
+You must have permission to call the [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) on the AWS KMS keys you specify\. For more information, see [ Authentication and Access Control for AWS KMS](https://docs.aws.amazon.com/kms/latest/developerguide/control-access.html)\. 
 
-As a best practice, this examples use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Even though this example uses only one wrapping key for decryption, the encrypted message has three \(3\) encrypted data keys; one for each of the three wrapping keys used when encrypting\. Specify the expected number of encrypted data keys or a reasonable maximum value, such as 5\. If you specify a maximum value less than 3, the command fails\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+As a best practice, this examples use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Even though this example uses only one wrapping key for decryption, the encrypted message has three \(3\) encrypted data keys; one for each of the three wrapping keys used when encrypting\. Specify the expected number of encrypted data keys or a reasonable maximum value, such as 5\. If you specify a maximum value less than 3, the command fails\. For details, see [Limit encrypted data keys](configure.md#config-limit-keys)\.
 
 ------
 #### [ Bash ]
 
 ```
 $ aws-encryption-cli --decrypt --input /archive/finance.log \
-                     --wrapping-keys key=$cmk1 \
+                     --wrapping-keys key=$key1 \
                      --output /finance --suffix '.clear' \
                      --metadata-output ~/metadata \
                      --max-encrypted-data-keys 3 \
@@ -579,7 +579,7 @@ $ aws-encryption-cli --decrypt --input /archive/finance.log \
 ```
 PS C:\> aws-encryption-cli --decrypt `
                            --input D:\Archive\Finance.log `
-                           --wrapping-keys key=$cmk1 `
+                           --wrapping-keys key=$key1 `
                            --output D:\Finance --suffix '.clear' `
                            --metadata-output .\Metadata\Metadata.txt `
                            --max-encrypted-data-keys 3 `
@@ -781,7 +781,7 @@ By default, the AWS Encryption CLI \(and other versions of the AWS Encryption SD
 
 In this example, data key caching speeds up the encryption operation by reducing the frequency of requests to the master key provider\.
 
-The command in this example encrypts a large directory with multiple subdirectories that contain a total of approximately 800 small log files\. The first command saves the ARN of the CMK in a `cmkARN` variable\. The second command encrypts all of the files in the input directory \(recursively\) and writes them to an archive directory\. The command uses the `--suffix` parameter to specify the `.archive` suffix\. 
+The command in this example encrypts a large directory with multiple subdirectories that contain a total of approximately 800 small log files\. The first command saves the ARN of the AWS KMS key in a `keyARN` variable\. The second command encrypts all of the files in the input directory \(recursively\) and writes them to an archive directory\. The command uses the `--suffix` parameter to specify the `.archive` suffix\. 
 
 The `--caching` parameter enables data key caching\. The **capacity** attribute, which limits the number of data keys in the cache, is set to 1, because serial file processing never uses more than one data key at a time\. The **max\_age** attribute, which determines how long the cached data key can used, is set to 10 seconds\. 
 
@@ -793,12 +793,12 @@ To run this command on log files that your operating system generates, you might
 #### [ Bash ]
 
 ```
-$  cmkArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+$  keyArn=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 
 $  aws-encryption-cli --encrypt \
                       --input /var/log/httpd --recursive \
                       --output ~/archive --suffix .archive \
-                      --wrapping-keys key=$cmkArn \
+                      --wrapping-keys key=$keyArn \
                       --encryption-context class=log \
                       --suppress-metadata \
                       --caching capacity=1 max_age=10 max_messages_encrypted=10
@@ -808,12 +808,12 @@ $  aws-encryption-cli --encrypt \
 #### [ PowerShell ]
 
 ```
-PS C:\> $cmkARN = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+PS C:\> $keyARN = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
 
 PS C:\> aws-encryption-cli --encrypt `
                            --input C:\Windows\Logs --recursive `
                            --output $home\Archive --suffix '.archive' `
-                           --wrapping-keys key=$cmkARN `
+                           --wrapping-keys key=$keyARN `
                            --encryption-context class=log `
                            --suppress-metadata `
                            --caching capacity=1 max_age=10 max_messages_encrypted=10
@@ -827,7 +827,7 @@ To test the effect of data key caching, this example uses the [Measure\-Command]
 PS C:\> Measure-Command {aws-encryption-cli --encrypt `
                                             --input C:\Windows\Logs --recursive `
                                             --output $home\Archive  --suffix '.archive' `
-                                            --wrapping-keys key=$cmkARN `
+                                            --wrapping-keys key=$keyARN `
                                             --encryption-context class=log `
                                             --suppress-metadata }
 
@@ -851,7 +851,7 @@ Data key caching makes the process quicker, even when you limit each data key to
 PS C:\> Measure-Command {aws-encryption-cli --encrypt `
                                             --input C:\Windows\Logs --recursive `
                                             --output $home\Archive  --suffix '.archive' `
-                                            --wrapping-keys key=$cmkARN `
+                                            --wrapping-keys key=$keyARN `
                                             --encryption-context class=log `
                                             --suppress-metadata `
                                             --caching capacity=1 max_age=10 max_messages_encrypted=10}
@@ -876,7 +876,7 @@ If you eliminate the `max_messages_encrypted` restriction, all files are encrypt
 PS C:\> Measure-Command {aws-encryption-cli --encrypt `
                                             --input C:\Windows\Logs --recursive `
                                             --output $home\Archive  --suffix '.archive' `
-                                            --wrapping-keys key=$cmkARN `
+                                            --wrapping-keys key=$keyARN `
                                             --encryption-context class=log `
                                             --suppress-metadata `
                                             --caching capacity=1 max_age=10}

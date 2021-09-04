@@ -242,12 +242,12 @@ The data consumer is an [AWS Lambda](https://aws.amazon.com/lambda/) function th
 
 Like the producer code, the consumer code enables data key caching by using a caching cryptographic materials manager \(caching CMM\) in calls to the decrypt method\. 
 
-The Java code builds a master key provider in *strict mode* with a specified AWS KMS customer master key \(CMK\)\. Strict mode isn't required when decrypting, but it's a [best practice](best-practices.md#strict-discovery-mode)\. The Python code uses *discovery mode*, which lets the AWS Encryption SDK use any wrapping key that encrypted a data key to decrypt it\.
+The Java code builds a master key provider in *strict mode* with a specified AWS KMS key\. Strict mode isn't required when decrypting, but it's a [best practice](best-practices.md#strict-discovery-mode)\. The Python code uses *discovery mode*, which lets the AWS Encryption SDK use any wrapping key that encrypted a data key to decrypt it\.
 
 ------
 #### [ Java ]
 
-This code creates a master key provider for decrypting in strict mode\. The AWS Encryption SDK can use only the CMKs you specify to decrypt your message\.
+This code creates a master key provider for decrypting in strict mode\. The AWS Encryption SDK can use only the AWS KMS keys you specify to decrypt your message\.
 
 ```
 /*

@@ -17,8 +17,8 @@ See also: [Using keyrings](choose-keyring.md)
 When you use the AWS Encryption SDK for C, you follow a pattern similar to this: create a [keyring](concepts.md#keyring), create a [CMM](concepts.md#crypt-materials-manager) that uses the keyring, create a session that uses the CMM \(and keyring\), and then process the session\.
 
 1\. Create a keyring\.  
-Configure your [keyring](concepts.md#keyring) with the wrapping keys that you want to use to encrypt your data keys\. This example uses an [AWS KMS keyring](choose-keyring.md#use-kms-keyring) with one AWS KMS customer master key \(CMK\), but you can use any type of keyring in its place\.  
-To identify an AWS KMS CMK in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
+Configure your [keyring](concepts.md#keyring) with the wrapping keys that you want to use to encrypt your data keys\. This example uses an [AWS KMS keyring](choose-keyring.md#use-kms-keyring) with one AWS KMS key, but you can use any type of keyring in its place\.  
+To identify an AWS KMS key in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
 
 ```
 const char * KEY_ARN = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"    

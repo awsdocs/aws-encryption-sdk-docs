@@ -7,9 +7,9 @@ Version 2\.1\.*x* of the AWS Encryption CLI introduces new security features to 
 For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to version 2\.0\.*x*](migration.md)\.  
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
-For an example showing how to use the security feature that limits encrypted data keys, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+For an example showing how to use the security feature that limits encrypted data keys, see [Limit encrypted data keys](configure.md#config-limit-keys)\.
 
-For an example showing how to use AWS KMS multi\-Region keys, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+For an example showing how to use AWS KMS multi\-Region keys, see [Use multi\-Region AWS KMS keys](configure.md#config-mrks)\.
 
 **Topics**
 + [How to encrypt and decrypt data](#crypto-cli-e-d-intro)
@@ -26,7 +26,7 @@ The AWS Encryption CLI uses the features of the AWS Encryption SDK to make it ea
 
 **Note**  
 The `--master-keys` parameter is deprecated in version 1\.8\.*x* of the AWS Encryption CLI and removed in version 2\.1\.*x*\. Instead, use the `--wrapping-keys` parameter\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is required when encrypting and decrypting\. For details, see [AWS Encryption SDK CLI syntax and parameter reference](crypto-cli-reference.md)\.
-+ When you encrypt data in the AWS Encryption CLI, you specify your plaintext data and a [wrapping key](concepts.md#master-key) \(or *master key*\), such as an AWS Key Management Service \(AWS KMS\) customer master key \(CMK\)\. If you are using a custom master key provider, you also need to specify the provider\. You also specify output locations for the [encrypted message](concepts.md#message) and for metadata about the encryption operation\. An [encryption context](concepts.md#encryption-context) is optional, but recommended\.
++ When you encrypt data in the AWS Encryption CLI, you specify your plaintext data and a [wrapping key](concepts.md#master-key) \(or *master key*\), such as an AWS KMS key in AWS Key Management Service \(AWS KMS\)\. If you are using a custom master key provider, you also need to specify the provider\. You also specify output locations for the [encrypted message](concepts.md#message) and for metadata about the encryption operation\. An [encryption context](concepts.md#encryption-context) is optional, but recommended\.
 
   In version 1\.8\.*x*, the `--commitment-policy` parameter is required when you use the `--wrapping-keys` parameter; otherwise it's not valid\. Beginning in version 2\.1\.*x*, the `--commitment-policy` parameter is optional, but recommended\.
 
@@ -41,7 +41,7 @@ The `--master-keys` parameter is deprecated in version 1\.8\.*x* of the AWS Encr
 
   The AWS Encryption CLI encrypts your data under a unique data key\. Then it encrypts the data key under the wrapping keys you specify\. It returns an [encrypted message](concepts.md#message) and metadata about the operation\. The encrypted message contains your encrypted data \(*ciphertext*\) and an encrypted copy of the data key\. You don't have to worry about storing, managing, or losing the data key\.
 
-   
+   
 + When you decrypt data, you pass in your encrypted message, the optional encryption context, and location for the plaintext output and the metadata\. You also specify the wrapping keys that the AWS Encryption CLI can use to decrypt the message, or tell the AWS Encryption CLI it can use any wrapping keys that encrypted the message\.
 
   Beginning in version 1\.8\.*x*, the `--wrapping-keys` parameter is optional when decrypting, but recommended\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is required when encrypting and decrypting\.
@@ -50,7 +50,7 @@ The `--master-keys` parameter is deprecated in version 1\.8\.*x* of the AWS Encr
 
   If you don't use the **key** attribute, you must set the [**discovery** attribute](#discovery-cli-attribute) of the `--wrapping-keys` parameter to `true`, which lets the AWS Encryption CLI decrypt using any wrapping key that encrypted the message\. 
 
-  As a best practice, use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Specify the expected number of encrypted data keys \(one for each wrapping key used in encryption\) or a reasonable maximum \(such as 5\)\. For details, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+  As a best practice, use the `--max-encrypted-data-keys` parameter to avoid decrypting a malformed message with an excessive number of encrypted data keys\. Specify the expected number of encrypted data keys \(one for each wrapping key used in encryption\) or a reasonable maximum \(such as 5\)\. For details, see [Limit encrypted data keys](configure.md#config-limit-keys)\.
 
   The `--buffer` parameter returns plaintext only after all input is processed, including verifying the digital signature if one is present\. 
 
@@ -73,7 +73,7 @@ The `--master-keys` parameter is deprecated in version 1\.8\.*x* of the AWS Encr
 
 ## How to specify wrapping keys<a name="crypto-cli-master-key"></a>
 
-When you encrypt data in the AWS Encryption CLI, you need to specify at least one [wrapping key](concepts.md#master-key) \(or *master key*\)\. You can use AWS KMS customer master keys \(CMKs\), wrapping keys from a custom [master key provider](concepts.md#master-key-provider), or both\. The custom master key provider can be any compatible Python master key provider\.
+When you encrypt data in the AWS Encryption CLI, you need to specify at least one [wrapping key](concepts.md#master-key) \(or *master key*\)\. You can use AWS KMS keys in AWS Key Management Service \(AWS KMS\), wrapping keys from a custom [master key provider](concepts.md#master-key-provider), or both\. The custom master key provider can be any compatible Python master key provider\.
 
 To specify wrapping keys in versions 1\.8\.*x* and later, use the `--wrapping-keys` parameter \(`-w`\)\. The value of this parameter is a collection of [attributes](#cli-master-key-attributes) with the `attribute=value` format\. The attributes that you use depend on the master key provider and the command\.
 + **AWS KMS**\. In encrypt commands, you must specify a `--wrapping-keys` parameter with a **key** attribute\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is also required in decrypt commands\. When decrypting, the `--wrapping-keys` parameter must have a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. Other attributes are optional\.
@@ -98,7 +98,7 @@ In an encrypt command, you must include at least one **key** attribute and value
 ```
 aws-encryption-cli --encrypt --wrapping-keys key=1234abcd-12ab-34cd-56ef-1234567890ab key=1a2b3c4d-5e6f-1a2b-3c4d-5e6f1a2b3c4d
 ```
-In encrypt commands that use AWS KMS CMKs, the value of **key** can be the key ID, its key ARN, an alias name, or alias ARN\. For example, this encrypt command uses an alias ARN in the value of the **key** attribute\. For details about the key identifiers for a AWS KMS CMK, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.  
+In encrypt commands that use AWS KMS keys, the value of **key** can be the key ID, its key ARN, an alias name, or alias ARN\. For example, this encrypt command uses an alias ARN in the value of the **key** attribute\. For details about the key identifiers for an AWS KMS key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.  
 
 ```
 aws-encryption-cli --encrypt --wrapping-keys key=arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias
@@ -109,19 +109,19 @@ In decrypt commands that use a custom master key provider, **key** and **provide
 \\ Custom master key provider
 aws-encryption-cli --decrypt --wrapping-keys provider='myProvider' key='100101'
 ```
-In decrypt commands that use AWS KMS, you can use the **key** attribute to specify the CMKs to use for decrypting, or the [**discovery** attribute](#discovery-cli-attribute) with a value of `true`, which lets the AWS Encryption CLI use any CMK that was used to encrypt the message\. If you specify a CMK, it must be one of the wrapping keys used to encrypt the message\.   
-Specifying the wrapping key is an [AWS Encryption SDK best practice](best-practices.md)\. It assures that you use the CMK you intend to use\.   
+In decrypt commands that use AWS KMS, you can use the **key** attribute to specify the AWS KMS keys to use for decrypting, or the [**discovery** attribute](#discovery-cli-attribute) with a value of `true`, which lets the AWS Encryption CLI use any AWS KMS key that was used to encrypt the message\. If you specify an AWS KMS key, it must be one of the wrapping keys used to encrypt the message\.   
+Specifying the wrapping key is an [AWS Encryption SDK best practice](best-practices.md)\. It assures that you use the AWS KMS key you intend to use\.   
 In a decrypt command, the value of the **key** attribute must be a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\.   
 
 ```
-\\ AWS KMS CMK
+\\ AWS KMS key
 aws-encryption-cli --decrypt --wrapping-keys key=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
 ```
 
-**Discovery: Use any CMK when decrypting**  <a name="discovery-cli-attribute"></a>
-If you don't need to limit the AWS KMS customer master keys \(CMKs\) to use when decrypting, you can use the **discovery** attribute with a value of `true`\. A value of `true` allows the AWS Encryption CLI to decrypt using any CMK that encrypted the message\. If you don't specify a **discovery** attribute, discovery is `false` \(default\)\. The **discovery** attribute is valid only in decrypt commands and only when the message was encrypted with AWS KMS customer master keys \(CMKs\)\.  
-The **discovery** attribute with a value of `true` is an alternative to using the **key** attribute to specify CMKs\. When decrypting a message encrypted with CMKs, each `--wrapping-keys` parameter must have a **key** attribute or a **discovery** attribute with a value of `true`, but not both\.  
-When discovery is true, it's a best practice to use the **discovery\-partition** and **discovery\-account** attributes to limit the CMKs used to those in the AWS accounts you specify\. In the following example, the **discovery** attributes allow the AWS Encryption CLI to use any CMK in the specified AWS accounts\.  
+**Discovery: Use any AWS KMS key when decrypting**  <a name="discovery-cli-attribute"></a>
+If you don't need to limit the AWS KMS keys to use when decrypting, you can use the **discovery** attribute with a value of `true`\. A value of `true` allows the AWS Encryption CLI to decrypt using any AWS KMS key that encrypted the message\. If you don't specify a **discovery** attribute, discovery is `false` \(default\)\. The **discovery** attribute is valid only in decrypt commands and only when the message was encrypted with AWS KMS keys\.  
+The **discovery** attribute with a value of `true` is an alternative to using the **key** attribute to specify AWS KMS keys\. When decrypting a message encrypted with AWS KMS keys, each `--wrapping-keys` parameter must have a **key** attribute or a **discovery** attribute with a value of `true`, but not both\.  
+When discovery is true, it's a best practice to use the **discovery\-partition** and **discovery\-account** attributes to limit the AWS KMS keys used to those in the AWS accounts you specify\. In the following example, the **discovery** attributes allow the AWS Encryption CLI to use any AWS KMS key in the specified AWS accounts\.  
 
 ```
 aws-encryption-cli --decrypt --wrapping-keys \
@@ -137,10 +137,10 @@ The **provider** attribute identifies the [master key provider](concepts.md#mast
 ```
 --wrapping-keys key=12345 provider=my_custom_provider
 ```
-For more information about using custom \(non\-AWS KMS\) master key providers, see the **Advanced Configuration** topic in the [README](https://github.com/aws/aws-encryption-sdk-cli/blob/master/README.rst) file for the [AWS Encryption SDK CLI](https://github.com/aws/aws-encryption-sdk-cli/) repository\.
+For more information about using custom \(non\-AWS KMS\) master key providers, see the **Advanced Configuration** topic in the [README](https://github.com/aws/aws-encryption-sdk-cli/blob/master/README.rst) file for the [AWS Encryption CLI](https://github.com/aws/aws-encryption-sdk-cli/) repository\.
 
 **Region: Specify an AWS Region**  
-Use the **region** attribute to specify the AWS Region of an AWS KMS CMK\. This attribute is valid only in encrypt commands and only when the master key provider is AWS KMS\.   
+Use the **region** attribute to specify the AWS Region of an AWS KMS key\. This attribute is valid only in encrypt commands and only when the master key provider is AWS KMS\.   
 
 ```
 --encrypt --wrapping-keys key=alias/primary-key region=us-east-2
@@ -166,21 +166,21 @@ There are two ways to specify multiple wrapping keys:
 + Include multiple **key** attributes in the `--wrapping-keys` parameter value\.
 
   ```
-  $cmk_oregon=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
-  $cmk_ohio=arn:aws:kms:us-east-2:111122223333:key/0987ab65-43cd-21ef-09ab-87654321cdef
+  $key_oregon=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+  $key_ohio=arn:aws:kms:us-east-2:111122223333:key/0987ab65-43cd-21ef-09ab-87654321cdef
   
-  --wrapping-keys key=$cmk_oregon key=$cmk_ohio
+  --wrapping-keys key=$key_oregon key=$key_ohio
   ```
 + Include multiple `--wrapping-keys` parameters in the same command\. Use this syntax when the attribute values that you specify do not apply to all of the wrapping keys in the command\.
 
   ```
-  --wrapping-keys region=us-east-2 key=alias/primary_CMK \
-  --wrapping-keys region=us-west-1 key=alias/primary_CMK
+  --wrapping-keys region=us-east-2 key=alias/test_key \
+  --wrapping-keys region=us-west-1 key=alias/test_key
   ```
 
-The **discovery** attribute with a value of `true` lets the AWS Encryption CLI use any AWS KMS CMK that encrypted the message\. If you use multiple `--wrapping-keys` parameters in the same command, using `discovery=true` in any `--wrapping-keys` parameter effectively overrides the limits of the **key** attribute in other `--wrapping-keys` parameters\. 
+The **discovery** attribute with a value of `true` lets the AWS Encryption CLI use any AWS KMS key that encrypted the message\. If you use multiple `--wrapping-keys` parameters in the same command, using `discovery=true` in any `--wrapping-keys` parameter effectively overrides the limits of the **key** attribute in other `--wrapping-keys` parameters\. 
 
-For example, in the following command, the **key** attribute in the first `--wrapping-keys` parameter limits the AWS Encryption CLI to the specified CMK\. However, the **discovery** attribute in the second `--wrapping-keys` parameter lets the AWS Encryption CLI use any CMK in the specified accounts to decrypt the message\.
+For example, in the following command, the **key** attribute in the first `--wrapping-keys` parameter limits the AWS Encryption CLI to the specified AWS KMS key\. However, the **discovery** attribute in the second `--wrapping-keys` parameter lets the AWS Encryption CLI use any AWS KMS key in the specified accounts to decrypt the message\.
 
 ```
 aws-encryption-cli --decrypt \
@@ -246,7 +246,7 @@ You can the output location in several ways\.
 
   For example, if you encrypt `file.txt`, the encrypt command creates `file.txt.encrypted`\. If you decrypt `file.txt.encrypted`, the decrypt command creates `file.txt.encrypted.decrypted`\.
 
-   
+   
 + Write to the command line \(stdout\)\. Enter a value of `-` for the `--output` parameter\. You can use `--output -` to pipe output to another command or program\.
 
   ```
@@ -261,7 +261,7 @@ An *encryption context* is a type of arbitrary, non\-secret *additional authenti
 
 **In an encrypt command**
 
-The encryption context that you specify in an encrypt command, along with any additional pairs that the [CMM](concepts.md#crypt-materials-manager) adds, is cryptographically bound to the encrypted data\. It is also included \(in plaintext\) in the [encrypted message](concepts.md#encryption-context) that the command returns\. If you are using an AWS KMS customer master key \(CMK\), the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\. 
+The encryption context that you specify in an encrypt command, along with any additional pairs that the [CMM](concepts.md#crypt-materials-manager) adds, is cryptographically bound to the encrypted data\. It is also included \(in plaintext\) in the [encrypted message](concepts.md#encryption-context) that the command returns\. If you are using an AWS KMS key, the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\. 
 
 The following example shows an encryption context with three `name=value` pairs\.
 
@@ -343,7 +343,7 @@ You can save time and avoid typing errors by saving frequently used AWS Encrypti
 
 A *configuration file* is a text file that contains parameters and values for an AWS Encryption CLI command\. When you refer to a configuration file in a AWS Encryption CLI command, the reference is replaced by the parameters and values in the configuration file\. The effect is the same is if you typed the file content at the command line\. A configuration file can have any name and it can be located in any directory that the current user can access\. 
 
-The following example configuration file, `cmk.conf`, specifies two AWS KMS CMKs in different Regions\.
+The following example configuration file, `key.conf`, specifies two AWS KMS keys in different Regions\.
 
 ```
 --wrapping-keys key=arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
@@ -352,20 +352,20 @@ The following example configuration file, `cmk.conf`, specifies two AWS KMS CMKs
 
 To use the configuration file in a command, prefix the file name with an at sign \(`@`\)\. In a PowerShell console, use a backtick character to escape the at sign \(``@`\)\.
 
-This example command uses the `cmk.conf` file in an encrypt command\.
+This example command uses the `key.conf` file in an encrypt command\.
 
 ------
 #### [ Bash ]
 
 ```
-$ aws-encryption-cli -e @cmk.conf -i hello.txt -o testdir  
+$ aws-encryption-cli -e @key.conf -i hello.txt -o testdir  
 ```
 
 ------
 #### [ PowerShell ]
 
 ```
-PS C:\> aws-encryption-cli -e `@cmk.conf -i .\Hello.txt -o .\TestDir
+PS C:\> aws-encryption-cli -e `@key.conf -i .\Hello.txt -o .\TestDir
 ```
 
 ------

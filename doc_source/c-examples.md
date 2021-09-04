@@ -13,9 +13,9 @@ When you install and build the AWS Encryption SDK for C, the source code for the
 
 The following example shows you how to use the AWS Encryption SDK for C to encrypt and decrypt a string\.
 
-This example features the KMS [keyring](concepts.md#keyring), a type of keyring that uses an [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) customer master key \(CMK\) to generate and encrypt data keys\. The example includes some code written in C\+\+ because the AWS Encryption SDK for C uses the AWS SDK for C\+\+ to call AWS KMS\. 
+This example features the KMS [keyring](concepts.md#keyring), a type of keyring that uses an AWS KMS key in [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) to generate and encrypt data keys\. The example includes some code written in C\+\+ because the AWS Encryption SDK for C uses the AWS SDK for C\+\+ to call AWS KMS\. 
 
-For help creating a CMK, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying CMKs in an AWS KMS keyring, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)
+For help creating an AWS KMS key, see [Creating Keys](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html) in the *AWS Key Management Service Developer Guide*\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)
 
 **See the complete code sample**: [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp)
 
@@ -25,13 +25,13 @@ For help creating a CMK, see [Creating Keys](https://docs.aws.amazon.com/kms/lat
 
 ### Encrypt a string<a name="c-example-string-encrypt"></a>
 
-The first part of this example uses an AWS KMS keyring with one CMK to encrypt a plaintext string\. 
+The first part of this example uses an AWS KMS keyring with one AWS KMS key to encrypt a plaintext string\. 
 
 Step 1: Construct the keyring\.  
-Create an AWS KMS keyring for encryption\. The keyring in this example is configured with one CMK, but you can configure an AWS KMS keyring with multiple CMKs, including CMKs in different AWS Regions and different accounts\.   
-To identify an AWS KMS CMK in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
-[Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)  
-When you create a keyring with multiple CMKs, you specify the CMK used to generate and encrypt the plaintext data key, and an optional array of additional CMKs that encrypt the same plaintext data key\. In this case, you specify only the generator CMK\.   
+Create an AWS KMS keyring for encryption\. The keyring in this example is configured with one AWS KMS key, but you can configure an AWS KMS keyring with multiple AWS KMS keys, including AWS KMS keys in different AWS Regions and different accounts\.   
+To identify an AWS KMS key in an encryption keyring, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
+[Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)  
+When you create a keyring with multiple AWS KMS keys, you specify the AWS KMS key used to generate and encrypt the plaintext data key, and an optional array of additional AWS KMS keys that encrypt the same plaintext data key\. In this case, you specify only the generator AWS KMS key\.   
 Before running this code, replace the example key ARN with a valid one\.  
 
 ```
@@ -108,10 +108,10 @@ If you prefer, instead of destroying the session, you can reuse the session with
 The second part of this example decrypts an encrypted message that contains the ciphertext of the original string\. 
 
 Step 1: Construct the keyring\.  
-When you decrypt data in AWS KMS, you pass in the [encrypted message](concepts.md#message) that the encrypt API returned\. The [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) doesn't take a CMK as input\. Instead, AWS KMS uses the same CMK to decrypt the ciphertext that it used to encrypt it\. However, the AWS Encryption SDK lets you specify an AWS KMS keyring with CMKs on encrypt and decrypt\.  
-On decrypt, you can configure a keyring with only the CMKs that you want to use to decrypt the encrypted message\. For example, you might want to create a keyring with only the CMK that is used by a particular role in your organization\. The AWS Encryption SDK will never use a CMK unless it appears in the decryption keyring\. If the SDK can't decrypt the encrypted data keys by using the CMKs in the keyring that you provide, either because none of CMKs in the keyring were used to encrypt any of the data keys, or because the caller doesn't have permission to use the CMKs in the keyring to decrypt, the decrypt call fails\.  
-When you specify an AWS KMS CMK for a decryption keyring, you must use its [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. [Alias ARNs](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn) are permitted only in encryption keyrings\. For help identifying CMKs in an AWS KMS keyring, see [Identifying CMKs in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
-In this example, we specify a keyring configured with the same CMK used to encrypt the string\. Before running this code, replace the example key ARN with a valid one\.  
+When you decrypt data in AWS KMS, you pass in the [encrypted message](concepts.md#message) that the encrypt API returned\. The [Decrypt API](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) doesn't take an AWS KMS key as input\. Instead, AWS KMS uses the same AWS KMS key to decrypt the ciphertext that it used to encrypt it\. However, the AWS Encryption SDK lets you specify an AWS KMS keyring with AWS KMS keys on encrypt and decrypt\.  
+On decrypt, you can configure a keyring with only the AWS KMS keys that you want to use to decrypt the encrypted message\. For example, you might want to create a keyring with only the AWS KMS key that is used by a particular role in your organization\. The AWS Encryption SDK will never use an AWS KMS key unless it appears in the decryption keyring\. If the SDK can't decrypt the encrypted data keys by using the AWS KMS keys in the keyring that you provide, either because none of AWS KMS keys in the keyring were used to encrypt any of the data keys, or because the caller doesn't have permission to use the AWS KMS keys in the keyring to decrypt, the decrypt call fails\.  
+When you specify an AWS KMS key for a decryption keyring, you must use its [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN)\. [Alias ARNs](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn) are permitted only in encryption keyrings\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](choose-keyring.md#kms-keyring-id)\.  
+In this example, we specify a keyring configured with the same AWS KMS key used to encrypt the string\. Before running this code, replace the example key ARN with a valid one\.  
 
 ```
 const char * key_arn = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"    

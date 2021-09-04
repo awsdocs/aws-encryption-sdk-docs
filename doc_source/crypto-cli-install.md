@@ -13,7 +13,8 @@ The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To instal
 Install the following prerequisites before you install the AWS Encryption CLI, 
 
 **Python**  
-The AWS Encryption CLI requires Python 2\.7, or Python 3\.4 or later\. Python is included in most Linux and macOS installations, although you might need to upgrade to one of the required versions\. However, you have to install Python on Windows, if it is not already installed\. To download Python, see [Python downloads](https://www.python.org/downloads/)\.  
+Python 3\.5 or later is required by the AWS Encryption CLI versions 4\.0\.*x* and later\. Python is included in most Linux and macOS installations, although you might need to upgrade to one of the required versions\. However, you have to install Python on Windows, if it is not already installed\. To download Python, see [Python downloads](https://www.python.org/downloads/)\.  
+Earlier versions of the AWS Encryption CLI support Python 2\.7 and 3\.4, but we recommend that you use the latest version of the AWS Encryption CLI\.  
 To determine whether Python is installed, at the command line, type the following\.  
 
 ```
@@ -38,12 +39,12 @@ PS C:\> dir HKCU:\Software\Python\PythonCore\version\InstallPath
 On Linux installations, versions of `pip` earlier than 8\.1 can't build the **cryptography** library that the AWS Encryption CLI requires\. If you choose not to update your `pip` version, you can install the build tools separately\. For more information, see [Building cryptography on Linux](https://cryptography.io/en/latest/installation.html#building-cryptography-on-linux)\.
 
 **AWS Command Line Interface**  
-The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS Key Management Service \(AWS KMS\) customer master keys \(CMKs\) with the AWS Encryption CLI\. If you are using a different [master key provider](concepts.md#master-key-provider), the AWS CLI is not required\.  
-To use AWS KMS CMKs with the AWS Encryption CLI, you need to [install](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configure ](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration) the AWS CLI\. The configuration makes the credentials that you use to authenticate to AWS KMS available to the AWS Encryption CLI\. 
+The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS KMS keys in AWS Key Management Service \(AWS KMS\) with the AWS Encryption CLI\. If you are using a different [master key provider](concepts.md#master-key-provider), the AWS CLI is not required\.  
+To use AWS KMS keys with the AWS Encryption CLI, you need to [install](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configure ](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration) the AWS CLI\. The configuration makes the credentials that you use to authenticate to AWS KMS available to the AWS Encryption CLI\. 
 
 ## Installing the AWS Encryption CLI<a name="install-sdk-cli"></a>
 
-When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](http://boto3.amazonaws.com/v1/documentation/api/latest/index.html)\.
+When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)\.
 
 **Note**  
 If you are new to the AWS Encryption CLI, install the latest available version\.   

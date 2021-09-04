@@ -43,16 +43,16 @@ Version 1\.7\.*x* includes the following changes:
 Version 1\.7\.*x* introduces new constructors to the AWS Encryption SDK for Java and AWS Encryption SDK for Python that explicitly create AWS KMS master key providers in either *strict* or *discovery* mode\. This version adds similar changes to the AWS Encryption SDK command\-line interface \(CLI\)\. For details, see [Updating AWS KMS master key providers](migrate-mkps-v2.md)\.  
 + In *strict mode*, AWS KMS master key providers require a list of wrapping keys, and they encrypt and decrypt with only the wrapping keys you specify\. This is an AWS Encryption SDK best practice that assures that you are using the wrapping keys you intend to use\. 
 + In *discovery mode*, AWS KMS master key providers do not take any wrapping keys\. You cannot use them for encrypting\. When decrypting, they can use any wrapping key to decrypt an encrypted data key\. However, you can limit the wrapping keys used for decryption to those in particular AWS accounts\. Account filtering is optional, but it's a [best practice](best-practices.md) that we recommend\.
-The constructors that create earlier versions of AWS KMS master key providers are deprecated in version 1\.7\.*x* and removed in version 2\.0\.*x*\. These constructors instantiate master key providers that encrypt using the wrapping keys you specify\. However, they decrypt encrypted data keys using the wrapping key that encrypted them, without regard to the specified wrapping keys\. Users might unintentionally decrypt messages with wrapping keys they don't intend to use, including customer master keys in other AWS accounts and Regions\.  
-There are no changes to constructors for AWS KMS master keys\. When encrypting and decrypting, AWS KMS master keys use only the CMK that you specify\.
+The constructors that create earlier versions of AWS KMS master key providers are deprecated in version 1\.7\.*x* and removed in version 2\.0\.*x*\. These constructors instantiate master key providers that encrypt using the wrapping keys you specify\. However, they decrypt encrypted data keys using the wrapping key that encrypted them, without regard to the specified wrapping keys\. Users might unintentionally decrypt messages with wrapping keys they don't intend to use, including AWS KMS keys in other AWS accounts and Regions\.  
+There are no changes to constructors for AWS KMS master keys\. When encrypting and decrypting, AWS KMS master keys use only the AWS KMS key that you specify\.
 
 **AWS KMS keyring updates \(optional\)**  
 Version 1\.7\.*x* adds a new filter to the AWS Encryption SDK for C and AWS Encryption SDK for JavaScript implementations that limits [AWS KMS discovery keyrings](choose-keyring.md#kms-keyring-discovery) to particular AWS accounts\. This new account filter is optional, but it's a [best practice](best-practices.md) that we recommend\. For details, see [Updating AWS KMS keyrings](migrate-keyrings-v2.md)\.  
 There are no changes to constructors for AWS KMS keyrings\. Standard AWS KMS keyrings behave like master key providers in strict mode\. AWS KMS discovery keyrings are created explicitly in discovery mode\. 
 
 **Passing a key ID to AWS KMS Decrypt**  
-Beginning in version 1\.7\.*x*, when decrypting encrypted data keys, the AWS Encryption SDK always specifies a customer master key \(CMK\) in its calls to the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation\. The AWS Encryption SDK gets the key ID value for the CMK from the metadata in each encrypted data key\. This feature doesn't require any code changes\.  
-Specifying the key ID of the CMK is not required to decrypt ciphertext that was encrypted under a symmetric CMK, but it is an [AWS KMS best practice](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html#KMS-Decrypt-request-KeyId)\. Like specifying wrapping keys in your key provider, this practice assures that AWS KMS only decrypts using the wrapping key you intend to use\.
+Beginning in version 1\.7\.*x*, when decrypting encrypted data keys, the AWS Encryption SDK always specifies an AWS KMS key in its calls to the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation\. The AWS Encryption SDK gets the key ID value for the AWS KMS key from the metadata in each encrypted data key\. This feature doesn't require any code changes\.  
+Specifying the key ID of the AWS KMS key is not required to decrypt ciphertext that was encrypted under a symmetric AWS KMS key, but it is an [AWS KMS best practice](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html#KMS-Decrypt-request-KeyId)\. Like specifying wrapping keys in your key provider, this practice assures that AWS KMS only decrypts using the wrapping key you intend to use\.
 
 **Decrypt ciphertext with key commitment**  
 Version 1\.7\.*x* can decrypt ciphertext that was encrypted with or without [key commitment](concepts.md#key-commitment)\. However, it cannot encrypt ciphertext with key commitment\. This property allows you to fully deploy applications that can decrypt ciphertext encrypted with key commitment before they ever encounter any such ciphertext\. Because this version decrypts messages that are encrypted without key commitment, you don't need to re\-encrypt any ciphertext\.  
@@ -118,14 +118,11 @@ You should limit encrypted data keys when you decrypt messages from an untrusted
 
 ## Version 2\.3\.*x*<a name="version2.3"></a>
 
-Adds support for AWS KMS multi\-Region keys\. For details, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
+Adds support for AWS KMS multi\-Region keys\. For details, see [Use multi\-Region AWS KMS keys](configure.md#config-mrks)\.
 
 **Note**  
 The AWS Encryption CLI supports multi\-Region keys beginning in [version 3\.0\.*x*](#version3.0)\.
 
 ## Version 3\.0\.*x*<a name="version3.0"></a>
 
-Adds support for AWS KMS multi\-Region keys to the AWS Encryption CLI\. For details, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.
-
-**Note**  
-Multi\-Region keys are supported in other versions of the AWS Encryption SDK beginning in [version 2\.3\.*x*](#version2.3)\.
+AWS Encryption CLI version 3\.0\.*x* adds support for AWS KMS multi\-Region keys\. For details, see in the *AWS Key Management Service Developer Guide*\. \(Other AWS Encryption SDK programming languages support multi\-Region keys beginning in [version 2\.3\.*x*](#version2.3)\.\)

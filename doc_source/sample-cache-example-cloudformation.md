@@ -30,7 +30,7 @@ This AWS CloudFormation template sets up all the necessary AWS resources to repr
         },
         "KeyAliasSuffix": {
             "Type": "String",
-            "Description": "Suffix to use for KMS CMK Alias (ie: alias/<KeyAliasSuffix>)"
+            "Description": "Suffix to use for KMS key Alias (ie: alias/<KeyAliasSuffix>)"
         },
         "StreamName": {
             "Type": "String",

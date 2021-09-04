@@ -12,7 +12,7 @@ For all AWS Encryption SDK users, learn about setting your commitment policy in 
 
 For AWS Encryption SDK for Java, AWS Encryption SDK for Python, and AWS Encryption CLI users, learn about a required update to master key providers in [Updating AWS KMS master key providers](migrate-mkps-v2.md)\.
 
- 
+ 
 
 You might have code like the following in your application\. This example creates an AWS KMS regional discovery keyring that is limited to the specified AWS accounts and the US West \(Oregon\) \(us\-west\-2\) Region\. This example represents code in AWS Encryption SDK versions earlier than 1\.7\.*x*\. However, it is still valid in versions 1\.7\.*x* and later\. 
 
@@ -46,7 +46,7 @@ const keyring = new KmsKeyringNode({ clientProvider, discovery })
 
 ------
 
-Beginning in version 1\.7\.*x*, you can add a discovery filter to any AWS KMS discovery keyring\. This discovery filter limits the CMKs that the AWS Encryption SDK can use for decryption to those in the specified partition and accounts\. Before using this code, change the partition, if necessary, and replace the example account IDs with valid ones\.
+Beginning in version 1\.7\.*x*, you can add a discovery filter to any AWS KMS discovery keyring\. This discovery filter limits the AWS KMS keys that the AWS Encryption SDK can use for decryption to those in the specified partition and accounts\. Before using this code, change the partition, if necessary, and replace the example account IDs with valid ones\.
 
 ------
 #### [ C ]

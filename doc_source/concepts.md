@@ -41,7 +41,6 @@ To decrypt the data, you need to provide a wrapping key that can decrypt one of 
 ![\[Each wrapping key encrypts the same data key, resulting in one encrypted data key for each wrapping key\]](http://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/images/multiple-wrapping-keys-70.png)
 
 **Combining the strengths of multiple algorithms**  
-In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. You might want to combine the strengths of each\. For example, you might encrypt raw data with symmetric key encryption, and then encrypt the data key with public key encryption\.  
 To encrypt your data, by default, the AWS Encryption SDK uses a sophisticated [algorithm suite](supported-algorithms.md) with AES\-GCM symmetric encryption, a key derivation function \(HKDF\), and signing\. To encrypt the data key, you can specify a [symmetric or asymmetric encryption algorithm](#symmetric-key-encryption) appropriate to your wrapping key\.   
 In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. To combine the strengths of each, you can your encrypt your data with symmetric key encryption, and then encrypt the data key with public key encryption\.
 
@@ -65,7 +64,7 @@ A *wrapping key* \(or *master key*\) is a key\-encryption key that the AWS Encry
 **Note**  
 *Wrapping key* refers to the keys in a keyring or master key provider\. *Master key* is typically associated with the `MasterKey` class that you instantiate when you use a master key provider\.
 
-The AWS Encryption SDK supports several commonly used wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric [customer master keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(CMKs\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and raw RSA keys\. You can also extend or implement your own wrapping keys\. 
+The AWS Encryption SDK supports several commonly used wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and raw RSA keys\. You can also extend or implement your own wrapping keys\. 
 
 When you use envelope encryption, you need to protect your wrapping keys from unauthorized access\. You can do this in any of the following ways:
 + Use a web service designed for this purpose, such as [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\.
@@ -90,11 +89,11 @@ To specify the wrapping keys in a keyring \(or master key provider\), you must u
 
 For raw AES and raw RSA wrapping keys in a keyring, you must specify a namespace and a name\. \(In master key providers, the `Provider ID` is the equivalent of the namespace and the `Key ID` is the equivalent of the name\.\) When decrypting, you must use the exact same namespace and name for each raw wrapping key\. If you use a different namespace or name, the AWS Encryption SDK will not recognize or use the wrapping key, even if the key material is the same\.
 
-When the wrapping key is an AWS KMS customer master key \(CMK\), use the AWS KMS key identifiers\. For details, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
-+ For encryption, the key identifiers you use differ with the language implementation\. For example, when encrypting in JavaScript, you can use any valid key identifier \(key ID, key ARN, alias name, or alias ARN\) for a CMK wrapping key\. When encrypting in C, you can only use a key ID or key ARN\.
+When the wrapping key is an AWS KMS key, use the AWS KMS key identifiers\. For details, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
++ For encryption, the key identifiers you use differ with the language implementation\. For example, when encrypting in JavaScript, you can use any valid key identifier \(key ID, key ARN, alias name, or alias ARN\) for an AWS KMS key\. When encrypting in C, you can only use a key ID or key ARN\.
 + When decrypting, you must use a key ARN\. 
 
-  When the AWS Encryption SDK encrypts a data key with a CMK wrapping key, it stores the key ARN of the CMK in the metadata of the encrypted data key\. When decrypting in strict mode, the AWS Encryption SDK verifies that the same key ARN appears in the keyring \(or master key provider\) before it attempts to decrypt the encrypted data key\. If you use a different key identifier, the AWS Encryption SDK will not recognize or use the CMK, even if it's the same key\.
+  When the AWS Encryption SDK encrypts a data key with an AWS KMS key, it stores the key ARN of the AWS KMS key in the metadata of the encrypted data key\. When decrypting in strict mode, the AWS Encryption SDK verifies that the same key ARN appears in the keyring \(or master key provider\) before it attempts to decrypt the encrypted data key\. If you use a different key identifier, the AWS Encryption SDK will not recognize or use the AWS KMS key, even if it's the same key\.
 
 ## Encryption context<a name="encryption-context"></a>
 

@@ -54,7 +54,7 @@ aws-encryption-cli --encrypt
 
 **Decrypt data**  
 The following syntax diagram shows the parameters that a decrypt command uses\.   
-In version 1\.8\.*x*, the `--wrapping-keys` parameter is optional when decrypting, but recommended\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is required when encrypting and decrypting\. For AWS KMS customer master keys \(CMKs\), you can use the **key** attribute to specify wrapping keys \(best practice\) or set the **discovery** attribute to `true`, which doesn't limit the wrapping keys that the AWS Encryption CLI can use\.  
+In version 1\.8\.*x*, the `--wrapping-keys` parameter is optional when decrypting, but recommended\. Beginning in version 2\.1\.*x*, the `--wrapping-keys` parameter is required when encrypting and decrypting\. For AWS KMS keys, you can use the **key** attribute to specify wrapping keys \(best practice\) or set the **discovery** attribute to `true`, which doesn't limit the wrapping keys that the AWS Encryption CLI can use\.  
 
 ```
 aws-encryption-cli --decrypt (or [--decrypt-unsigned]) 
@@ -102,27 +102,27 @@ You can use `--decrypt` or `--decrypt-unsigned` for decryption but not both\.
 **\-\-wrapping\-keys \(\-w\) \[Introduced in version 1\.8\.*x*\]**  <a name="wrapping-keys"></a>
 Specifies the [wrapping keys](concepts.md#master-key) \(or *master keys*\) used in encryption and decryption operations\. You can use [multiple `--wrapping-keys` parameters](crypto-cli-how-to.md#cli-many-cmks) in each command\.   
 Beginning in version 2\.1\.*x*, the AWS Encryption CLI requires the `--wrapping-keys` parameter for encrypt and decrypt commands\. In version 1\.8\.*x*, the AWS Encryption CLI does not require `--wrapping-keys` \(or `--master-keys`\) parameter for encrypt commands\. In version 1\.8\.*x* decrypt commands, a `--wrapping-keys` parameter is optional but recommended\.   
-When using a custom master key provider, encrypt and decrypt commands require **key** and **provider** attributes\. When using AWS KMS customer master keys, encrypt commands require a **key** attribute\. Decrypt commands can include a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute when decrypting is an [AWS Encryption SDK best practice](best-practices.md)\. It is particularly important if you're decrypting batches of unfamiliar messages, such as those in an Amazon S3 bucket or an Amazon SQS queue\.  
-For an example showing how to use AWS KMS multi\-Region keys as wrapping keys, see [Using multi\-Region KMS keys](configure.md#config-mrks)\.  
+When using a custom master key provider, encrypt and decrypt commands require **key** and **provider** attributes\. When using AWS KMS keys, encrypt commands require a **key** attribute\. Decrypt commands can include a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute when decrypting is an [AWS Encryption SDK best practice](best-practices.md)\. It is particularly important if you're decrypting batches of unfamiliar messages, such as those in an Amazon S3 bucket or an Amazon SQS queue\.  
+For an example showing how to use AWS KMS multi\-Region keys as wrapping keys, see [Use multi\-Region AWS KMS keys](configure.md#config-mrks)\.  
 **Attributes**: The value of the `--wrapping-keys` parameter consists of the following attributes\. The format is `attribute_name=value`\.     
 **key**  
 Identifies the wrapping key used in the operation\. The format is a **key**=ID pair\. You can specify multiple **key** attributes in each `--wrapping-keys` parameter value\.  
-+ **Encrypt commands**: All encrypt commands require the **key** attribute \. When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For descriptions of the AWS KMS key identifiers, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\. 
-+ **Decrypt commands**: When decrypting with AWS KMS customer master keys \(CMKs\), the `--wrapping-keys` parameter requires a **key** attribute with a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) value or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute is an [AWS Encryption SDK best practice](best-practices.md)\. When decrypting with a custom master key provider, the **key** attribute is required\.
++ **Encrypt commands**: All encrypt commands require the **key** attribute \. When you use an AWS KMS key in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For descriptions of the AWS KMS key identifiers, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\. 
++ **Decrypt commands**: When decrypting with AWS KMS keys, the `--wrapping-keys` parameter requires a **key** attribute with a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) value or a **discovery** attribute with a value of `true` \(but not both\)\. Using the **key** attribute is an [AWS Encryption SDK best practice](best-practices.md)\. When decrypting with a custom master key provider, the **key** attribute is required\.
 **Note**  
 To specify an AWS KMS wrapping key in a decrypt command, the value of the **key** attribute must be a key ARN\. If you use a key ID, alias name, or alias ARN, the AWS Encryption CLI does not recognize the wrapping key\.
 You can specify multiple **key** attributes in each `--wrapping-keys` parameter value\. However, any **provider**, **region**, and **profile** attributes in a `--wrapping-keys` parameter apply to all wrapping keys in that parameter value\. To specify wrapping keys with different attribute values, use multiple `--wrapping-keys` parameters in the command\.  
 **discovery**  
-Allows the AWS Encryption CLI to use any AWS KMS customer master key \(CMK\) to decrypt the message\. The **discovery** value can be `true` or `false`\. The default value is `false`\. The **discovery** attribute is valid only in decrypt commands and only when the master key provider is AWS KMS\.   
-When decrypting with AWS KMS customer master keys \(CMKs\), the `--wrapping-keys` parameter requires a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. If you use the **key** attribute, you can use a **discovery** attribute with a value of `false` to explicitly reject discovery\.   
-+ `False` \(default\) — When the **discovery** attribute isn't specified or its value is `false`, the AWS Encryption CLI decrypts the message using only the CMKs specified by the **key** attribute of the `--wrapping-keys` parameter\. If you don't specify a **key** attribute when discovery is `false`, the decrypt command fails\. This value supports an AWS Encryption CLI [best practice](best-practices.md)\.
-+ `True` — When the value of the **discovery** attribute is `true`, the AWS Encryption CLI gets the CMKs from metadata in the encrypted message, and uses those CMKs to decrypt the message\. The **discovery** attribute with a value of `true` behaves like versions of the AWS Encryption CLI before version 1\.8\.*x* that didn't permit you to specify a wrapping key when decrypting\. However, your intent to use any CMK is explicit\. If you specify a **key** attribute when discovery is `true`, the decrypt command fails\. 
+Allows the AWS Encryption CLI to use any AWS KMS key to decrypt the message\. The **discovery** value can be `true` or `false`\. The default value is `false`\. The **discovery** attribute is valid only in decrypt commands and only when the master key provider is AWS KMS\.   
+When decrypting with AWS KMS keys, the `--wrapping-keys` parameter requires a **key** attribute or a **discovery** attribute with a value of `true` \(but not both\)\. If you use the **key** attribute, you can use a **discovery** attribute with a value of `false` to explicitly reject discovery\.   
++ `False` \(default\) — When the **discovery** attribute isn't specified or its value is `false`, the AWS Encryption CLI decrypts the message using only the AWS KMS keys specified by the **key** attribute of the `--wrapping-keys` parameter\. If you don't specify a **key** attribute when discovery is `false`, the decrypt command fails\. This value supports an AWS Encryption CLI [best practice](best-practices.md)\.
++ `True` — When the value of the **discovery** attribute is `true`, the AWS Encryption CLI gets the AWS KMS keys from metadata in the encrypted message, and uses those AWS KMS keys to decrypt the message\. The **discovery** attribute with a value of `true` behaves like versions of the AWS Encryption CLI before version 1\.8\.*x* that didn't permit you to specify a wrapping key when decrypting\. However, your intent to use any AWS KMS key is explicit\. If you specify a **key** attribute when discovery is `true`, the decrypt command fails\. 
 
-  The `true` value might cause the AWS Encryption CLI to use CMKs in different AWS accounts and Regions, or attempt to use CMKs that the user isn't authorized to use\. 
-When **discovery** is `true`, it's a best practice to use the **discovery\-partition** and **discovery\-account** attributes to limit the CMKs used to those in the AWS accounts you specify\.   
+  The `true` value might cause the AWS Encryption CLI to use AWS KMS keys in different AWS accounts and Regions, or attempt to use AWS KMS keys that the user isn't authorized to use\. 
+When **discovery** is `true`, it's a best practice to use the **discovery\-partition** and **discovery\-account** attributes to limit the AWS KMS keys used to those in the AWS accounts you specify\.   
 **discovery\-account**  
-Limits the CMKs used for decrypting to those in the specified AWS account\. The only valid value for this attribute is an [AWS account ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html)\.  
-This attribute is optional and valid only in decrypt commands with AWS KMS CMKs where the **discovery** attribute is set to `true` and the **discovery\-partition** attribute is specified\.  
+Limits the AWS KMS keys used for decrypting to those in the specified AWS account\. The only valid value for this attribute is an [AWS account ID](https://docs.aws.amazon.com/general/latest/gr/acct-identifiers.html)\.  
+This attribute is optional and valid only in decrypt commands with AWS KMS keys where the **discovery** attribute is set to `true` and the **discovery\-partition** attribute is specified\.  
 Each **discovery\-account** attribute takes just one AWS account ID, but you can specify multiple **discovery\-account** attributes in the same `--wrapping-keys` parameter\. All accounts specified in a given `--wrapping-keys` parameter must be in the specified AWS partition\.  
 **discovery\-partition**  
 Specifies the AWS partition for the accounts in the **discovery\-account** attribute\. Its value must be an AWS partition, such as `aws`, `aws-cn`, or `aws-gov-cloud`\. For information, see [Amazon Resource Names](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax) in the *AWS General Reference*\.  
@@ -130,9 +130,9 @@ This attribute is required when you use the **discovery\-account** attribute\. Y
 **provider**  
 Identifies the [master key provider](concepts.md#master-key-provider)\. The format is a **provider**=ID pair\. The default value, **aws\-kms**, represents AWS KMS\. This attribute is required only when the master key provider is not AWS KMS\.  
 **region**  
-Identifies the AWS Region of an AWS KMS CMK\. This attribute is valid only for AWS KMS CMKs\. It is used only when the **key** identifier does not specify a Region; otherwise, it is ignored\. When it is used, it overrides the default Region in the AWS CLI named profile\.   
+Identifies the AWS Region of an AWS KMS key\. This attribute is valid only for AWS KMS keys\. It is used only when the **key** identifier does not specify a Region; otherwise, it is ignored\. When it is used, it overrides the default Region in the AWS CLI named profile\.   
 **profile**  
-Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The Region in the profile is used only when the key identifier does not specify a Region and there is no **region** attribute in the command\. 
+Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS keys\. The Region in the profile is used only when the key identifier does not specify a Region and there is no **region** attribute in the command\. 
 
 **\-\-input \(\-i\)**  
 Specifies the location of the data to encrypt or decrypt\. This parameter is required\. The value can be a path to a file or directory, or a file name pattern\. If you are piping input to the command \(stdin\), use `-`\.  
@@ -196,7 +196,7 @@ Returns plaintext only after all input is processed, including verifying the dig
 **\-\-max\-encrypted\-data\-keys \[Introduced in versions 1\.9\.*x* and 2\.2\.*x*\]**  
 Specifies the maximum number of encrypted data keys in an encrypted message\. This parameter is optional\.   
 Valid values are 1 – 65,535\. If you omit this parameter, the AWS Encryption CLI does not enforce any maximum\. An encrypted message can hold up to 65,535 \(2^16 \- 1\) encrypted data keys\.  
-You can use this parameter in encrypt commands to prevent a malformed message\. You can use it in decrypt commands to detect malicious messages and avoid decrypting messages with numerous encrypted data keys that you can't decrypt\. For details and an example, see [Limiting encrypted data keys](configure.md#config-limit-keys)\.
+You can use this parameter in encrypt commands to prevent a malformed message\. You can use it in decrypt commands to detect malicious messages and avoid decrypting messages with numerous encrypted data keys that you can't decrypt\. For details and an example, see [Limit encrypted data keys](configure.md#config-limit-keys)\.
 
 **\-\-help \(\-h\)**  
 Prints usage and syntax at the command line\.
@@ -217,15 +217,15 @@ The `--master-keys` parameter is required in encrypt commands\. It is required i
 **Attributes**: The value of the `--master-keys` parameter consists of the following attributes\. The format is `attribute_name=value`\.     
 **key**  
 Identifies the [wrapping key](concepts.md#master-key) used in the operation\. The format is a **key**=ID pair\. The **key** attribute is required in all encrypt commands\.   
-When you use an AWS KMS customer master key \(CMK\) in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For details about AWS KMS key identifiers, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.  
-The **key** attribute is required in decrypt commands when the master key provider is not AWS KMS\. The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS CMK\.   
+When you use an AWS KMS key in an encrypt command, the value of the **key** attribute can be a key ID, key ARN, an alias name, or an alias ARN\. For details about AWS KMS key identifiers, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.  
+The **key** attribute is required in decrypt commands when the master key provider is not AWS KMS\. The **key** attribute is not permitted in commands that decrypt data that was encrypted under an AWS KMS key\.   
 You can specify multiple **key** attributes in each `--master-keys` parameter value\. However, any **provider**, **region**, and **profile** attributes apply to all master keys in the parameter value\. To specify master keys with different attribute values, use multiple `--master-keys` parameters in the command\.   
 **provider**  
 Identifies the [master key provider](concepts.md#master-key-provider)\. The format is a **provider**=ID pair\. The default value, **aws\-kms**, represents AWS KMS\. This attribute is required only when the master key provider is not AWS KMS\.  
 **region**  
-Identifies the AWS Region of an AWS KMS CMK\. This attribute is valid only for AWS KMS CMKs\. It is used only when the **key** identifier does not specify a Region; otherwise, it is ignored\. When it is used, it overrides the default Region in the AWS CLI named profile\.   
+Identifies the AWS Region of an AWS KMS key\. This attribute is valid only for AWS KMS keys\. It is used only when the **key** identifier does not specify a Region; otherwise, it is ignored\. When it is used, it overrides the default Region in the AWS CLI named profile\.   
 **profile**  
-Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS CMKs\. The Region in the profile is used only when the key identifier does not specify a Region and there is no **region** attribute in the command\. 
+Identifies an AWS CLI [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html)\. This attribute is valid only for AWS KMS keys\. The Region in the profile is used only when the key identifier does not specify a Region and there is no **region** attribute in the command\. 
 
 ## Advanced parameters<a name="cli-advanced-parameters"></a>
 
