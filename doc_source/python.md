@@ -12,11 +12,12 @@ This topic explains how to install and use the AWS Encryption SDK for Python\. F
 Before you install the AWS Encryption SDK for Python, be sure you have the following prerequisites\.
 
 **A supported version of Python**  
-Python 3\.5 or later is required by the AWS Encryption SDK for Python versions 3\.0\.*x* and later\. To download Python, see [Python downloads](https://www.python.org/downloads/)\.  
-Earlier versions of the AWS Encryption SDK for Python support Python 2\.7 and Python 3\.4, but we recommend that you use the latest version of the AWS Encryption SDK\. 
+Python 3\.6 or later is required by the AWS Encryption SDK for Python versions 3\.1\.0 and later\.  
+Earlier versions of the AWS Encryption SDK support Python 2\.7 and Python 3\.4 and later, but we recommend that you use the latest version of the AWS Encryption SDK\.   
+To download Python, see [Python downloads](https://www.python.org/downloads/)\.
 
 **The pip installation tool for Python**  
-pip is included in Python 3\.5 or later, although you might want to upgrade it\. For more information about upgrading or installing pip, see [Installation](https://pip.pypa.io/en/latest/installation/) in the pip documentation\.
+pip is included in Python 3\.6 and later versions, although you might want to upgrade it\. For more information about upgrading or installing pip, see [Installation](https://pip.pypa.io/en/latest/installation/) in the pip documentation\.
 
 ## Installation<a name="python-installation"></a>
 

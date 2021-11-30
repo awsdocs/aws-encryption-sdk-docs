@@ -16,6 +16,7 @@ To disable data key caching temporarily, the Java and Python implementations of 
 
 **Maximum age \(required\)**  
 Determines how long a cached entry can be used, beginning when it was added\. This value is required\. Enter a value greater than 0\. The AWS Encryption SDK does not limit the maximum age value\.  
+All language implementations of the AWS Encryption SDK define the maximum age in seconds, except for the AWS Encryption SDK for JavaScript, which uses milliseconds\.  
 Use the shortest interval that still allows your application to benefit from the cache\. You can use the maximum age threshold like a key rotation policy\. Use it to limit reuse of data keys, minimize exposure of cryptographic materials, and evict data keys whose policies might have changed while they were cached\.
 
 **Maximum messages encrypted \(optional\)**  

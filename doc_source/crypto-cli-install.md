@@ -13,8 +13,9 @@ The AWS Encryption CLI is built on the AWS Encryption SDK for Python\. To instal
 Install the following prerequisites before you install the AWS Encryption CLI, 
 
 **Python**  
-Python 3\.5 or later is required by the AWS Encryption CLI versions 4\.0\.*x* and later\. Python is included in most Linux and macOS installations, although you might need to upgrade to one of the required versions\. However, you have to install Python on Windows, if it is not already installed\. To download Python, see [Python downloads](https://www.python.org/downloads/)\.  
-Earlier versions of the AWS Encryption CLI support Python 2\.7 and 3\.4, but we recommend that you use the latest version of the AWS Encryption CLI\.  
+Python 3\.6 or later is required by the AWS Encryption CLI versions 4\.1\.0 and later\.  
+Earlier versions of the AWS Encryption CLI support Python 2\.7 and 3\.4 and later, but we recommend that you use the latest version of the AWS Encryption CLI\.  
+Python is included in most Linux and macOS installations, but you need to upgrade to Python 3\.6 or later\. We recommend that you use the latest version of Python\. On Windows, you have to install Python; it is not installed by default\. To download and install Python, see [Python downloads](https://www.python.org/downloads/)\.  
 To determine whether Python is installed, at the command line, type the following\.  
 
 ```
@@ -25,7 +26,7 @@ To check the Python version, use the `-V` \(uppercase V\) parameter\.
 ```
 python -V
 ```
-On Windows, you need to install Python\. Then, add the path to the `Python.exe` file to the value of the **Path** environment variable\.   
+On Windows, after you install Python, add the path to the `Python.exe` file to the value of the **Path** environment variable\.   
 By default, Python is installed in the all users directory or in a user profile directory \(`$home` or `%userprofile%`\) in the `AppData\Local\Programs\Python` subdirectory\. To find the location of the `Python.exe` file on your system, check one of the following registry keys\. You can use PowerShell to search the registry\.   
 
 ```

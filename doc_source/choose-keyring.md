@@ -88,6 +88,8 @@ An AWS KMS keyring can include one or more AWS KMS keys\. To specify an AWS KMS 
 + In a decryption keyring, you must use a key ARN to identify AWS KMS keys\. This requirement applies to all language implementations of the AWS Encryption SDK\. For details, see [Specifying wrapping keys](concepts.md#specifying-keys)\.
 + In a keyring used for encryption and decryption, you must use a key ARN to identify AWS KMS keys\. This requirement applies to all language implementations of the AWS Encryption SDK\.
 
+If you specify an alias name or alias ARN for a KMS key in an encryption keyring, the encrypt operation saves the key ARN currently associated with the alias in the metadata of the encrypted data key\. It does not save the alias\. Changes to the alias don't affect the KMS key used to decrypt your encrypted data keys\.
+
 ### Encrypting with an AWS KMS keyring<a name="kms-keyring-encrypt"></a>
 
 You can configure each AWS KMS keyring with a single AWS KMS key or multiple AWS KMS keys in the same or different AWS accounts and AWS Regions\. You can also configure an [AWS KMS discovery keyring](#kms-keyring-discovery) with no AWS KMS keys\. As with all keyrings, you can use one or more AWS KMS keyrings in a [multi\-keyring](#use-multi-keyring)\. 

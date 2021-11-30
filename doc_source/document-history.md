@@ -8,12 +8,11 @@ This topic describes significant updates to the *AWS Encryption SDK Developer Gu
 
 ## Recent updates<a name="recent-updates"></a>
 
-The following table describes significant changes to this documentation since November 2017\. In addition to major changes listed here, we also update the documentation frequently to improve the descriptions and examples, and to address the feedback that you send to us\. To be notified about significant changes, use the link in the upper left corner to subscribe to the RSS feed\.
-
-**Latest documentation update:** September 24, 2020
+The following table describes significant changes to this documentation since November 2017\. In addition to major changes listed here, we also update the documentation frequently to improve the descriptions and examples, and to address the feedback that you send to us\. To be notified about significant changes, subscribe to the RSS feed\.
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [Documentation change](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/concepts.html#master-key) | Replace the AWS Key Management Service term *customer master key \(CMK\)* with *AWS KMS key* and *KMS key*\. | August 30, 2021 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/configure.html#config-mrks) | Added support for AWS Key Management Service\.\(AWS KMS\) multi\-Region keys\. Multi\-Region keys are AWS KMS keys in different AWS Regions that can be used interchangeably because they have the same key ID and key material\. | June 8, 2021 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/concepts.html#digital-sigs) | Added and updated documentation about the improved message decryption process\. | May 11, 2021 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/about-versions.html) | Added and updated documentation for the general availability release of AWS Encryption CLI version 1\.8\.*x* to replace AWS Encryption CLI version 1\.7\.*x*, and AWS Encryption CLI 2\.1\.*x* to replace AWS Encryption CLI 2\.0\.*x*\. | October 27, 2020 | 

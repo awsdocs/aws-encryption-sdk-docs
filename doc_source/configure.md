@@ -25,6 +25,12 @@ However, you must select one or more wrapping keys to encrypt each data key\. Th
 
 To specify your wrapping keys for encryption and decryption, you use a keyring \(C and JavaScript\) or a master key provider \(Java and Python\)\. You can specify one wrapping key or multiple wrapping keys of the same or different types\. If you use multiple wrapping keys to wrap a data key, each wrapping key will encrypt a copy of the same data key\. The encrypted data keys \(one per wrapping key\) are stored with the encrypted data in the encrypted message that the AWS Encryption SDK returns\. To decrypt the data, the AWS Encryption SDK must first use one of your wrapping keys to decrypt an encrypted data key\. 
 
+To specify an AWS KMS key in a keyring or master key provider, use a supported AWS KMS key identifier\. The key identifiers you can use to identify an AWS KMS key in a keyring vary with the operation and the language implementation\. For details about the key identifiers for an AWS KMS key, see [Key Identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
++ When encrypting, you can use a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-ARN) to identify AWS KMS keys\. Some language implementations allow other formats\.
++ When decrypting, you must use a key ARN to identify AWS KMS keys\. This requirement applies to all language implementations of the AWS Encryption SDK\. For details, see [Specifying wrapping keys](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/concepts.html#specifying-keys)\.
+
+If you specify an alias name or alias ARN for a KMS key when encrypting, the AWS Encryption SDK saves the key ARN currently associated with that alias; it does not save the alias\. Changes to the alias don't affect the KMS key used to decrypt your data keys\.
+
 ## Use multi\-Region AWS KMS keys<a name="config-mrks"></a>
 
 You can use AWS Key Management Service \(AWS KMS\) multi\-Region keys as wrapping keys in the AWS Encryption SDK\. If you encrypt with a multi\-Region key in one AWS Region, you can decrypt using a related multi\-Region key in a different AWS Region\. Support for multi\-Region keys is introduced in version 2\.3\.*x* of the AWS Encryption SDK and version 3\.0\.*x* of the AWS Encryption CLI\.
@@ -547,7 +553,7 @@ $ aws-encryption-cli --decrypt \
 ------
 #### [ Java ]
 
-To specify the local Region, use the `builder().withDiscoveryMrkRegion` parameter\. Otherwise, the AWS Encryption SDK gets the local Region from the Region configured in the [AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/java-dg-region-selection.html)\.
+To specify the local Region, use the `builder().withDiscoveryMrkRegion` parameter\. Otherwise, the AWS Encryption SDK gets the local Region from the Region configured in the [AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-region-selection.html)\.
 
 For a complete example, see [DiscoveryMultiRegionKeyEncryptionExample\.java](https://github.com/aws/aws-encryption-sdk-java/blob/master/src/examples/java/com/amazonaws/crypto/examples/DiscoveryMultiRegionKeyEncryptionExample.java) in the AWS Encryption SDK for Java repository on GitHub\.
 

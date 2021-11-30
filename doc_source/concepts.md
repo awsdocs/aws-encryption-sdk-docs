@@ -42,7 +42,7 @@ To decrypt the data, you need to provide a wrapping key that can decrypt one of 
 
 **Combining the strengths of multiple algorithms**  
 To encrypt your data, by default, the AWS Encryption SDK uses a sophisticated [algorithm suite](supported-algorithms.md) with AES\-GCM symmetric encryption, a key derivation function \(HKDF\), and signing\. To encrypt the data key, you can specify a [symmetric or asymmetric encryption algorithm](#symmetric-key-encryption) appropriate to your wrapping key\.   
-In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. To combine the strengths of each, you can your encrypt your data with symmetric key encryption, and then encrypt the data key with public key encryption\.
+In general, symmetric key encryption algorithms are faster and produce smaller ciphertexts than asymmetric or *public key encryption*\. But public key algorithms provide inherent separation of roles and easier key management\. To combine the strengths of each, you can encrypt your data with symmetric key encryption, and then encrypt the data key with public key encryption\.
 
 ## Data key<a name="DEK"></a>
 
