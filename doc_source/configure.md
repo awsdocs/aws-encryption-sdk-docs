@@ -555,7 +555,7 @@ $ aws-encryption-cli --decrypt \
 
 To specify the local Region, use the `builder().withDiscoveryMrkRegion` parameter\. Otherwise, the AWS Encryption SDK gets the local Region from the Region configured in the [AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/java-dg-region-selection.html)\.
 
-For a complete example, see [DiscoveryMultiRegionKeyEncryptionExample\.java](https://github.com/aws/aws-encryption-sdk-java/blob/master/src/examples/java/com/amazonaws/crypto/examples/DiscoveryMultiRegionKeyEncryptionExample.java) in the AWS Encryption SDK for Java repository on GitHub\.
+For a complete example, see [DiscoveryMultiRegionDecryptionExample\.java](https://github.com/aws/aws-encryption-sdk-java/blob/master/src/examples/java/com/amazonaws/crypto/examples/DiscoveryMultiRegionDecryptionExample.java) in the AWS Encryption SDK for Java repository on GitHub\.
 
 ```
 // Decrypt in discovery mode in us-west-2 Region
