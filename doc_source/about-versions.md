@@ -47,7 +47,7 @@ The constructors that create earlier versions of AWS KMS master key providers ar
 There are no changes to constructors for AWS KMS master keys\. When encrypting and decrypting, AWS KMS master keys use only the AWS KMS key that you specify\.
 
 **AWS KMS keyring updates \(optional\)**  
-Version 1\.7\.*x* adds a new filter to the AWS Encryption SDK for C and AWS Encryption SDK for JavaScript implementations that limits [AWS KMS discovery keyrings](choose-keyring.md#kms-keyring-discovery) to particular AWS accounts\. This new account filter is optional, but it's a [best practice](best-practices.md) that we recommend\. For details, see [Updating AWS KMS keyrings](migrate-keyrings-v2.md)\.  
+Version 1\.7\.*x* adds a new filter to the AWS Encryption SDK for C and AWS Encryption SDK for JavaScript implementations that limits [AWS KMS discovery keyrings](use-kms-keyring.md#kms-keyring-discovery) to particular AWS accounts\. This new account filter is optional, but it's a [best practice](best-practices.md) that we recommend\. For details, see [Updating AWS KMS keyrings](migrate-keyrings-v2.md)\.  
 There are no changes to constructors for AWS KMS keyrings\. Standard AWS KMS keyrings behave like master key providers in strict mode\. AWS KMS discovery keyrings are created explicitly in discovery mode\. 
 
 **Passing a key ID to AWS KMS Decrypt**  

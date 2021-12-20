@@ -74,7 +74,7 @@ These step\-by\-step instructions show you how to create the components that you
 ------
 
    
-+ Create a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C and JavaScript\)\. These examples use an AWS Key Management Service \(AWS KMS\) master key provider or a compatible [AWS KMS keyring](choose-keyring.md#use-kms-keyring)\.
++ Create a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C and JavaScript\)\. These examples use an AWS Key Management Service \(AWS KMS\) master key provider or a compatible [AWS KMS keyring](use-kms-keyring.md)\.
 
    
 

@@ -53,15 +53,15 @@ This error indicates that the encrypted message that you were trying to decrypt 
 
 ## Other encryption failures<a name="encrypt-failed"></a>
 
-Encryption can fail for multiple reasons\. You cannot use an [AWS KMS discovery keyring](choose-keyring.md#kms-keyring-discovery) or a [master key provider in discovery mode](migrate-mkps-v2.md) to encrypt a message\. 
+Encryption can fail for multiple reasons\. You cannot use an [AWS KMS discovery keyring](use-kms-keyring.md#kms-keyring-discovery) or a [master key provider in discovery mode](migrate-mkps-v2.md) to encrypt a message\. 
 
-Be sure that you specify a keyring or master key provider with wrapping keys that you have [permission to use](choose-keyring.md#kms-keyring-permissions) for encryption\. For help with permissions on AWS KMS keys, see [Viewing a key policy](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-viewing.html) and [Determining access to an AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/determining-access.html) in the *AWS Key Management Service Developer Guide*\.
+Be sure that you specify a keyring or master key provider with wrapping keys that you have [permission to use](use-kms-keyring.md#kms-keyring-permissions) for encryption\. For help with permissions on AWS KMS keys, see [Viewing a key policy](https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-viewing.html) and [Determining access to an AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/determining-access.html) in the *AWS Key Management Service Developer Guide*\.
 
 ## Other decryption failures<a name="decrypt-failed"></a>
 
 If your attempt to decrypt an encrypted message fails, it means that the AWS Encryption SDK could not \(or would not\) decrypt any of the encrypted data keys in the message\. 
 
-If you used a keyring or master key provider that specifies wrapping keys, the AWS Encryption SDK uses only the wrapping keys you specify\. Verify that you are using the wrapping keys that you intend and that you have `kms:Decrypt` permission on at least one of the wrapping keys\. If you are using AWS KMS keys, as a fallback, you can try decrypting the message with an [AWS KMS discovery keyring](choose-keyring.md#kms-keyring-discovery) or a [master key provider in discovery mode](migrate-mkps-v2.md)\. If the operation succeeds, before returning the plaintext, verify that the key used to decrypt the message is one that you trust\. 
+If you used a keyring or master key provider that specifies wrapping keys, the AWS Encryption SDK uses only the wrapping keys you specify\. Verify that you are using the wrapping keys that you intend and that you have `kms:Decrypt` permission on at least one of the wrapping keys\. If you are using AWS KMS keys, as a fallback, you can try decrypting the message with an [AWS KMS discovery keyring](use-kms-keyring.md#kms-keyring-discovery) or a [master key provider in discovery mode](migrate-mkps-v2.md)\. If the operation succeeds, before returning the plaintext, verify that the key used to decrypt the message is one that you trust\. 
 
 ## Rollback considerations<a name="migration-rollback"></a>
 

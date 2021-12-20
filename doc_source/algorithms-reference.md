@@ -3,7 +3,7 @@
 
 |  | 
 | --- |
-|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the *AWS Encryption SDK Specification* in the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification/) repository in GitHub\.  | 
+|  The information on this page is a reference for building your own encryption library that is compatible with the AWS Encryption SDK\. If you are not building your own compatible encryption library, you likely do not need this information\. To use the AWS Encryption SDK in one of the supported programming languages, see [Programming languages](programming-languages.md)\. For the specification that defines the elements of a proper AWS Encryption SDK implementation, see the [AWS Encryption SDK Specification](https://github.com/awslabs/aws-encryption-sdk-specification/) in GitHub\.  | 
 
 If you are building your own library that can read and write ciphertexts that are compatible with the AWS Encryption SDK, you'll need to understand how the AWS Encryption SDK implements the supported algorithm suites to encrypt raw data\. 
 

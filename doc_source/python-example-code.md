@@ -14,7 +14,7 @@ The examples in this section show how to use [version 2\.0\.*x*](about-versions.
 
 The following example shows you how to use the AWS Encryption SDK to encrypt and decrypt strings\. This example uses an AWS KMS key in [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/) as the master key\.
 
-When encrypting, the `StrictAwsKmsMasterKeyProvider` constructor takes a key ID, key ARN, alias name, or alias ARN\. When decrypting, [it requires a key ARN](concepts.md#specifying-keys)\. In this case, because the `keyArn` parameter is used for encrypting and decrypting, its value must be a key ARN\. For information about IDs for AWS KMS keys, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
+When encrypting, the `StrictAwsKmsMasterKeyProvider` constructor takes a key ID, key ARN, alias name, or alias ARN\. When decrypting, it [requires a key ARN](configure.md#config-keys)\. In this case, because the `keyArn` parameter is used for encrypting and decrypting, its value must be a key ARN\. For information about IDs for AWS KMS keys, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 
 ```
 # Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.

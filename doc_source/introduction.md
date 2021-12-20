@@ -30,7 +30,7 @@ Some language implementations of the AWS Encryption SDK require an AWS SDK, but 
 
 ## Compatibility with encryption libraries and services<a name="intro-compatibility"></a>
 
-The AWS Encryption SDK is supported in several [programming languages](programming-languages.md)\. All language implementations are interoperable\. You can encrypt with one language implementation and decrypt with another\. Interoperability might be subject to language constraints\. If so, these constraints are described in the topic about the language implementation\. Also, when encrypting and decrypting, you must use compatible keyrings, or master keys and master key providers\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
+The AWS Encryption SDK is supported in several [programming languages](programming-languages.md)\. All language implementations are interoperable\. You can encrypt with one language implementation and decrypt with another\. Interoperability might be subject to language constraints\. If so, these constraints are described in the topic about the language implementation\. Also, when encrypting and decrypting, you must use compatible keyrings, or master keys and master key providers\. For details, see [Keyring compatibility](keyring-compatibility.md)\.
 
 However, the AWS Encryption SDK cannot interoperate with other libraries\. Because each library returns encrypted data in a different format, you cannot encrypt with one library and decrypt with another\.
 
@@ -52,7 +52,7 @@ For more information about the AWS Encryption SDK and client\-side encryption, t
 + For information about how this SDK works, see [How the SDK works](how-it-works.md)\.
 + For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
 + For detailed technical information, see the [AWS Encryption SDK reference](reference.md)\.
-+ For the technical specification for the AWS Encryption SDK, see the [aws\-encryption\-sdk\-specification](https://github.com/awslabs/aws-encryption-sdk-specification) repository in GitHub\.
++ For the technical specification for the AWS Encryption SDK, see the [AWS Encryption SDK Specification](https://github.com/awslabs/aws-encryption-sdk-specification/) in GitHub\.
 + For answers to your questions about using the AWS Encryption SDK, read and post on the [AWS Crypto Tools Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=302)\.
 
 For information about implementations of the AWS Encryption SDK in different programming languages\.

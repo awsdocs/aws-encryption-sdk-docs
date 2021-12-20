@@ -75,7 +75,7 @@ If you don't have a key management system, we recommend AWS KMS\. The AWS Encryp
 
 ## Keyrings and master key providers<a name="keyring"></a>
 
-To specify the wrapping keys you use for encryption and decryption, you use a keyring \(C and JavaScript\) or a master key provider \(Java, Python, CLI\)\. You can use the keyrings and master key providers that the AWS Encryption SDK provides or design your own implementations\. The AWS Encryption SDK provides keyrings and master key providers that are compatible with each other subject to language constraints\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\. 
+To specify the wrapping keys you use for encryption and decryption, you use a keyring \(C and JavaScript\) or a master key provider \(Java, Python, CLI\)\. You can use the keyrings and master key providers that the AWS Encryption SDK provides or design your own implementations\. The AWS Encryption SDK provides keyrings and master key providers that are compatible with each other subject to language constraints\. For details, see [Keyring compatibility](keyring-compatibility.md)\. 
 
 A *keyring* generates, encrypts, and decrypts data keys\. When you define a keyring, you can specify the [wrapping keys](#master-key) that encrypt your data keys\. Most keyrings specify at least one wrapping key or a service that provides and protects wrapping keys\. You can also define a keyring with no wrapping keys or a more complex keyring with additional configuration options\. For help choosing and using the keyrings that the AWS Encryption SDK defines, see [Using keyrings](choose-keyring.md)\. Keyrings are supported in C and JavaScript\.
 
@@ -83,17 +83,7 @@ A *master key provider* is an alternative to a keyring\. The master key provider
 
 You must specify a keyring \(or master key provider\) for encryption\. You can specify the same keyring \(or master key provider\), or a different one, for decryption\. When encrypting, the AWS Encryption SDK uses all of the wrapping keys you specify to encrypt the data key\. When decrypting, the AWS Encryption SDK uses only the wrapping keys you specify to decrypt an encrypted data key\. Specifying wrapping keys for decryption is optional, but it's a AWS Encryption SDK [best practice](best-practices.md)\. 
 
-### Specifying wrapping keys<a name="specifying-keys"></a>
-
-To specify the wrapping keys in a keyring \(or master key provider\), you must use an identifier that the keyring understands\. 
-
-For raw AES and raw RSA wrapping keys in a keyring, you must specify a namespace and a name\. \(In master key providers, the `Provider ID` is the equivalent of the namespace and the `Key ID` is the equivalent of the name\.\) When decrypting, you must use the exact same namespace and name for each raw wrapping key\. If you use a different namespace or name, the AWS Encryption SDK will not recognize or use the wrapping key, even if the key material is the same\.
-
-When the wrapping key is an AWS KMS key, use the AWS KMS key identifiers\. For details, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
-+ For encryption, the key identifiers you use differ with the language implementation\. For example, when encrypting in JavaScript, you can use any valid key identifier \(key ID, key ARN, alias name, or alias ARN\) for an AWS KMS key\. When encrypting in C, you can only use a key ID or key ARN\.
-+ When decrypting, you must use a key ARN\. 
-
-  When the AWS Encryption SDK encrypts a data key with an AWS KMS key, it stores the key ARN of the AWS KMS key in the metadata of the encrypted data key\. When decrypting in strict mode, the AWS Encryption SDK verifies that the same key ARN appears in the keyring \(or master key provider\) before it attempts to decrypt the encrypted data key\. If you use a different key identifier, the AWS Encryption SDK will not recognize or use the AWS KMS key, even if it's the same key\.
+For details about specifying wrapping keys, see [Select wrapping keys](configure.md#config-keys)\. 
 
 ## Encryption context<a name="encryption-context"></a>
 

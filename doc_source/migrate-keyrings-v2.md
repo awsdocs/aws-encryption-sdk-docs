@@ -1,10 +1,10 @@
 # Updating AWS KMS keyrings<a name="migrate-keyrings-v2"></a>
 
-The AWS KMS keyrings in the [AWS Encryption SDK for C](c-language.md) and the [AWS Encryption SDK for JavaScript](javascript.md) support [best practices](best-practices.md) by allowing you to specify wrapping keys when encrypting and decrypting\. If you create an [AWS KMS discovery keyring](choose-keyring.md#kms-keyring-discovery), you do so explicitly\. 
+The AWS KMS keyrings in the [AWS Encryption SDK for C](c-language.md) and the [AWS Encryption SDK for JavaScript](javascript.md) support [best practices](best-practices.md) by allowing you to specify wrapping keys when encrypting and decrypting\. If you create a standard [AWS KMS decryption keyring](use-kms-keyring.md#kms-keyring-discovery), you specify wrapping keys explicitly\. 
 
-When you update to versions 1\.7\.*x* and later, you can also limit the wrapping keys that any AWS KMS discovery keyring or [AWS KMS regional discovery keyring](choose-keyring.md#kms-keyring-regional) uses when decrypting to those in particular AWS accounts\. Filtering a discovery keyring is an AWS Encryption SDK [best practice](best-practices.md)\.
+When you update to versions 1\.7\.*x* and later, you can use a *discovery filter* to limit the wrapping keys that any [AWS KMS discovery keyring](use-kms-keyring.md#kms-keyring-discovery) or [AWS KMS regional discovery keyring](use-kms-keyring.md#kms-keyring-regional) uses when decrypting to the wrapping keys in particular AWS accounts\. Filtering a discovery keyring is an AWS Encryption SDK [best practice](best-practices.md)\.
 
-The examples in this section will show you how to add the discovery filter to an AWS KMS regional discovery keyring\. 
+The examples in this section will show you how to add the discovery filter to an AWS KMS regional discovery keyring\.
 
 **Learn more about migration**
 
@@ -14,7 +14,7 @@ For AWS Encryption SDK for Java, AWS Encryption SDK for Python, and AWS Encrypti
 
  
 
-You might have code like the following in your application\. This example creates an AWS KMS regional discovery keyring that is limited to the specified AWS accounts and the US West \(Oregon\) \(us\-west\-2\) Region\. This example represents code in AWS Encryption SDK versions earlier than 1\.7\.*x*\. However, it is still valid in versions 1\.7\.*x* and later\. 
+You might have code like the following in your application\. This example creates an AWS KMS regional discovery keyring that can only use wrapping keys in the US West \(Oregon\) \(us\-west\-2\) Region\. This example represents code in AWS Encryption SDK versions earlier than 1\.7\.*x*\. However, it is still valid in versions 1\.7\.*x* and later\. 
 
 ------
 #### [ C ]
@@ -55,8 +55,7 @@ For a complete example, see [kms\_discovery\.cpp](https://github.com/aws/aws-enc
 
 ```
 std::shared_ptr<KmsKeyring::DiscoveryFilter> discovery_filter(
-    KmsKeyring::DiscoveryFilter::Builder()
-        .WithPartition("aws")
+    KmsKeyring::DiscoveryFilter::Builder("aws")
         .AddAccount("111122223333")
         .AddAccount("444455556666")
         .Build());

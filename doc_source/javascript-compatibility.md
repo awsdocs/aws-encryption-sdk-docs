@@ -4,7 +4,7 @@ The AWS Encryption SDK for JavaScript is designed to be interoperable with other
 
 However, when you use the AWS Encryption SDK for JavaScript, you need to be aware of some compatibility issues in the JavaScript language implementation and in web browsers\.
 
-Also, when using different language implementations, be sure to configure compatible master key providers, master keys, and keyrings\. For details, see [Keyring compatibility](choose-keyring.md#keyring-compatibility)\.
+Also, when using different language implementations, be sure to configure compatible master key providers, master keys, and keyrings\. For details, see [Keyring compatibility](keyring-compatibility.md)\.
 
 ## AWS Encryption SDK for JavaScript compatibility<a name="javascript-language-compatibility"></a>
 

@@ -13,7 +13,7 @@ The following examples show you how to use the AWS Encryption SDK for Java to en
 
 The following example shows you how to use the AWS Encryption SDK for Java to encrypt and decrypt strings\. Before using the string, convert it into a byte array\.
 
-This example uses an AWS KMS key as the wrapping key\. When encrypting, the `KmsMasterKeyProvider` `buildStrict()` method takes a key ID, key ARN, alias name, or alias ARN\. When decrypting, [it requires a key ARN](concepts.md#specifying-keys)\. In this case, because the `keyArn` parameter is used for encrypting and decrypting, its value must be a key ARN\. For information about IDs for AWS KMS keys, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
+This example uses an AWS KMS key as the wrapping key\. When encrypting, the `KmsMasterKeyProvider` `buildStrict()` method takes a key ID, key ARN, alias name, or alias ARN\. When decrypting, it [requires a key ARN](configure.md#config-keys)\. In this case, because the `keyArn` parameter is used for encrypting and decrypting, its value must be a key ARN\. For information about IDs for AWS KMS keys, see [Key identifiers](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id) in the *AWS Key Management Service Developer Guide*\.
 
 When you call the `encryptData()` method, it returns an [encrypted message](concepts.md#message) \(`CryptoResult`\) that includes the ciphertext, the encrypted data keys, and the encryption context\. When you call `getResult` on the `CryptoResult` object, it returns a base\-64\-encoded string version of the [encrypted message](message-format.md) that you can pass to the `decryptData()` method\.
 

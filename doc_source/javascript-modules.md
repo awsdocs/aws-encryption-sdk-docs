@@ -29,10 +29,10 @@ Defines tests that verify that the AWS Encryption SDK for JavaScript in Node\.js
 Exports functions that support AWS KMS keyrings in Node\.js\.
 
 [raw\-aes\-keyring\-node](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/raw-aes-keyring-node)  
-Exports functions that support [Raw AES keyrings](choose-keyring.md#use-raw-aes-keyring) in Node\.js\.
+Exports functions that support [Raw AES keyrings](use-raw-aes-keyring.md) in Node\.js\.
 
 [raw\-rsa\-keyring\-node](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/raw-rsa-keyring-node)  
-Exports functions that support [Raw RSA keyrings](choose-keyring.md#use-raw-rsa-keyring) in Node\.js\.
+Exports functions that support [Raw RSA keyrings](use-raw-rsa-keyring.md) in Node\.js\.
 
 ## Modules for JavaScript Browser<a name="jsn-modules-browser"></a>
 
@@ -55,13 +55,13 @@ Working examples of programming with the AWS Encryption SDK for JavaScript in th
 Defines tests that verify that the AWS Encryption SDK for JavaScript in the browser is compatible with other language implementations of the AWS Encryption SDK\.
 
 [kms\-keyring\-browser](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/kms-keyring-browser)  
-Exports functions that support [AWS KMS keyrings](choose-keyring.md#use-kms-keyring) in the browser\.
+Exports functions that support [AWS KMS keyrings](use-kms-keyring.md) in the browser\.
 
 [raw\-aes\-keyring\-browser](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/raw-aes-keyring-browser)  
-Exports functions that support [Raw AES keyrings](choose-keyring.md#use-raw-aes-keyring) in the browser\.
+Exports functions that support [Raw AES keyrings](use-raw-aes-keyring.md) in the browser\.
 
 [raw\-rsa\-keyring\-browser](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/raw-rsa-keyring-browser)  
-Exports functions that support [Raw RSA keyrings](choose-keyring.md#use-raw-rsa-keyring) in the browser\.
+Exports functions that support [Raw RSA keyrings](use-raw-rsa-keyring.md) in the browser\.
 
 ## Modules for all implementations<a name="jsn-modules-all"></a>
 
@@ -69,7 +69,7 @@ Exports functions that support [Raw RSA keyrings](choose-keyring.md#use-raw-rsa-
 Supports the [data key caching](data-key-caching.md) feature\. Provides code for assembling the cryptographic materials that are cached with each data key\.
 
 [kms\-keyring](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/kms-keyring)  
-Exports functions that support [KMS keyrings](choose-keyring.md#use-kms-keyring)\.
+Exports functions that support [KMS keyrings](use-kms-keyring.md)\.
 
 [material\-management](https://github.com/aws/aws-encryption-sdk-javascript/tree/master/modules/material-management)  
 Implements the [cryptographic materials manager](concepts.md#crypt-materials-manager) \(CMM\)\.
