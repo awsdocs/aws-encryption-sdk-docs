@@ -61,6 +61,9 @@ This simple example does not include an [encryption context](concepts.md#encrypt
 For a complete example, see [kms\_multi\_region\_keys\.cpp](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples/kms_multi_region_keys.cpp) in the AWS Encryption SDK for C repository on GitHub\.
 
 ```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
 /* Initialize a multi-Region keyring */
 const char *mrk_us_east_1 = "arn:aws:kms:us-east-1:111122223333:key/mrk-1234abcd12ab34cd56ef1234567890ab";    
 
@@ -291,6 +294,9 @@ To decrypt in strict mode with a multi\-Region key, use the `Aws::Cryptosdk::Kms
 For a complete example, see [kms\_multi\_region\_keys\.cpp](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples/kms_multi_region_keys.cpp) in the AWS Encryption SDK for C repository on GitHub\.
 
 ```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
 /* Initialize a multi-Region keyring */
 const char *mrk_us_west_2 = "arn:aws:kms:us-west-2:111122223333:key/mrk-1234abcd12ab34cd56ef1234567890ab";    
 
@@ -492,6 +498,9 @@ To decrypt in discovery mode with a multi\-Region key, use the `Aws::Cryptosdk::
 For a complete example, see [kms\_multi\_region\_keys\.cpp](https://github.com/aws/aws-encryption-sdk-c/tree/master/examples/kms_multi_region_keys.cpp) in the AWS Encryption SDK for C repository on GitHub\.
 
 ```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
 /* Construct a discovery filter for the account and partition. The
  *  filter is optional, but it's a best practice that we recommend.
  */
@@ -576,7 +585,7 @@ DiscoveryFilter discoveryFilter = new DiscoveryFilter("aws", 111122223333);
 
 AwsKmsMrkAwareMasterKeyProvider mrkDiscoveryProvider = AwsKmsMrkAwareMasterKeyProvider
     .builder()
-    .withDiscoveryMrkRegion("us-west-2")
+    .withDiscoveryMrkRegion(Region.US_WEST_2)
     .buildDiscovery(discoveryFilter);
 
 // Decrypt your ciphertext
@@ -708,6 +717,9 @@ The following examples show you how to select an alternate algorithm suite when 
 To specify an alternate algorithm suite in the AWS Encryption SDK for C, you must create a CMM explicitly\. Then use the `aws_cryptosdk_default_cmm_set_alg_id` with the CMM and the selected algorithm suite\.
 
 ```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
 /* Construct an AWS KMS keyring */
 struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn);
 
@@ -744,6 +756,9 @@ if (AWS_OP_SUCCESS != aws_cryptosdk_session_process_full(
 When decrypting data that was encrypted without digital signatures, use `AWS_CRYPTOSDK_DECRYPT_UNSIGNED`\. This causes the decrypt to fail if it encounters signed ciphertext\.
 
 ```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
 /* Construct an AWS KMS keyring */
 struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn);
     
@@ -1003,6 +1018,9 @@ To limit encrypted data keys, use the `MaxEncryptedDataKeys` parameter\. This pa
 #### [ C ]
 
 ```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
 /* Construct an AWS KMS keyring */
 struct aws_cryptosdk_keyring *kms_keyring = 
       Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn1, { key_arn2, key_arn3 });
@@ -1010,7 +1028,7 @@ struct aws_cryptosdk_keyring *kms_keyring =
 /* Create a session */
 struct aws_cryptosdk_session *session = 
     aws_cryptosdk_session_new_from_keyring_2(alloc, AWS_CRYPTOSDK_DECRYPT, kms_keyring);
-aws_cryptosdk_keyring_release(kms_keyring);  
+aws_cryptosdk_keyring_release(kms_keyring);
 
 /* Limit encrypted data keys */
 aws_cryptosdk_session_set_max_encrypted_data_keys(session, 3);

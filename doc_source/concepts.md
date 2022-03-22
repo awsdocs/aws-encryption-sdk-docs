@@ -163,7 +163,7 @@ Although encrypting and decrypting with key commitment is a best practice, we le
 
 Key commitment results in a [slightly larger \(\+ 30 bytes\) encrypted message](message-format.md) and takes more time to process\. If your application is very sensitive to size or performance, you might choose to opt out of key commitment\. But do so only if you must\. 
 
-For more information about migrating to versions 1\.7\.*x* and 2\.0\.*x*, including their key commitment features, see [Migrating to version 2\.0\.*x*](migration.md)\. For technical information about key commitment, see [AWS Encryption SDK algorithms reference](algorithms-reference.md) and [AWS Encryption SDK message format reference](message-format.md)\.
+For more information about migrating to versions 1\.7\.*x* and 2\.0\.*x*, including their key commitment features, see [Migrating to versions 2\.0\.*x* and later](migration.md)\. For technical information about key commitment, see [AWS Encryption SDK algorithms reference](algorithms-reference.md) and [AWS Encryption SDK message format reference](message-format.md)\.
 
 ## Commitment policy<a name="commitment-policy"></a>
 

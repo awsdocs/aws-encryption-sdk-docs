@@ -182,7 +182,7 @@ This parameter has the following values:
   In version 1\.8\.*x*, this is the only valid value\. The AWS Encryption CLI uses the `forbid-encrypt-allow-decrypt` commitment policy for all encrypt and decrypt operations\. 
 + `require-encrypt-allow-decrypt` — Encrypts only with key commitment\. Decrypts with and without key commitment\. This value is introduced in version 2\.1\.*x*\.
 + `require-encrypt-require-decrypt` \(default\) — Encrypts and decrypts only with key commitment\. This value is introduced in version 2\.1\.*x*\. It is the default value in versions 2\.1\.*x* and later\. With this value, the AWS Encryption CLI will not decrypt any ciphertext that was encrypted with earlier versions of the AWS Encryption SDK\.
-For detailed information about setting your commitment policy, see [Migrating to version 2\.0\.*x*](migration.md)\.
+For detailed information about setting your commitment policy, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.
 
 **\-\-encryption\-context \(\-c\)**  
 Specifies an [encryption context](crypto-cli-how-to.md#crypto-cli-encryption-context) for the operation\. This parameter is not required, but it is recommended\.   

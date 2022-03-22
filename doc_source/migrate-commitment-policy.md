@@ -2,18 +2,18 @@
 
 [Key commitment](concepts.md#key-commitment) assures that your encrypted data always decrypts to the same plaintext\. To provide this security property, beginning in version 1\.7\.*x*, AWS Encryption SDK uses new [algorithm suites](supported-algorithms.md) with key commitment\. To determine whether your data is encrypted and decrypted with key commitment, use the [commitment policy](concepts.md#commitment-policy) configuration setting\. Encrypting and decrypting data with key commitment is an [AWS Encryption SDK best practice](best-practices.md)\.
 
-Setting a commitment policy is an important step in migrating from version 1\.7\.*x* of the AWS Encryption SDK to 2\.0\.*x* and later\. After setting and changing your commitment policy, be sure to test your application thoroughly before deploying it in production\. For migration guidance, see [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)\.
+Setting a commitment policy is an important step in migrating from version 1\.7\.*x* of the AWS Encryption SDK to versions 2\.0\.*x* and later\. After setting and changing your commitment policy, be sure to test your application thoroughly before deploying it in production\. For migration guidance, see [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)\.
 
-The commitment policy setting has three valid values in version 2\.0\.*x*\. In version 1\.7\.*x*, only `ForbidEncryptAllowDecrypt` is valid\.
+The commitment policy setting has three valid values in versions 2\.0\.*x* and later\. In version 1\.7\.*x*, only `ForbidEncryptAllowDecrypt` is valid\.
 + `ForbidEncryptAllowDecrypt` — The AWS Encryption SDK cannot encrypt with key commitment\. It can decrypt ciphertexts encrypted with or without key commitment\. 
 
-  In version 1\.7\.*x*, this is the only valid value\. It ensures that you don't encrypt with key commitment until you are fully prepared to decrypt with key commitment\. Setting the value explicitly prevents your commitment policy from changing automatically to `require-encrypt-require-decrypt` when you upgrade to version 2\.1\.*x*\. Instead, you can [migrate your commitment policy](#migrate-commitment-policy) in stages\.
+  In version 1\.7\.*x*, this is the only valid value\. It ensures that you don't encrypt with key commitment until you are fully prepared to decrypt with key commitment\. Setting the value explicitly prevents your commitment policy from changing automatically to `require-encrypt-require-decrypt` when you upgrade to version 2\.0\.*x* or later\. Instead, you can [migrate your commitment policy](#migrate-commitment-policy) in stages\.
 + `RequireEncryptAllowDecrypt` — The AWS Encryption SDK must encrypt with key commitment\. It can decrypt ciphertexts encrypted with or without key commitment\. This value is added in version 2\.0\.*x*\.
 + `RequireEncryptRequireDecrypt` — The AWS Encryption SDK must encrypt with key commitment\. It only decrypts ciphertexts with key commitment\. This value is added in version 2\.0\.*x*\. It is the default value in version 2\.0\.*x*\.
 
-In version 1\.7\.*x*, the only valid commitment policy value is `ForbidEncryptAllowDecrypt`\. After you migrate to version 2\.0\.*x*, you can [change your commitment policy in stages](migration-guide.md) as you are ready\. Don't update your commitment policy to `RequireEncryptRequireDecrypt` until you are certain that you don't have any messages encrypted without key commitment\. 
+In version 1\.7\.*x*, the only valid commitment policy value is `ForbidEncryptAllowDecrypt`\. After you migrate to version 2\.0\.*x* or later, you can [change your commitment policy in stages](migration-guide.md) as you are ready\. Don't update your commitment policy to `RequireEncryptRequireDecrypt` until you are certain that you don't have any messages encrypted without key commitment\. 
 
-These examples show you how to set your commitment policy in versions 1\.7\.*x* and 2\.0\.*x*\. The technique depends on your programming language\. 
+These examples show you how to set your commitment policy in versions 1\.7\.*x* and 2\.0\.*x* and later\. The technique depends on your programming language\. 
 
 **Learn more about migration**
 
@@ -32,16 +32,19 @@ Beginning in version 1\.7\.*x* of the AWS Encryption SDK for C, you use the `aws
 
 The `aws_cryptosdk_session_new_from_keyring` and `aws_cryptosdk_session_new_from_cmm` functions are deprecated in version 1\.7\.*x* and removed in version 2\.0\.*x*\. These functions are replaced by `aws_cryptosdk_session_new_from_keyring_2` and `aws_cryptosdk_session_new_from_cmm_2` functions that return a session\.
 
-When you use the `aws_cryptosdk_session_new_from_keyring_2` and `aws_cryptosdk_session_new_from_cmm_2` in version 1\.7\.*x*, you are required to call the `aws_cryptosdk_session_set_commitment_policy` function with the `COMMITMENT_POLICY_FORBID_ENCRYPT_ALLOW_DECRYPT` commitment policy value\. In version 2\.0\.*x*, calling this function is optional and it takes all valid values\. The default commitment policy for version 2\.0\.*x* and later is `COMMITMENT_POLICY_REQUIRE_ENCRYPT_REQUIRE_DECRYPT`\.
+When you use the `aws_cryptosdk_session_new_from_keyring_2` and `aws_cryptosdk_session_new_from_cmm_2` in version 1\.7\.*x*, you are required to call the `aws_cryptosdk_session_set_commitment_policy` function with the `COMMITMENT_POLICY_FORBID_ENCRYPT_ALLOW_DECRYPT` commitment policy value\. In version 2\.0\.*x*, calling this function is optional and it takes all valid values\. The default commitment policy for versions 2\.0\.*x* and later is `COMMITMENT_POLICY_REQUIRE_ENCRYPT_REQUIRE_DECRYPT`\.
 
 For a complete example, see [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp)\.
 
 ```
-// Create an AWS KMS keyring
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+
+/* Create an AWS KMS keyring */
 const char * key_arn = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";
 struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn);
 
-// Create an encrypt session with a CommitmentPolicy setting
+/* Create an encrypt session with a CommitmentPolicy setting */
 struct aws_cryptosdk_session *encrypt_session = aws_cryptosdk_session_new_from_keyring_2(
     alloc, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
 
@@ -50,7 +53,7 @@ aws_cryptosdk_session_set_commitment_policy(encrypt_session,
     COMMITMENT_POLICY_FORBID_ENCRYPT_ALLOW_DECRYPT);
 
 ...
-// Encrypt your data 
+/* Encrypt your data */
 
 size_t plaintext_consumed_output;
 aws_cryptosdk_session_process(encrypt_session,
@@ -62,7 +65,7 @@ aws_cryptosdk_session_process(encrypt_session,
                               &plaintext_consumed_output)
 ...
 
-// Create a decrypt session with a CommitmentPolicy setting
+/* Create a decrypt session with a CommitmentPolicy setting */
 
 struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(key_arn);
 struct aws_cryptosdk_session *decrypt_session = *aws_cryptosdk_session_new_from_keyring_2(
@@ -71,7 +74,7 @@ aws_cryptosdk_keyring_release(kms_keyring);
 aws_cryptosdk_session_set_commitment_policy(decrypt_session,
         COMMITMENT_POLICY_FORBID_ENCRYPT_ALLOW_DECRYPT);
 
-// Decrypt your ciphertext
+/* Decrypt your ciphertext */
 size_t ciphertext_consumed_output;
 aws_cryptosdk_session_process(decrypt_session,
                               plaintext_output,
@@ -89,7 +92,7 @@ To set a commitment policy in the AWS Encryption CLI, use the `--commitment-poli
 
 In version 1\.8\.*x*, when you use the `--wrapping-keys` parameter in an `--encrypt` or `--decrypt` command, a `--commitment-policy` parameter with the `forbid-encrypt-allow-decrypt` value is required\. Otherwise, the `--commitment-policy` parameter is invalid\.
 
-In version 2\.1\.*x*, the `--commitment-policy` parameter is optional and defaults to the `require-encrypt-require-decrypt` value, which won't encrypt or decrypt any ciphertext encrypted without key commitment\. However, we recommend that you set the commitment policy explicitly in all encrypt and decrypt calls to help with maintenance and troubleshooting\.
+In versions 2\.1\.*x* and later, the `--commitment-policy` parameter is optional and defaults to the `require-encrypt-require-decrypt` value, which won't encrypt or decrypt any ciphertext encrypted without key commitment\. However, we recommend that you set the commitment policy explicitly in all encrypt and decrypt calls to help with maintenance and troubleshooting\.
 
 This example sets the commitment policy\. It also uses the `--wrapping-keys` parameter that replaces the `--master-keys` parameter beginning in version 1\.8\.*x*\. For details, see [Updating AWS KMS master key providers](migrate-mkps-v2.md)\. For complete examples, see [Examples of the AWS Encryption CLI](crypto-cli-examples.md)\.
 

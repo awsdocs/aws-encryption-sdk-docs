@@ -51,7 +51,7 @@ When you use `pip` to install the AWS Encryption CLI, it automatically installs 
 If you are new to the AWS Encryption CLI, install the latest available version\.   
 If you support commands and scripts designed for version of the AWS Encryption CLI before 1\.8\.*x*, we recommend that you upgrade first to version 1\.8\.*x* before upgrading to version 2\.1\.*x* or later\. Version 2\.1\.*x* of the AWS Encryption CLI introduces new security features to support [AWS Encryption SDK best practices](best-practices.md)\. However, version 2\.1\.*x* is not backward\-compatible; it will cause scripts designed for earlier versions of the AWS Encryption CLI to fail\.   
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.  
-For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to version 2\.0\.*x*](migration.md)\.
+For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.
 
 **To install the latest version of the AWS Encryption CLI**  
 

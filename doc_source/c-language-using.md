@@ -16,7 +16,16 @@ See also: [Using keyrings](choose-keyring.md)
 
 When you use the AWS Encryption SDK for C, you follow a pattern similar to this: create a [keyring](concepts.md#keyring), create a [CMM](concepts.md#crypt-materials-manager) that uses the keyring, create a session that uses the CMM \(and keyring\), and then process the session\.
 
-1\. Create a keyring\.  
+1\. Load error strings\.  
+Call the `aws_cryptosdk_load_error_strings()` method in your C or C\+\+ code\. It loads error information that is very useful for debugging\.  
+You only need to call it once, such as in your `main` method\.  
+
+```
+/* Load error strings for debugging */
+aws_cryptosdk_load_error_strings();
+```
+
+2\. Create a keyring\.  
 Configure your [keyring](concepts.md#keyring) with the wrapping keys that you want to use to encrypt your data keys\. This example uses an [AWS KMS keyring](use-kms-keyring.md) with one AWS KMS key, but you can use any type of keyring in its place\.  
 To identify an AWS KMS key in an encryption keyring in the AWS Encryption SDK for C, specify a [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. In a decryption keyring, you must use a key ARN\. For details, see [Identifying AWS KMS keys in an AWS KMS keyring](use-kms-keyring.md#kms-keyring-id)\.  
 
@@ -26,7 +35,7 @@ struct aws_cryptosdk_keyring *kms_keyring =
        Aws::Cryptosdk::KmsKeyring::Builder().Build(KEY_ARN);
 ```
 
-2\. Create a session\.  
+3\. Create a session\.  
 In the AWS Encryption SDK for C, you use a *session* to encrypt a single plaintext message or decrypt a single ciphertext message, regardless of its size\. The session maintains the state of the message throughout its processing\.   
 Configure your session with an allocator, a keyring, and a mode: `AWS_CRYPTOSDK_ENCRYPT` or `AWS_CRYPTOSDK_DECRYPT`\. If you need to change the mode of the session, use the `aws_cryptosdk_session_reset` method\.  
 When you create a session with a keyring, the AWS Encryption SDK for C automatically creates a default cryptographic materials manager \(CMM\) for you\. You don't need to create, maintain, or destroy this object\.   
@@ -36,12 +45,12 @@ For example, the following session uses the allocator and the keyring that was d
 struct aws_cryptosdk_session * session = aws_cryptosdk_session_new_from_keyring_2(allocator, AWS_CRYPTOSDK_ENCRYPT, kms_keyring);
 ```
 
-3\. Encrypt or decrypt the data\.  
+4\. Encrypt or decrypt the data\.  
 To process the data in the session, use the `aws_cryptosdk_session_process` method\. If the input buffer is large enough to hold the entire plaintext, and the output buffer is large enough to hold the entire ciphertext, you can call `aws_cryptosdk_session_process_full`\. However, if you need to handle streaming data, you can call `aws_cryptosdk_session_process` in a loop\. For an example, see the [file\_streaming\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/file_streaming.cpp) example\. The `aws_cryptosdk_session_process_full` is introduced in AWS Encryption SDK versions 1\.9\.*x* and 2\.2\.*x*\.  
 When the session is configured to encrypt data, the plaintext fields describe the input and the ciphertext fields describe the output\. The `plaintext` field holds the message that you want to encrypt and the `ciphertext` field gets the [encrypted message](message-format.md) that the encrypt method returns\.   
 
 ```
-// Encrypting data
+/* Encrypting data */
 aws_cryptosdk_session_process_full(session,
                                    ciphertext,
                                    ciphertext_buffer_size,
@@ -53,7 +62,7 @@ When the session is configured to decrypt data, the ciphertext fields describe t
 To decrypt the data, call the `aws_cryptosdk_session_process_full` method\.  
 
 ```
-// Decrypting data
+/* Decrypting data */
 aws_cryptosdk_session_process_full(session,
                                    plaintext,
                                    plaintext_buffer_size,

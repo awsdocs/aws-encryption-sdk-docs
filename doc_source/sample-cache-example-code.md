@@ -36,79 +36,80 @@ Because the call to the encrypt method specifies a caching CMM, instead of a reg
  * specific language governing permissions and limitations under the License.
  */
 package com.amazonaws.crypto.examples.kinesisdatakeycaching;
- 
-import java.nio.ByteBuffer;
+
+import com.amazonaws.encryptionsdk.AwsCrypto;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
+import com.amazonaws.encryptionsdk.CryptoResult;
+import com.amazonaws.encryptionsdk.MasterKeyProvider;
+import com.amazonaws.encryptionsdk.caching.CachingCryptoMaterialsManager;
+import com.amazonaws.encryptionsdk.caching.LocalCryptoMaterialsCache;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKey;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKeyProvider;
+import com.amazonaws.encryptionsdk.multi.MultipleProviderFactory;
+import com.amazonaws.util.json.Jackson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
- 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.encryptionsdk.AwsCrypto;
-import com.amazonaws.encryptionsdk.CryptoResult;
-import com.amazonaws.encryptionsdk.MasterKeyProvider;
-import com.amazonaws.encryptionsdk.caching.CachingCryptoMaterialsManager;
-import com.amazonaws.encryptionsdk.caching.LocalCryptoMaterialsCache;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKey;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
-import com.amazonaws.encryptionsdk.multi.MultipleProviderFactory;
-import com.amazonaws.regions.Region;
-import com.amazonaws.services.kinesis.AmazonKinesis;
-import com.amazonaws.services.kinesis.AmazonKinesisClientBuilder;
-import com.amazonaws.util.json.Jackson;
- 
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.core.SdkBytes;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.kinesis.KinesisClient;
+import software.amazon.awssdk.services.kms.KmsClient;
+
 /**
  * Pushes data to Kinesis Streams in multiple Regions.
  */
 public class MultiRegionRecordPusher {
-    private static long MAX_ENTRY_AGE_MILLISECONDS = 300000;
-    private static long MAX_ENTRY_USES = 100;
-    private static int MAX_CACHE_ENTRIES = 100;
+
+    private static final long MAX_ENTRY_AGE_MILLISECONDS = 300000;
+    private static final long MAX_ENTRY_USES = 100;
+    private static final int MAX_CACHE_ENTRIES = 100;
     private final String streamName_;
-    private ArrayList<AmazonKinesis> kinesisClients_;
-    private CachingCryptoMaterialsManager cachingMaterialsManager_;
-    private AwsCrypto crypto_;
- 
+    private final ArrayList<KinesisClient> kinesisClients_;
+    private final CachingCryptoMaterialsManager cachingMaterialsManager_;
+    private final AwsCrypto crypto_;
+
     /**
-     * Creates an instance of this object with Kinesis clients for all target Regions
-     * and a cached key provider containing KMS master keys in all target Regions.
+     * Creates an instance of this object with Kinesis clients for all target Regions and a cached
+     * key provider containing KMS master keys in all target Regions.
      */
-    public MultiRegionRecordPusher(final Region[] regions, final String kmsAliasName, final String streamName){
+    public MultiRegionRecordPusher(final Region[] regions, final String kmsAliasName,
+        final String streamName) {
         streamName_ = streamName;
         crypto_ = AwsCrypto.builder()
-                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
-                .build();
-        kinesisClients_ = new ArrayList<AmazonKinesis>();
- 
-        DefaultAWSCredentialsProviderChain credentialsProvider = new DefaultAWSCredentialsProviderChain();
-        ClientConfiguration clientConfig = new ClientConfiguration();
- 
+            .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+            .build();
+        kinesisClients_ = new ArrayList<>();
+
+        AwsCredentialsProvider credentialsProvider = DefaultCredentialsProvider.builder().build();
+
         // Build KmsMasterKey and AmazonKinesisClient objects for each target region
-        List<KmsMasterKey> masterKeys = new ArrayList<KmsMasterKey>();
+        List<KmsMasterKey> masterKeys = new ArrayList<>();
         for (Region region : regions) {
-            kinesisClients_.add(AmazonKinesisClientBuilder.standard()
-                    .withCredentials(credentialsProvider)
-                    .withRegion(region.getName())
-                    .build());
- 
+            kinesisClients_.add(KinesisClient.builder()
+                .credentialsProvider(credentialsProvider)
+                .region(region)
+                .build());
+
             KmsMasterKey regionMasterKey = KmsMasterKeyProvider.builder()
-                .withDefaultRegion(region.getName())
-                .withCredentials(credentialsProvider)
+                .defaultRegion(region)
+                .builderSupplier(() -> KmsClient.builder().credentialsProvider(credentialsProvider))
                 .buildStrict(kmsAliasName)
                 .getMasterKey(kmsAliasName);
- 
+
             masterKeys.add(regionMasterKey);
         }
- 
+
         // Collect KmsMasterKey objects into single provider and add cache
         MasterKeyProvider<?> masterKeyProvider = MultipleProviderFactory.buildMultiProvider(
-                KmsMasterKey.class,
-                masterKeys
+            KmsMasterKey.class,
+            masterKeys
         );
- 
+
         cachingMaterialsManager_ = CachingCryptoMaterialsManager.newBuilder()
             .withMasterKeyProvider(masterKeyProvider)
             .withCache(new LocalCryptoMaterialsCache(MAX_CACHE_ENTRIES))
@@ -116,18 +117,18 @@ public class MultiRegionRecordPusher {
             .withMessageUseLimit(MAX_ENTRY_USES)
             .build();
     }
- 
+
     /**
      * JSON serializes and encrypts the received record data and pushes it to all target streams.
      */
-    public void putRecord(final Map<Object, Object> data){
+    public void putRecord(final Map<Object, Object> data) {
         String partitionKey = UUID.randomUUID().toString();
-        Map<String, String> encryptionContext = new HashMap<String, String>();
+        Map<String, String> encryptionContext = new HashMap<>();
         encryptionContext.put("stream", streamName_);
- 
+
         // JSON serialize data
         String jsonData = Jackson.toJsonString(data);
- 
+
         // Encrypt data
         CryptoResult<byte[], ?> result = crypto_.encryptData(
             cachingMaterialsManager_,
@@ -135,14 +136,13 @@ public class MultiRegionRecordPusher {
             encryptionContext
         );
         byte[] encryptedData = result.getResult();
- 
+
         // Put records to Kinesis stream in all Regions
-        for (AmazonKinesis regionalKinesisClient : kinesisClients_) {
-            regionalKinesisClient.putRecord(
-                streamName_,
-                ByteBuffer.wrap(encryptedData),
-                partitionKey
-            );
+        for (KinesisClient regionalKinesisClient : kinesisClients_) {
+            regionalKinesisClient.putRecord(builder ->
+                builder.streamName(streamName_)
+                    .data(SdkBytes.fromByteArray(encryptedData))
+                    .partitionKey(partitionKey));
         }
     }
 }
@@ -263,82 +263,90 @@ This code creates a master key provider for decrypting in strict mode\. The AWS 
  * specific language governing permissions and limitations under the License.
  */
 package com.amazonaws.crypto.examples.kinesisdatakeycaching;
- 
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.util.concurrent.TimeUnit;
- 
+
 import com.amazonaws.encryptionsdk.AwsCrypto;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
 import com.amazonaws.encryptionsdk.CryptoResult;
 import com.amazonaws.encryptionsdk.caching.CachingCryptoMaterialsManager;
 import com.amazonaws.encryptionsdk.caching.LocalCryptoMaterialsCache;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKey;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKeyProvider;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent;
 import com.amazonaws.services.lambda.runtime.events.KinesisEvent.KinesisEventRecord;
 import com.amazonaws.util.BinaryUtils;
- 
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+
 /**
  * Decrypts all incoming Kinesis records and writes records to DynamoDB.
  */
 public class LambdaDecryptAndWrite {
+
     private static final long MAX_ENTRY_AGE_MILLISECONDS = 600000;
     private static final int MAX_CACHE_ENTRIES = 100;
-    private CachingCryptoMaterialsManager cachingMaterialsManager_;
-    private AwsCrypto crypto_;
-    private Table table_;
- 
+    private final CachingCryptoMaterialsManager cachingMaterialsManager_;
+    private final AwsCrypto crypto_;
+    private final DynamoDbTable<Item> table_;
+
     /**
-     * Because the cache is used only for decryption, the code doesn't set
-     * the max bytes or max message security thresholds that are enforced
-     * only on on data keys used for encryption.  
+     * Because the cache is used only for decryption, the code doesn't set the max bytes or max
+     * message security thresholds that are enforced only on on data keys used for encryption.
      */
     public LambdaDecryptAndWrite() {
-    	String kmsKeyArn = System.getenv("CMK_ARN");
+        String kmsKeyArn = System.getenv("CMK_ARN");
         cachingMaterialsManager_ = CachingCryptoMaterialsManager.newBuilder()
             .withMasterKeyProvider(KmsMasterKeyProvider.builder().buildStrict(kmsKeyArn))
             .withCache(new LocalCryptoMaterialsCache(MAX_CACHE_ENTRIES))
             .withMaxAge(MAX_ENTRY_AGE_MILLISECONDS, TimeUnit.MILLISECONDS)
             .build();
- 
+
         crypto_ = AwsCrypto.builder()
-                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
-                .build();
- 
+            .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+            .build();
+
         String tableName = System.getenv("TABLE_NAME");
-        DynamoDB dynamodb = new DynamoDB(AmazonDynamoDBClientBuilder.defaultClient());
-        table_ = dynamodb.getTable(tableName);
+        DynamoDbEnhancedClient dynamodb = DynamoDbEnhancedClient.builder().build();
+        table_ = dynamodb.table(tableName, TableSchema.fromClass(Item.class));
     }
- 
+
     /**
-     * 
      * @param event
      * @param context
      */
-    public void handleRequest(KinesisEvent event, Context context) throws UnsupportedEncodingException{
+    public void handleRequest(KinesisEvent event, Context context)
+        throws UnsupportedEncodingException {
         for (KinesisEventRecord record : event.getRecords()) {
             ByteBuffer ciphertextBuffer = record.getKinesis().getData();
             byte[] ciphertext = BinaryUtils.copyAllBytesFrom(ciphertextBuffer);
- 
+
             // Decrypt and unpack record
-            CryptoResult<byte[], ?> plaintextResult = crypto_.decryptData(cachingMaterialsManager_, ciphertext);
- 
+            CryptoResult<byte[], ?> plaintextResult = crypto_.decryptData(cachingMaterialsManager_,
+                ciphertext);
+
             // Verify the encryption context value
             String streamArn = record.getEventSourceARN();
             String streamName = streamArn.substring(streamArn.indexOf("/") + 1);
             if (!streamName.equals(plaintextResult.getEncryptionContext().get("stream"))) {
                 throw new IllegalStateException("Wrong Encryption Context!");
             }
- 
+
             // Write record to DynamoDB
-            String jsonItem = new String(plaintextResult.getResult(), "UTF-8");
+            String jsonItem = new String(plaintextResult.getResult(), StandardCharsets.UTF_8);
             System.out.println(jsonItem);
             table_.putItem(Item.fromJSON(jsonItem));
+        }
+    }
+
+    private static class Item {
+
+        static Item fromJSON(String jsonText) {
+            // Parse JSON and create new Item
+            return new Item();
         }
     }
 }

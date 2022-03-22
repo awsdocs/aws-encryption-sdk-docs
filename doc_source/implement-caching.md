@@ -283,17 +283,17 @@ In the AWS Encryption SDK for C, you create a session with the caching CMM and t
 By default, when the message size is unknown and unbounded, the AWS Encryption SDK does not cache data keys\. To allow caching when you don't know the exact data size, use the `aws_cryptosdk_session_set_message_bound` method to set a maximum size for the message\. Set the bound larger than the estimated message size\. If the actual message size exceeds the bound, the encryption operation fails\.
 
 ```
-// Create a session with the caching CMM. Set the session mode to encrypt.
+/* Create a session with the caching CMM. Set the session mode to encrypt. */
 struct aws_cryptosdk_session *session = aws_cryptosdk_session_new_from_cmm_2(allocator, AWS_CRYPTOSDK_ENCRYPT, caching_cmm);
 
-// Set a message bound of 1000 bytes
+/* Set a message bound of 1000 bytes */
 aws_status = aws_cryptosdk_session_set_message_bound(session, 1000);
 
-// Encrypt the message using the session with the caching CMM
+/* Encrypt the message using the session with the caching CMM */
 aws_status = aws_cryptosdk_session_process(
              session, output_buffer, output_capacity, &output_produced, input_buffer, input_len, &input_consumed);
 
-// Release your references to the caching CMM and the session.
+/* Release your references to the caching CMM and the session. */
 aws_cryptosdk_cmm_release(caching_cmm);
 aws_cryptosdk_session_destroy(session);
 ```
@@ -385,6 +385,9 @@ void encrypt_with_caching(
     const uint64_t MAX_ENTRY_MSGS = 100;
 
     struct aws_allocator *allocator = aws_default_allocator();
+    
+    // Load error strings for debugging
+    aws_cryptosdk_load_error_strings();
 
     // Create a keyring
     struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(kms_key_arn);
@@ -446,20 +449,18 @@ void encrypt_with_caching(
 
 package com.amazonaws.crypto.examples;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import com.amazonaws.encryptionsdk.AwsCrypto;
 import com.amazonaws.encryptionsdk.CryptoMaterialsManager;
 import com.amazonaws.encryptionsdk.MasterKeyProvider;
 import com.amazonaws.encryptionsdk.caching.CachingCryptoMaterialsManager;
 import com.amazonaws.encryptionsdk.caching.CryptoMaterialsCache;
 import com.amazonaws.encryptionsdk.caching.LocalCryptoMaterialsCache;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKey;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
-import com.amazonaws.encryptionsdk.CommitmentPolicy;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKey;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKeyProvider;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -475,6 +476,7 @@ import com.amazonaws.encryptionsdk.CommitmentPolicy;
  * </ol>
  */
 public class SimpleDataKeyCachingExample {
+
     /*
      * Security thresholds
      *   Max entry age is required.
@@ -494,18 +496,19 @@ public class SimpleDataKeyCachingExample {
         final Map<String, String> encryptionContext = Collections.singletonMap("purpose", "test");
 
         // Create a master key provider
-        MasterKeyProvider<KmsMasterKey> keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsKeyArn);
+        MasterKeyProvider<KmsMasterKey> keyProvider = KmsMasterKeyProvider.builder()
+            .buildStrict(kmsKeyArn);
 
         // Create a cache
         CryptoMaterialsCache cache = new LocalCryptoMaterialsCache(cacheCapacity);
 
         // Create a caching CMM
         CryptoMaterialsManager cachingCmm =
-                CachingCryptoMaterialsManager.newBuilder().withMasterKeyProvider(keyProvider)
-                        .withCache(cache)
-                        .withMaxAge(maxEntryAge, TimeUnit.SECONDS)
-                        .withMessageUseLimit(MAX_ENTRY_MSGS)
-                        .build();
+            CachingCryptoMaterialsManager.newBuilder().withMasterKeyProvider(keyProvider)
+                .withCache(cache)
+                .withMaxAge(maxEntryAge, TimeUnit.SECONDS)
+                .withMessageUseLimit(MAX_ENTRY_MSGS)
+                .build();
 
         // When the call to encryptData specifies a caching CMM,
         // the encryption operation uses the data key cache

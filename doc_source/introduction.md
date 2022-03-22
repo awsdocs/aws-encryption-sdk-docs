@@ -28,6 +28,15 @@ The AWS Encryption SDK stores the encrypted data and encrypted data key together
 
 Some language implementations of the AWS Encryption SDK require an AWS SDK, but the AWS Encryption SDK doesn't require an AWS account and it doesn't depend on any AWS service\. You need an AWS account only if you choose to use [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#kms-keys) to protect your data\.
 
+## Developed in open\-source repositories<a name="esdk-repos"></a>
+
+The AWS Encryption SDK is developed in open\-source repositories on GitHub\. You can use these repositories to view the code, read and submit issues, and find information that is specific to your language implementation\.
++ AWS Encryption SDK for C — [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/)
++ AWS Encryption CLI — [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/)
++ AWS Encryption SDK for Java — [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/)
++ AWS Encryption SDK for JavaScript — [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/)
++ AWS Encryption SDK for Python — [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/)
+
 ## Compatibility with encryption libraries and services<a name="intro-compatibility"></a>
 
 The AWS Encryption SDK is supported in several [programming languages](programming-languages.md)\. All language implementations are interoperable\. You can encrypt with one language implementation and decrypt with another\. Interoperability might be subject to language constraints\. If so, these constraints are described in the topic about the language implementation\. Also, when encrypting and decrypting, you must use compatible keyrings, or master keys and master key providers\. For details, see [Keyring compatibility](keyring-compatibility.md)\.
@@ -44,6 +53,21 @@ The AWS Encryption SDK supports only [symmetric AWS KMS keys](https://docs.aws.a
 
 For help deciding which library or service to use, see [How to Choose an Encryption Tool or Service](https://docs.aws.amazon.com/crypto/latest/userguide/awscryp-overview.html) in *AWS Cryptographic Services and Tools*\.
 
+## Support and maintenance<a name="support"></a>
+
+The AWS Encryption SDK uses the same [maintenance policy](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html) that the AWS SDK and Tools use, including its versioning and life\-cycle phases\. As a [best practice](best-practices.md), we recommend that you use the latest available version of the AWS Encryption SDK for your programming language, and upgrade as new versions are released\. When a version requires significant changes, such as the upgrade from AWS Encryption SDK versions earlier than 1\.7\.*x* to versions 2\.0\.*x* and later, we provide [detailed instructions](migration.md) to help you\.
+
+Each programming language implementation of the AWS Encryption SDK is developed in a separate open\-source GitHub repository\. The life\-cycle and support phase of each version is likely to vary among repositories\. For example, a given version of the AWS Encryption SDK might be in the general availability \(full support\) phase in one programming language, but the end\-of\-support phase in a different programming language\. We recommend that you use a fully supported version whenever possible and avoid versions that are no longer supported\.
+
+To find the life\-cycle phase of AWS Encryption SDK versions for your programming language, see the `SUPPORT_POLICY.rst` file in each AWS Encryption SDK repository\.
++ AWS Encryption SDK for C — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-c/blob/master/SUPPORT_POLICY.rst)
++ AWS Encryption CLI — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-cli/blob/master/SUPPORT_POLICY.rst)
++ AWS Encryption SDK for Java — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-java/blob/master/SUPPORT_POLICY.rst)
++ AWS Encryption SDK for JavaScript — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/SUPPORT_POLICY.rst)
++ AWS Encryption SDK for Python — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-python/blob/master/SUPPORT_POLICY.rst)
+
+For more information, see [Versions of the AWS Encryption SDK](about-versions.md) and [AWS SDKs and Tools maintenance policy](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html) in the AWS SDKs and Tools Reference Guide\.
+
 ## Learning more<a name="intro-see-also"></a>
 
 For more information about the AWS Encryption SDK and client\-side encryption, try these sources\.
@@ -59,8 +83,9 @@ For information about implementations of the AWS Encryption SDK in different pro
 + **C**: See [AWS Encryption SDK for C](c-language.md), the AWS Encryption SDK [C documentation](https://aws.github.io/aws-encryption-sdk-c/html/), and the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
 + **Command Line Interface**: See [AWS Encryption SDK command line interface](crypto-cli.md), [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/) for the AWS Encryption CLI, and the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 + **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
+
+  **JavaScript**: See [AWS Encryption SDK for JavaScript](javascript.md) and the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository on GitHub\. 
 + **Python**: See [AWS Encryption SDK for Python](python.md), the AWS Encryption SDK [Python documentation](https://aws-encryption-sdk-python.readthedocs.io/en/latest/), and the [aws\-encryption\-sdk\-python](https://github.com/aws/aws-encryption-sdk-python/) repository on GitHub\.
-+ **JavaScript**: See [AWS Encryption SDK for JavaScript](javascript.md) and the [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/) repository on GitHub\. 
 
 ## Sending feedback<a name="report-issues"></a>
 

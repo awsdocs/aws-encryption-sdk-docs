@@ -16,7 +16,7 @@ If you're new to the AWS Encryption CLI, use the latest version\.
 To decrypt data encrypted by a version of the AWS Encryption SDK earlier than version 1\.7\.*x*, start with version 1\.8\.*x*\. Make [all recommended changes](migration-guide.md) before updating to version 2\.1\.*x* or later\. Otherwise, you can begin with the latest available version of the AWS Encryption CLI\.
 
 **Learn more**
-+ For detailed information about the changes and guidance for migrating to these new versions, see [Migrating to version 2\.0\.*x*](migration.md)\.
++ For detailed information about the changes and guidance for migrating to these new versions, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.
 + For descriptions of the new AWS Encryption CLI parameters and attributes, see [AWS Encryption SDK CLI syntax and parameter reference](crypto-cli-reference.md)\.
 
 The following lists describe the change to the AWS Encryption CLI in versions 1\.8\.*x* and 2\.1\.*x*\.

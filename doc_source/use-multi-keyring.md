@@ -19,10 +19,10 @@ To create a multi\-keyring, first instantiate the child keyrings\. In this examp
 #### [ C ]
 
 ```
-// Define an AWS KMS keyring. For details, see [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp).
+/* Define an AWS KMS keyring. For details, see [string\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/string.cpp) */
 struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder().Build(example_key);
 
-// Define a Raw AES keyring. For details, see [raw\_aes\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c).
+// Define a Raw AES keyring. For details, see [raw\_aes\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c) */
 struct aws_cryptosdk_keyring *aes_keyring = aws_cryptosdk_raw_aes_keyring_new(
         alloc, wrapping_key_namespace, wrapping_key_name, wrapping_key, AWS_CRYPTOSDK_AES256);
 ```

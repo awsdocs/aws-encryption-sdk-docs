@@ -1,9 +1,9 @@
 # How to migrate and deploy the AWS Encryption SDK<a name="migration-guide"></a>
 
-When migrating from earlier versions of the AWS Encryption SDK to version 2\.0\.*x*, you must transition safely to encrypting with [key commitment](concepts.md#key-commitment)\. Otherwise, your application will encounter ciphertexts that it cannot decrypt\. If you are using AWS KMS master key providers, you must update to new constructors that create master key providers in strict or discovery mode\.
+When migrating from an AWS Encryption SDK version earlier than 1\.7\.*x* to version 2\.0\.*x* or later, you must transition safely to encrypting with [key commitment](concepts.md#key-commitment)\. Otherwise, your application will encounter ciphertexts that it cannot decrypt\. If you are using AWS KMS master key providers, you must update to new constructors that create master key providers in strict mode or discovery mode\.
 
 **Note**  
-This topic is designed for users migrating from earlier versions of the AWS Encryption SDK to version 2\.0\.*x*\. If you are new to the AWS Encryption SDK, you can begin using the latest available version immediately with the default settings\.
+This topic is designed for users migrating from an earlier version of the AWS Encryption SDK to version 2\.0\.*x* or later\. If you are new to the AWS Encryption SDK, you can begin using the latest available version immediately with the default settings\.
 
 To avoid a critical situation in which you cannot decrypt ciphertext that you need to read, we recommend that you migrate and deploy in multiple distinct stages\. Verify that each stage is complete and fully deployed before starting the next stage\. This is particularly important for distributed applications with multiple hosts\.
 
@@ -21,7 +21,7 @@ Version 1\.7\.*x* is backward compatible with legacy versions of the AWS Encrypt
 
 After deploying version 1\.7\.*x* successfully to all hosts, you can upgrade to version 2\.0\.*x*\. Version 2\.0\.*x* includes breaking changes for all earlier versions of the AWS Encryption SDK\. However, if you make the code changes recommended in Stage 1, you can avoid errors when you migrate to version 2\.0\.*x*\.
 
-When you update to version 2\.0\.*x* from 1\.7\.*x*, verify that your commitment policy is consistently set to `ForbidEncryptAllowDecrypt`\. Then, depending on your data configuration, you can migrate at your own pace to `RequireEncryptAllowDecrypt` and then to the default setting, `RequireEncryptRequireDecrypt`\. We recommend a series of transition steps like the following pattern\.
+When you update to versions 2\.0\.*x* and later from 1\.7\.*x*, verify that your commitment policy is consistently set to `ForbidEncryptAllowDecrypt`\. Then, depending on your data configuration, you can migrate at your own pace to `RequireEncryptAllowDecrypt` and then to the default setting, `RequireEncryptRequireDecrypt`\. We recommend a series of transition steps like the following pattern\.
 
 1. Begin with your [commitment policy](migrate-commitment-policy.md) set to `ForbidEncryptAllowDecrypt`\. The AWS Encryption SDK can decrypt messages with key commitment, but it doesn't yet encrypt with key commitment\.
 

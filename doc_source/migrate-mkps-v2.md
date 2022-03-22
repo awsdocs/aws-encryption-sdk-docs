@@ -1,6 +1,6 @@
 # Updating AWS KMS master key providers<a name="migrate-mkps-v2"></a>
 
-To migrate to versions 1\.7\.*x* and 2\.0\.*x*, you must replace legacy AWS KMS master key providers with master key providers created explicitly in [*strict mode* or *discovery mode*](about-versions.md#changes-to-mkps)\. Legacy master key providers are deprecated in version 1\.7\.*x* and removed in version 2\.0\.*x*\. This change is required for applications and scripts that use the [AWS Encryption SDK for Java](java.md), [AWS Encryption SDK for Python](python.md), and the [AWS Encryption CLI](crypto-cli.md)\. The examples in this section will show you how to update your code\. 
+To migrate to versions 1\.7\.*x* and then to version 2\.0\.*x* or later, you must replace legacy AWS KMS master key providers with master key providers created explicitly in [*strict mode* or *discovery mode*](about-versions.md#changes-to-mkps)\. Legacy master key providers are deprecated in version 1\.7\.*x* and removed in version 2\.0\.*x*\. This change is required for applications and scripts that use the [AWS Encryption SDK for Java](java.md), [AWS Encryption SDK for Python](python.md), and the [AWS Encryption CLI](crypto-cli.md)\. The examples in this section will show you how to update your code\. 
 
 **Note**  
 In Python, [turn on deprecation warnings](https://docs.python.org/3/library/warnings.html)\. This will help you identify the parts of your code that you need to update\.

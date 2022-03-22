@@ -4,7 +4,7 @@ This topic explains how to use the parameters in the AWS Encryption CLI\. For ex
 
 **Note**  
 Version 2\.1\.*x* of the AWS Encryption CLI introduces new security features to support [AWS Encryption SDK best practices](best-practices.md)\. However, version 2\.1\.*x* is not backward\-compatible; it will cause commands and scripts designed for earlier versions of the AWS Encryption CLI to fail\. To mitigate the effect of these changes, we provide a transition version, 1\.8\.*x*\.   
-For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to version 2\.0\.*x*](migration.md)\.  
+For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.  
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 For an example showing how to use the security feature that limits encrypted data keys, see [Limit encrypted data keys](configure.md#config-limit-keys)\.

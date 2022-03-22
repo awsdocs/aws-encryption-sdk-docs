@@ -2,7 +2,7 @@
 
 The following examples show you how to use the AWS Encryption SDK for Java to encrypt and decrypt data\. These examples show how to use [version 2\.0\.*x*](about-versions.md) and later of the AWS Encryption SDK for Java\. For examples that use earlier versions, find your release in the [Releases](https://github.com/aws/aws-encryption-sdk-java/releases) list of the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
 
-
+Java examples in the AWS Encryption SDK Developer Guide use the AWS SDK for Java 2\.x\.
 
 **Topics**
 + [Strings](#java-example-strings)
@@ -25,16 +25,15 @@ Similarly, when you call `decryptData()`, the `CryptoResult` object it returns c
 
 package com.amazonaws.crypto.examples;
 
+import com.amazonaws.encryptionsdk.AwsCrypto;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
+import com.amazonaws.encryptionsdk.CryptoResult;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKey;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKeyProvider;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-
-import com.amazonaws.encryptionsdk.AwsCrypto;
-import com.amazonaws.encryptionsdk.CryptoResult;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKey;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
-import com.amazonaws.encryptionsdk.CommitmentPolicy;
 
 /**
  * <p>
@@ -64,8 +63,8 @@ public class BasicEncryptionExample {
         // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
         // or `AwsCrypto.standard()`.
         final AwsCrypto crypto = AwsCrypto.builder()
-                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
-                .build();
+            .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+            .build();
 
         // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict().
         // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
@@ -79,21 +78,25 @@ public class BasicEncryptionExample {
         // to protect integrity. This sample uses placeholder values.
         // For more information see:
         // blogs.aws.amazon.com/security/post/Tx2LZ6WBJJANTNW/How-to-Protect-the-Integrity-of-Your-Encrypted-Data-by-Using-AWS-Key-Management
-        final Map<String, String> encryptionContext = Collections.singletonMap("ExampleContextKey", "ExampleContextValue");
+        final Map<String, String> encryptionContext = Collections.singletonMap("ExampleContextKey",
+            "ExampleContextValue");
 
         // 4. Encrypt the data
-        final CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(keyProvider, EXAMPLE_DATA, encryptionContext);
+        final CryptoResult<byte[], KmsMasterKey> encryptResult = crypto.encryptData(keyProvider,
+            EXAMPLE_DATA, encryptionContext);
         final byte[] ciphertext = encryptResult.getResult();
 
         // 5. Decrypt the data
-        final CryptoResult<byte[], KmsMasterKey> decryptResult = crypto.decryptData(keyProvider, ciphertext);
+        final CryptoResult<byte[], KmsMasterKey> decryptResult = crypto.decryptData(keyProvider,
+            ciphertext);
 
         // 6. Verify that the encryption context in the result contains the
         // encryption context supplied to the encryptData method. Because the
         // SDK can add values to the encryption context, don't require that
         // the entire context matches.
         if (!encryptionContext.entrySet().stream()
-                .allMatch(e -> e.getValue().equals(decryptResult.getEncryptionContext().get(e.getKey())))) {
+            .allMatch(
+                e -> e.getValue().equals(decryptResult.getEncryptionContext().get(e.getKey())))) {
             throw new IllegalStateException("Wrong Encryption Context!");
         }
 
@@ -229,6 +232,14 @@ This example encrypts with the [default algorithm suite](supported-algorithms.md
 
 package com.amazonaws.crypto.examples;
 
+import com.amazonaws.encryptionsdk.AwsCrypto;
+import com.amazonaws.encryptionsdk.CommitmentPolicy;
+import com.amazonaws.encryptionsdk.CryptoOutputStream;
+import com.amazonaws.encryptionsdk.MasterKeyProvider;
+import com.amazonaws.encryptionsdk.jce.JceMasterKey;
+import com.amazonaws.encryptionsdk.kmssdkv2.KmsMasterKeyProvider;
+import com.amazonaws.encryptionsdk.multi.MultipleProviderFactory;
+import com.amazonaws.util.IOUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -239,15 +250,6 @@ import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
-import com.amazonaws.encryptionsdk.AwsCrypto;
-import com.amazonaws.encryptionsdk.CryptoOutputStream;
-import com.amazonaws.encryptionsdk.MasterKeyProvider;
-import com.amazonaws.encryptionsdk.jce.JceMasterKey;
-import com.amazonaws.encryptionsdk.kms.KmsMasterKeyProvider;
-import com.amazonaws.encryptionsdk.multi.MultipleProviderFactory;
-import com.amazonaws.encryptionsdk.CommitmentPolicy;
-import com.amazonaws.util.IOUtils;
-
 /**
  * <p>
  * Encrypts a file using both AWS KMS and an asymmetric key pair.
@@ -256,23 +258,23 @@ import com.amazonaws.util.IOUtils;
  * Arguments:
  * <ol>
  * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your AWS KMS key, see 'Find the key ID and ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
-  * <li>Name of file containing plaintext data to encrypt
+ * <li>Name of file containing plaintext data to encrypt
  * </ol>
- *
+ * <p>
  * You might use AWS Key Management Service (AWS KMS) for most encryption and decryption operations, but
  * still want the option of decrypting your data offline independently of AWS KMS. This sample
  * demonstrates one way to do this.
- * 
+ * <p>
  * The sample encrypts data under both an AWS KMS key and an "escrowed" RSA key pair
  * so that either key alone can decrypt it. You might commonly use the AWS KMS key for decryption. However,
  * at any time, you can use the private RSA key to decrypt the ciphertext independent of AWS KMS.
- *
+ * <p>
  * This sample uses the JCEMasterKey class to generate a RSA public-private key pair
- * and saves the key pair in memory. In practice, you would store the private key in a secure offline 
+ * and saves the key pair in memory. In practice, you would store the private key in a secure offline
  * location, such as an offline HSM, and distribute the public key to your development team.
- *
  */
 public class EscrowedEncryptExample {
+
     private static PublicKey publicEscrowKey;
     private static PrivateKey privateEscrowKey;
 
@@ -300,26 +302,28 @@ public class EscrowedEncryptExample {
         // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
         // or `AwsCrypto.standard()`.
         final AwsCrypto crypto = AwsCrypto.builder()
-                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
-                .build();
+            .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+            .build();
 
         // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict()
         //
         // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
         // indicated by kmsArn.
         final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsArn);
-        
+
         // 3. Instantiate a JCE master key provider
         // Because the user does not have access to the private escrow key,
         // they pass in "null" for the private key parameter.
-        final JceMasterKey escrowPub = JceMasterKey.getInstance(publicEscrowKey, null, "Escrow", "Escrow",
-                "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
+        final JceMasterKey escrowPub = JceMasterKey.getInstance(publicEscrowKey, null, "Escrow",
+            "Escrow",
+            "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 
         // 4. Combine the providers into a single master key provider
-        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(keyProvider, escrowPub);
+        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(keyProvider,
+            escrowPub);
 
         // 5. Encrypt the file
-        // To simplify the code, we omit the encryption context. Production code should always 
+        // To simplify the code, we omit the encryption context. Production code should always
         // use an encryption context. For an example, see the other SDK samples.
         final FileInputStream in = new FileInputStream(fileName);
         final FileOutputStream out = new FileOutputStream(fileName + ".encrypted");
@@ -341,37 +345,41 @@ public class EscrowedEncryptExample {
         // This is the default commitment policy if you build the client with `AwsCrypto.builder().build()`
         // or `AwsCrypto.standard()`.
         final AwsCrypto crypto = AwsCrypto.builder()
-                .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
-                .build();
+            .withCommitmentPolicy(CommitmentPolicy.RequireEncryptRequireDecrypt)
+            .build();
 
         // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict()
         //
         // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
         // indicated by kmsArn.
         final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(kmsArn);
-        
+
         // 3. Instantiate a JCE master key provider
-        // Because the user does not have access to the private 
+        // Because the user does not have access to the private
         // escrow key, they pass in "null" for the private key parameter.
-        final JceMasterKey escrowPub = JceMasterKey.getInstance(publicEscrowKey, null, "Escrow", "Escrow",
-                "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
+        final JceMasterKey escrowPub = JceMasterKey.getInstance(publicEscrowKey, null, "Escrow",
+            "Escrow",
+            "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 
         // 4. Combine the providers into a single master key provider
-        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(keyProvider, escrowPub);
+        final MasterKeyProvider<?> provider = MultipleProviderFactory.buildMultiProvider(keyProvider,
+            escrowPub);
 
         // 5. Decrypt the file
-        // To simplify the code, we omit the encryption context. Production code should always 
+        // To simplify the code, we omit the encryption context. Production code should always
         // use an encryption context. For an example, see the other SDK samples.
         final FileInputStream in = new FileInputStream(fileName + ".encrypted");
         final FileOutputStream out = new FileOutputStream(fileName + ".decrypted");
         // Since we are using a signing algorithm suite, we avoid streaming plaintext directly to the output file.
         // This ensures that the trailing signature is verified before writing any untrusted plaintext to disk.
         final ByteArrayOutputStream plaintextBuffer = new ByteArrayOutputStream();
-        final CryptoOutputStream<?> decryptingStream = crypto.createDecryptingStream(provider, plaintextBuffer);
+        final CryptoOutputStream<?> decryptingStream = crypto.createDecryptingStream(provider,
+            plaintextBuffer);
         IOUtils.copy(in, decryptingStream);
         in.close();
         decryptingStream.close();
-        final ByteArrayInputStream plaintextReader = new ByteArrayInputStream(plaintextBuffer.toByteArray());
+        final ByteArrayInputStream plaintextReader = new ByteArrayInputStream(
+            plaintextBuffer.toByteArray());
         IOUtils.copy(plaintextReader, out);
         out.close();
     }
@@ -384,12 +392,13 @@ public class EscrowedEncryptExample {
         final AwsCrypto crypto = AwsCrypto.standard();
 
         // 2. Instantiate a JCE master key provider
-        // This method call uses the escrowed private key, not null 
-        final JceMasterKey escrowPriv = JceMasterKey.getInstance(publicEscrowKey, privateEscrowKey, "Escrow", "Escrow",
-                "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
+        // This method call uses the escrowed private key, not null
+        final JceMasterKey escrowPriv = JceMasterKey.getInstance(publicEscrowKey, privateEscrowKey,
+            "Escrow", "Escrow",
+            "RSA/ECB/OAEPWithSHA-512AndMGF1Padding");
 
         // 3. Decrypt the file
-        // To simplify the code, we omit the encryption context. Production code should always 
+        // To simplify the code, we omit the encryption context. Production code should always
         // use an encryption context. For an example, see the other SDK samples.
         final FileInputStream in = new FileInputStream(fileName + ".encrypted");
         final FileOutputStream out = new FileOutputStream(fileName + ".deescrowed");
