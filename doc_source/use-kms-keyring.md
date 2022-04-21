@@ -46,7 +46,7 @@ If you specify an alias name or alias ARN for a KMS key in an encryption keyring
 
 ## Creating an AWS KMS keyring for encryption<a name="kms-keyring-encrypt"></a>
 
-You can configure each AWS KMS keyring with a single symmetric AWS KMS key or multiple symmetric AWS KMS keys in the same or different AWS accounts and AWS Regions\. You can also use a symmetric [multi\-Region KMS key](configure.md#config-mrks)\. As with all keyrings, you can use one or more AWS KMS keyrings in a [multi\-keyring](use-multi-keyring.md)\. 
+You can configure each AWS KMS keyring with a single AWS KMS key or multiple AWS KMS keys in the same or different AWS accounts and AWS Regions\. The AWS KMS keys must be symmetric encryption keys \(SYMMETRIC\_DEFAULT\)\. You can also use a symmetric encryption [multi\-Region KMS key](configure.md#config-mrks)\. As with all keyrings, you can use one or more AWS KMS keyrings in a [multi\-keyring](use-multi-keyring.md)\. 
 
 When you create an AWS KMS keyring to encrypt data, you must specify a *generator key*, which is an AWS KMS key that is used to generate a plaintext data key and encrypt it\. The data key is mathematically unrelated to the KMS key\. Then, if you choose, you can specify additional AWS KMS keys that encrypt the same plaintext data key\. 
 
