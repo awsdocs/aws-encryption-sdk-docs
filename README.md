@@ -43,6 +43,7 @@ and examples in each programming language to help you get started.
 We are developing the AWS Encryption SDK in the following open source projects on GitHub. 
 
 * C - [aws-encryption-sdk-c](https://github.com/aws/aws-encryption-sdk-c)
+* C#/.NET - [aws-encryption-sdk-net](https://github.com/aws/aws-encryption-sdk-dafny/tree/mainline/aws-encryption-sdk-net/)
 * Java - [aws-encryption-sdk-java](https://github.com/aws/aws-encryption-sdk-java)
 * JavaScript - [aws-encryption-sdk-javascript](https://github.com/aws/aws-encryption-sdk-javascript)
 * Python -
