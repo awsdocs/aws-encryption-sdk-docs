@@ -10,8 +10,9 @@ The AWS Encryption SDK answers questions like the following for you:
 + How can I make my encrypted data portable?
 + How do I ensure that the intended recipient can read my encrypted data?
 + How can I ensure my encrypted data is not modified between the time it is written and when it is read?
++ How do I use the data keys that AWS KMS returns?
 
-With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java or Python\) or a [keyring](concepts.md#keyring) \(C or JavaScript\) that determines which master keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
+With the AWS Encryption SDK, you define a [master key provider](concepts.md#master-key-provider) \(Java and Python\) or a [keyring](concepts.md#keyring) \(C, C\#/\.NET, and JavaScript\) that determines which wrapping keys you use to protect your data\. Then you encrypt and decrypt your data using straightforward methods provided by the AWS Encryption SDK\. The AWS Encryption SDK does the rest\.
 
 Without the AWS Encryption SDK, you might spend more effort on building an encryption solution than on the core functionality of your application\. The AWS Encryption SDK answers these questions by providing the following things\.
 
@@ -19,9 +20,9 @@ Without the AWS Encryption SDK, you might spend more effort on building an encry
 By default, the AWS Encryption SDK generates a unique data key for each data object that it encrypts\. This follows the cryptography best practice of using unique data keys for each encryption operation\.  
 The AWS Encryption SDK encrypts your data using a secure, authenticated, symmetric key algorithm\. For more information, see [Supported algorithm suites in the AWS Encryption SDK](supported-algorithms.md)\.
 
-**A framework for protecting data keys with master keys**  
-The AWS Encryption SDK protects the data keys that encrypt your data by encrypting them under one or more master keys\. By providing a framework to encrypt data keys with more than one master key, the AWS Encryption SDK helps make your encrypted data portable\.   
-For example, you can encrypt data under multiple AWS KMS keys, each in a different AWS Region\. Then you can copy the encrypted data to any of the regions and use the AWS KMS key in that region to decrypt it\. You can also encrypt data under an AWS KMS key in AWS KMS and a master key in an on\-premises HSM, enabling you to later decrypt the data even if one of the options is unavailable\.
+**A framework for protecting data keys with wrapping keys**  
+The AWS Encryption SDK protects the data keys that encrypt your data by encrypting them under one or more wrapping keys\. By providing a framework to encrypt data keys with more than one wrapping key, the AWS Encryption SDK helps make your encrypted data portable\.   
+For example, encrypt data under an AWS KMS key in AWS KMS and a key from your on\-premises HSM\. You can use either of the wrapping keys to decrypt the data, in case one is unavailable or the caller doesn't have permission to use both keys\.
 
 **A formatted message that stores encrypted data keys with the encrypted data**  
 The AWS Encryption SDK stores the encrypted data and encrypted data key together in an [encrypted message](concepts.md#message) that uses a defined data format\. This means you don't need to keep track of or protect the data keys that encrypt your data because the AWS Encryption SDK does it for you\.
@@ -32,6 +33,7 @@ Some language implementations of the AWS Encryption SDK require an AWS SDK, but 
 
 The AWS Encryption SDK is developed in open\-source repositories on GitHub\. You can use these repositories to view the code, read and submit issues, and find information that is specific to your language implementation\.
 + AWS Encryption SDK for C — [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/)
++ AWS Encryption SDK for \.NET — [aws\-encryption\-sdk\-net](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/) directory of the `aws-encryption-sdk-dafny` repository\.
 + AWS Encryption CLI — [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/)
 + AWS Encryption SDK for Java — [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/)
 + AWS Encryption SDK for JavaScript — [aws\-encryption\-sdk\-javascript](https://github.com/aws/aws-encryption-sdk-javascript/)
@@ -44,10 +46,10 @@ The AWS Encryption SDK is supported in several [programming languages](programmi
 However, the AWS Encryption SDK cannot interoperate with other libraries\. Because each library returns encrypted data in a different format, you cannot encrypt with one library and decrypt with another\.
 
 **DynamoDB Encryption Client and Amazon S3 client\-side encryption**  <a name="ESDK-DDBEC"></a>
-The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. And these libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
+The AWS Encryption SDK cannot decrypt data encrypted by the [DynamoDB Encryption Client](https://docs.aws.amazon.com/dynamodb-encryption-client/latest/devguide/) or [Amazon S3 client\-side encryption](https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html)\. These libraries cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\. 
 
 **AWS Key Management Service \(AWS KMS\)**  <a name="ESDK-KMS"></a>
-The AWS Encryption SDK can use [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) and [data keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys) to protect your data\. For example, you can configure the AWS Encryption SDK to encrypt your data under one or more AWS KMS keys in your AWS account\. However, you must use the AWS Encryption SDK to decrypt that data\.   
+The AWS Encryption SDK can use [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) and [data keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#data-keys) to protect your data, including multi\-Region KMS keys\. For example, you can configure the AWS Encryption SDK to encrypt your data under one or more AWS KMS keys in your AWS account\. However, you must use the AWS Encryption SDK to decrypt that data\.   
 The AWS Encryption SDK cannot decrypt the ciphertext that the AWS KMS [Encrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Encrypt.html) or [ReEncrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_ReEncrypt.html) operations return\. Similarly, the AWS KMS [Decrypt](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html) operation cannot decrypt the [encrypted message](concepts.md#message) the AWS Encryption SDK returns\.  
 The AWS Encryption SDK supports only [symmetric encryption KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#symmetric-cmks)\. You cannot use an [asymmetric KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html#asymmetric-cmks) for encryption or signing in the AWS Encryption SDK\. The AWS Encryption SDK generates its own ECDSA signing keys for [algorithm suites](supported-algorithms.md) that sign messages\.
 
@@ -61,6 +63,7 @@ Each programming language implementation of the AWS Encryption SDK is developed 
 
 To find the life\-cycle phase of AWS Encryption SDK versions for your programming language, see the `SUPPORT_POLICY.rst` file in each AWS Encryption SDK repository\.
 + AWS Encryption SDK for C — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-c/blob/master/SUPPORT_POLICY.rst)
++ AWS Encryption SDK for \.NET — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/SUPPORT_POLICY.rst)
 + AWS Encryption CLI — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-cli/blob/master/SUPPORT_POLICY.rst)
 + AWS Encryption SDK for Java — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-java/blob/master/SUPPORT_POLICY.rst)
 + AWS Encryption SDK for JavaScript — [SUPPORT\_POLICY\.rst](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/SUPPORT_POLICY.rst)
@@ -71,16 +74,17 @@ For more information, see [Versions of the AWS Encryption SDK](about-versions.md
 ## Learning more<a name="intro-see-also"></a>
 
 For more information about the AWS Encryption SDK and client\-side encryption, try these sources\.
-+ To get started quickly, see [Getting started](getting-started.md)\.
++ For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
 + For best practice guidelines, see [Best practices for the AWS Encryption SDK](best-practices.md)\.
 + For information about how this SDK works, see [How the SDK works](how-it-works.md)\.
-+ For help with the terms and concepts used in this SDK, see [Concepts in the AWS Encryption SDK](concepts.md)\.
++ For examples that show how to configure options in the AWS Encryption SDK, see [Configuring the AWS Encryption SDK](configure.md)\.
 + For detailed technical information, see the [AWS Encryption SDK reference](reference.md)\.
 + For the technical specification for the AWS Encryption SDK, see the [AWS Encryption SDK Specification](https://github.com/awslabs/aws-encryption-sdk-specification/) in GitHub\.
 + For answers to your questions about using the AWS Encryption SDK, read and post on the [AWS Crypto Tools Discussion Forum](https://forums.aws.amazon.com/forum.jspa?forumID=302)\.
 
 For information about implementations of the AWS Encryption SDK in different programming languages\.
 + **C**: See [AWS Encryption SDK for C](c-language.md), the AWS Encryption SDK [C documentation](https://aws.github.io/aws-encryption-sdk-c/html/), and the [aws\-encryption\-sdk\-c](https://github.com/aws/aws-encryption-sdk-c/) repository on GitHub\.
++ **C\#/\.NET**: See [AWS Encryption SDK for \.NET](dot-net.md) and the [aws\-encryption\-sdk\-net](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/) directory of the `aws-encryption-sdk-dafny` repository on GitHub\.
 + **Command Line Interface**: See [AWS Encryption SDK command line interface](crypto-cli.md), [Read the Docs](https://aws-encryption-sdk-cli.readthedocs.io/en/latest/) for the AWS Encryption CLI, and the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 + **Java**: See [AWS Encryption SDK for Java](java.md), the AWS Encryption SDK [Javadoc](https://aws.github.io/aws-encryption-sdk-java/), and the [aws\-encryption\-sdk\-java](https://github.com/aws/aws-encryption-sdk-java/) repository on GitHub\.
 
@@ -92,4 +96,4 @@ For information about implementations of the AWS Encryption SDK in different pro
 We welcome your feedback\! If you have a question or comment, or an issue to report, please use the following resources\.
 + If you discover a potential security vulnerability in the AWS Encryption SDK, please [notify AWS security](https://aws.amazon.com/security/vulnerability-reporting/)\. Do not create a public GitHub issue\.
 + To provide feedback on the AWS Encryption SDK, file an issue in the GitHub repository for the programming language you are using\. 
-+ To provide feedback on this documentation, use the **Feedback** link on this page\. You can also file an issue or contribute to [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs), the open\-source repository for this documentation on GitHub\.
++ To provide feedback on this documentation, use the **Feedback** links on this page\. You can also file an issue or contribute to [aws\-encryption\-sdk\-docs](https://github.com/awsdocs/aws-encryption-sdk-docs), the open\-source repository for this documentation on GitHub\.

@@ -8,6 +8,7 @@ When upgrades include new features that require special configuration to avoid e
 
 For a detailed description of the changes for each version your programming language, see the Changelog for each repository\. 
 + AWS Encryption SDK for C — [CHANGELOG\.md](https://github.com/aws/aws-encryption-sdk-c/blob/master/CHANGELOG.md)
++ C\# / \.NET — [CHANGELOG\.md](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/CHANGELOG.md)
 + AWS Encryption CLI — [Versions of the AWS Encryption CLI](crypto-cli-versions.md) and [CHANGELOG\.rst](https://github.com/aws/aws-encryption-sdk-cli/blob/master/CHANGELOG.rst)
 + AWS Encryption SDK for Java — [CHANGELOG\.md](https://github.com/aws/aws-encryption-sdk-java/blob/master/CHANGELOG.md)
 + AWS Encryption SDK for JavaScript — [CHANGELOG\.md](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/CHANGELOG.md)
@@ -160,3 +161,5 @@ For details, see [Prerequisites](java.md#java-prerequisites)\.
 For information about [support and maintenance](introduction.md#support) of this AWS Encryption SDK version in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
 AWS Encryption CLI version 3\.0\.*x* adds support for AWS KMS multi\-Region keys\. For details, see in the *AWS Key Management Service Developer Guide*\. \(Other AWS Encryption SDK programming languages support multi\-Region keys beginning in [version 2\.3\.*x*](#version2.3)\.\)
+
+Introduced the AWS Encryption SDK for \.NET\.

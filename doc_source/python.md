@@ -5,7 +5,7 @@ This topic explains how to install and use the AWS Encryption SDK for Python\. F
 **Topics**
 + [Prerequisites](#python-prerequisites)
 + [Installation](#python-installation)
-+ [Example code](python-example-code.md)
++ [Examples](python-example-code.md)
 
 ## Prerequisites<a name="python-prerequisites"></a>
 

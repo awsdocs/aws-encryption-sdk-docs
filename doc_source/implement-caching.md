@@ -11,6 +11,8 @@ For complete and tested examples of using data key caching in the AWS Encryption
 + JavaScript Node\.js: [caching\_cmm\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/caching_cmm.ts)
 + Python: [data\_key\_caching\_basic\.py](https://github.com/aws/aws-encryption-sdk-python/blob/master/examples/src/data_key_caching_basic.py)
 
+The [AWS Encryption SDK for \.NET](dot-net.md) does not support data key caching\.
+
 **Topics**
 + [Using data key caching: Step\-by\-step](#implement-caching-steps)
 + [Data key caching example: Encrypt a string](#caching-example-encrypt-string)

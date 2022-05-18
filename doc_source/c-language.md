@@ -13,6 +13,6 @@ The AWS Encryption SDK for C requires the AWS SDK for C\+\+ to interact with AWS
 + For a discussion about how to use the AWS Encryption SDK for C to encrypt data so that you can decrypt it in multiple AWS Regions, see [How to decrypt ciphertexts in multiple regions with the AWS Encryption SDK in C](http://aws.amazon.com/blogs/security/how-to-decrypt-ciphertexts-multiple-regions-aws-encryption-sdk-in-c/) in the AWS Security Blog\.
 
 **Topics**
-+ [Install and build](c-language-installation.md)
++ [Installing](c-language-installation.md)
 + [Using the C SDK](c-language-using.md)
 + [Examples](c-examples.md)

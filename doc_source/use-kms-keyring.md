@@ -14,6 +14,8 @@ AWS KMS keyrings can include two types of wrapping keys:
 
 When encrypting, the AWS KMS keyring that you use must have a generator key\. When decrypting, the generator key is optional, and the distinction between generators keys and additional keys is ignored\. 
 
+When an AWS KMS encryption keyring has just one AWS KMS key, that key is used to generate and encrypt the data key\. 
+
 Like all keyrings, AWS KMS keyrings can be used independently or in a [multi\-keyring](use-multi-keyring.md) with other keyrings of the same or a different type\.
 
 **Topics**
@@ -52,6 +54,8 @@ When you create an AWS KMS keyring to encrypt data, you must specify a *generato
 
 To decrypt the encrypted message protected by this keyring, the keyring that you use must include at least one of the AWS KMS keys defined in the keyring, or no AWS KMS keys\. \(An AWS KMS keyring with no AWS KMS keys is known as an [AWS KMS discovery keyring](#kms-keyring-discovery)\.\)
 
+In AWS Encryption SDK language implementations other than the AWS Encryption SDK for C, all wrapping keys in an encryption keyring or multi\-keyring must be able to encrypt the data key\. If any wrapping key fails to encrypt, the encrypt method fails\. As a result, the caller must have the [required permissions](#kms-keyring-permissions) for all keys in the keyring\. If you use a discovery keyring to encrypt data, alone or in a multi\-keyring, the encrypt operation fails\. The exception is the AWS Encryption SDK for C, where the encrypt operation ignores a standard discovery keyring, but fails if you specify a multi\-Region discovery keyring, alone or in a multi\-keyring\.
+
 The following examples create an AWS KMS keyring with one generator key and one additional key\. These examples use [key ARNs](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN) to identify the KMS keys\. This is a best practice for AWS KMS keyrings used for encryption, and a requirement for AWS KMS keyrings used for decryption\. For details, see [Identifying AWS KMS keys in an AWS KMS keyring](#kms-keyring-id)\.
 
 ------
@@ -63,6 +67,7 @@ For a complete example, see [string\.cpp](https://github.com/aws/aws-encryption-
 
 ```
 const char * generator_key = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
+
 const char * additional_key = "arn:aws:kms:us-west-2:111122223333:key/0987dcba-09fe-87dc-65ba-ab0987654321"    
 
 struct aws_cryptosdk_keyring *kms_encrypt_keyring = 
@@ -70,11 +75,39 @@ struct aws_cryptosdk_keyring *kms_encrypt_keyring =
 ```
 
 ------
+#### [ C\# / \.NET ]
+
+To create an AWS KMS keyring with one or multiple AWS KMS keys in the AWS Encryption SDK for \.NET, create a multi\-keyring\. The AWS Encryption SDK for \.NET includes a multi\-keyring just for AWS KMS keys\.
+
+When you specify an AWS KMS key for an encryption keyring in the AWS Encryption SDK for \.NET, you can use any valid key identifier: a [key ID](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-id), [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN), [alias name](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-name), or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](#kms-keyring-id)\.
+
+The following example creates an AWS KMS keyring with a generator key and additional keys\. For a complete example, see [AwsKmsMultiKeyringExample\.cs](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/Examples/Keyring/AwsKmsMultiKeyringExample.cs)\.
+
+```
+// Instantiate the AWS Encryption SDK and material provider
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+string generatorKey = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";
+List<string> additionalKey = new List<string> { "alias/exampleAlias" };
+
+// Instantiate the keyring input object
+var kmsEncryptKeyringInput = new CreateAwsKmsMultiKeyringInput
+{
+    Generator = generatorKey,
+    KmsKeyIds = additionalKey
+};
+
+var kmsEncryptKeyring = materialProviders.CreateAwsKmsMultiKeyring(kmsEncryptKeyringInput);
+```
+
+------
 #### [ JavaScript Browser ]
 
 When you specify an AWS KMS key for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid key identifier: a [key ID](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-id), [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN), [alias name](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-name), or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](#kms-keyring-id)\.
 
-For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts)\.
+For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/kms_simple.ts) in the AWS Encryption SDK for JavaScript repository in GitHub\.
 
 ```
 const clientProvider = getClient(KMS, { credentials })
@@ -93,10 +126,11 @@ const keyring = new KmsKeyringBrowser({
 
 When you specify an AWS KMS key for an encryption keyring in the AWS Encryption SDK for JavaScript, you can use any valid key identifier: a [key ID](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-id), [key ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-key-ARN), [alias name](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-name), or [alias ARN](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id-alias-arn)\. For help identifying the AWS KMS keys in an AWS KMS keyring, see [Identifying AWS KMS keys in an AWS KMS keyring](#kms-keyring-id)\.
 
-For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts)\.
+For a complete example, see [kms\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/kms_simple.ts) in the AWS Encryption SDK for JavaScript repository in GitHub\.
 
 ```
 const generatorKeyId = 'arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab'
+                            
 const additionalKey = 'alias/exampleAlias'
 
 const keyring = new KmsKeyringNode({
@@ -128,7 +162,9 @@ When you specify an AWS KMS key in a decryption keyring, you must use its key AR
 **Note**  
 If you reuse an encryption keyring for decrypting, be sure that the AWS KMS keys in the keyring are identified by their key ARNs\.
 
-For example, the following AWS KMS keyring includes only the additional key that was used in the encryption keyring\. You can use this keyring to decrypt a message that was encrypted under both the generator key and the additional key, provided that you have permission to use the additional key to decrypt data\.
+For example, the following AWS KMS keyring includes only the additional key that was used in the encryption keyring\. However, instead of referring to the additional key by its alias, `alias/exampleAlias`, the example uses the additional key's key ARN as required by decrypt calls\.
+
+You can use this keyring to decrypt a message that was encrypted under both the generator key and the additional key, provided that you have permission to use the additional key to decrypt data\.
 
 ------
 #### [ C ]
@@ -138,6 +174,29 @@ const char * additional_key = "arn:aws:kms:us-west-2:111122223333:key/0987dcba-0
 
 struct aws_cryptosdk_keyring *kms_decrypt_keyring = 
        Aws::Cryptosdk::KmsKeyring::Builder().Build(additional_key);
+```
+
+------
+#### [ C\# / \.NET ]
+
+Because this decrypt keyring includes only one AWS KMS key, the example uses the `CreateAwsKmsKeyring()` method with an instance of its `CreateAwsKmsKeyringInput` object\. To create a AWS KMS keyring with one AWS KMS key, you can use a single\-key or multi\-key keyring\. For details, see [Encrypting data in the AWS Encryption SDK for \.NET](dot-net-examples.md#dot-net-example-encrypt)\.
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+string additionalKey = "arn:aws:kms:us-west-2:111122223333:key/0987dcba-09fe-87dc-65ba-ab0987654321";
+
+// Instantiate a KMS keyring for one AWS KMS key.
+var kmsDecryptKeyringInput = new CreateAwsKmsKeyringInput
+{
+    KmsClient = new AmazonKeyManagementServiceClient(),
+    KmsKeyId = additionalKey
+};
+
+var kmsDecryptKeyring = materialProviders.CreateAwsKmsKeyring(kmsDecryptKeyringInput);
 ```
 
 ------
@@ -169,6 +228,27 @@ You can also use an AWS KMS keyring that specifies a generator key for decryptin
 ```
 struct aws_cryptosdk_keyring *kms_decrypt_keyring = 
        Aws::Cryptosdk::KmsKeyring::Builder().Build(generator_key, {additional_key, other_key});
+```
+
+------
+#### [ C\# / \.NET ]
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+string generatorKey = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";
+
+// Instantiate a KMS keyring for one AWS KMS key.
+var kmsDecryptKeyringInput = new CreateAwsKmsKeyringInput
+{
+    KmsClient = new AmazonKeyManagementServiceClient(),
+    KmsKeyId = generatorKey
+};
+
+var kmsDecryptKeyring = materialProviders.CreateAwsKmsKeyring(kmsDecryptKeyringInput);
 ```
 
 ------
@@ -204,7 +284,7 @@ When decrypting, it's a [best practice](best-practices.md) to specify the wrappi
 
 The AWS Encryption SDK provides a standard AWS KMS discovery keyring and a discovery keyring for AWS KMS multi\-Region keys\. For information about using multi\-Region keys with the AWS Encryption SDK, see [Use multi\-Region AWS KMS keys](configure.md#config-mrks)\.
 
-Because it doesn't specify any wrapping keys, a discovery keyring can't encrypt data\. \(If you use a standard AWS KMS discovery keyring to encrypt data, it has no effect\. If you use a multi\-Region discovery keyring to encrypt data, alone or in a multi\-keyring, the encrypt operation fails\.\)
+Because it doesn't specify any wrapping keys, a discovery keyring can't encrypt data\. If you use a discovery keyring to encrypt data, alone or in a multi\-keyring, the encrypt operation fails\. The exception is the AWS Encryption SDK for C, where the encrypt operation ignores a standard discovery keyring, but fails if you specify a multi\-Region discovery keyring, alone or in a multi\-keyring\.
 
 When decrypting, a discovery keyring allows the AWS Encryption SDK to ask AWS KMS to decrypt any encrypted data key by using the AWS KMS key that encrypted it, regardless of who owns or has access to that AWS KMS key\. The call succeeds only when the caller has `kms:Decrypt` permission on the AWS KMS key\.
 
@@ -232,6 +312,32 @@ std::shared_ptr<KmsKeyring::> discovery_filter(
 
 struct aws_cryptosdk_keyring *kms_discovery_keyring = Aws::Cryptosdk::KmsKeyring::Builder()
        .BuildDiscovery(discovery_filter));
+```
+
+------
+#### [ C\# / \.NET ]
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+List<string> account = new List<string> { "111122223333" };
+        
+// In a discovery keyring, you specify an AWS KMS client and a discovery filter,
+// but not a AWS KMS key
+var kmsDiscoveryKeyringInput = new CreateAwsKmsDiscoveryKeyringInput
+{
+    KmsClient = new AmazonKeyManagementServiceClient(),
+    DiscoveryFilter = new DiscoveryFilter()
+    {
+        AccountIds = account,
+        Partition = "aws"
+    }
+};
+        
+var kmsDiscoveryKeyring = materialProviders.CreateAwsKmsDiscoveryKeyring(kmsDiscoveryKeyringInput);
 ```
 
 ------
@@ -269,12 +375,14 @@ const keyring = new KmsKeyringNode({
 
 An *AWS KMS regional discovery keyring* is a keyring that doesn't specify the ARNs of KMS keys\. Instead, it allows the AWS Encryption SDK to decrypt using only the KMS keys in particular AWS Regions\. 
 
-Like other discovery keyrings, the regional discovery keyring has no effect on encryption\. It works only when decrypting encrypted messages\. \(If you use a multi\-Region discovery keyring to encrypt data, alone or in a multi\-keyring, the encrypt operation fails\.\) If you use a regional discovery keyring in a multi\-keyring that is used for encrypting and decrypting, it is effective only when decrypting\.
+When decrypting with an AWS KMS regional discovery keyring, the AWS Encryption SDK decrypts any encrypted data key that was encrypted under an AWS KMS key in the specified AWS Region\. To succeed, the caller must have `kms:Decrypt` permission on at least one of the AWS KMS keys in the specified AWS Region that encrypted a data key\.
 
-When decrypting with an AWS KMS regional discovery keyring, the AWS Encryption SDK decrypt any encrypted data key that was encrypted under an AWS KMS key in the specified AWS Region\. To succeed, the caller must have `kms:Decrypt` permission on at least one of the AWS KMS keys in the specified AWS Region that encrypted a data key\.
+Like other discovery keyrings, the regional discovery keyring has no effect on encryption\. It works only when decrypting encrypted messages\. If you use a regional discovery keyring in a multi\-keyring that is used for encrypting and decrypting, it is effective only when decrypting\. If you use a multi\-Region discovery keyring to encrypt data, alone or in a multi\-keyring, the encrypt operation fails\.
 
 **Important**  
 If you include an AWS KMS regional discovery keyring in a decryption [multi\-keyring](use-multi-keyring.md), the regional discovery keyring overrides all KMS key restrictions specified by other keyrings in the multi\-keyring\. The multi\-keyring behaves like its least restrictive keyring\. An AWS KMS discovery keyring has no effect on encryption when used by itself or in a multi\-keyring\.
+
+The regional discovery keyring in the AWS Encryption SDK for C attempts to decrypt only with KMS keys in the specified Region\. When you use a discovery keyring in the AWS Encryption SDK for JavaScript and AWS Encryption SDK for \.NET, you configure the Region on the AWS KMS client\. These AWS Encryption SDK implementations don't filter KMS keys by Region, but AWS KMS will fail a decrypt request for KMS keys outside of the specified Region\.
 
 If you use a discovery keyring, we recommend that you use a *discovery filter* to limit the KMS keys used in decryption to those in specified AWS accounts and partitions\. Discovery filters are supported in versions 1\.7\.*x* and later of the AWS Encryption SDK\.
 
@@ -293,6 +401,65 @@ std::shared_ptr<KmsKeyring::DiscoveryFilter> discovery_filter(
 
 struct aws_cryptosdk_keyring *kms_regional_keyring = Aws::Cryptosdk::KmsKeyring::Builder()
        .WithKmsClient(create_kms_client(Aws::Region::US_WEST_2)).BuildDiscovery(discovery_filter));
+```
+
+------
+#### [ C\# / \.NET ]
+
+The AWS Encryption SDK for \.NET does not have a dedicated regional discovery keyring\. However, you can use several techniques to limit the KMS keys used when decrypting to a particular Region\.
+
+The most efficient way to limit the Regions in a discovery keyring is to use a multi\-Region\-aware discovery keyring, even if you encrypted the data using only single\-Region keys\. When it encounters single\-Region keys, the multi\-Region\-aware keyring does not use any multi\-Region features\. 
+
+The keyring returned by the `CreateAwsKmsMrkDiscoveryKeyring()` method filters KMS keys by Region before calling AWS KMS\. It sends a decrypt request to AWS KMS only when the encrypted data key was encrypted by a KMS key in the Region specified by the `Region` parameter in the `CreateAwsKmsMrkDiscoveryKeyringInput` object\.
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+List<string> account = new List<string> { "111122223333" };
+
+// Create the discovery filter
+var filter = DiscoveryFilter = new DiscoveryFilter
+{
+    AccountIds = account,
+    Partition = "aws"
+};
+                                
+var regionalDiscoveryKeyringInput = new CreateAwsKmsMrkDiscoveryKeyringInput
+{
+    KmsClient = new AmazonKeyManagementServiceClient(RegionEndpoint.USWest2),
+    Region = RegionEndpoint.USWest2,
+    DiscoveryFilter = filter
+};                                
+
+var kmsRegionalDiscoveryKeyring = materialProviders.CreateAwsKmsMrkDiscoveryKeyring(regionalDiscoveryKeyringInput);
+```
+
+You can also limit KMS keys to a particular AWS Region by specifying a Region in your instance of the AWS KMS client \([AmazonKeyManagementServiceClient](https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/KeyManagementService/TKeyManagementServiceClient.html)\)\. However, this configuration is less efficient and potentially more costly than using a multi\-Region\-aware discovery keyring\. Instead of filtering KMS keys by Region before calling AWS KMS, the AWS Encryption SDK for \.NET calls AWS KMS for each encrypted data key \(until it decrypts one\) and relies on AWS KMS to limit the KMS keys it uses to the specified Region\.
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+List<string> account = new List<string> { "111122223333" };
+        
+// Create the discovery filter,
+// but not a AWS KMS key
+var createRegionalDiscoveryKeyringInput = new CreateAwsKmsDiscoveryKeyringInput
+{
+    KmsClient = new AmazonKeyManagementServiceClient(RegionEndpoint.USWest2),
+    DiscoveryFilter = new DiscoveryFilter()
+    {
+        AccountIds = account,
+        Partition = "aws"
+    }
+};
+        
+var kmsRegionalDiscoveryKeyring = materialProviders.CreateAwsKmsDiscoveryKeyring(createRegionalDiscoveryKeyringInput);
 ```
 
 ------

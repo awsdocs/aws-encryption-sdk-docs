@@ -3,7 +3,7 @@
 When migrating from an AWS Encryption SDK version earlier than 1\.7\.*x* to version 2\.0\.*x* or later, you must transition safely to encrypting with [key commitment](concepts.md#key-commitment)\. Otherwise, your application will encounter ciphertexts that it cannot decrypt\. If you are using AWS KMS master key providers, you must update to new constructors that create master key providers in strict mode or discovery mode\.
 
 **Note**  
-This topic is designed for users migrating from an earlier version of the AWS Encryption SDK to version 2\.0\.*x* or later\. If you are new to the AWS Encryption SDK, you can begin using the latest available version immediately with the default settings\.
+This topic is designed for users migrating from earlier versions of the AWS Encryption SDK to version 2\.0\.*x* or later\. If you are new to the AWS Encryption SDK, you can begin using the latest available version immediately with the default settings\.
 
 To avoid a critical situation in which you cannot decrypt ciphertext that you need to read, we recommend that you migrate and deploy in multiple distinct stages\. Verify that each stage is complete and fully deployed before starting the next stage\. This is particularly important for distributed applications with multiple hosts\.
 

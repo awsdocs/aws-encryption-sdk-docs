@@ -1,8 +1,8 @@
-# Getting started with the AWS Encryption SDK<a name="getting-started"></a>
+# Using the AWS Encryption SDK with AWS KMS<a name="getting-started"></a>
 
-To use the AWS Encryption SDK, you need to configure [keyring](concepts.md#keyring) or [master key provider](concepts.md#master-key-provider) with encryption keys\. If you don't have a key infrastructure, we recommend using [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\. Many of the code examples in the AWS Encryption SDK require an [AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys)\.
+To use the AWS Encryption SDK, you need to configure [keyrings](concepts.md#keyring) or [master key providers](concepts.md#master-key-provider) with wrapping keys\. If you don't have a key infrastructure, we recommend using [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\. Many of the code examples in the AWS Encryption SDK require an [AWS KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys)\.
 
-To interact with AWS KMS, the AWS Encryption SDK requires the AWS SDK for your preferred programming language, such as the AWS SDK for Java 1\.x, the AWS SDK for Python \(Boto\), the AWS SDK for JavaScript, or the AWS SDK for C\+\+, which you use with the AWS Encryption SDK for C\. The AWS Encryption SDK client library works with the AWS SDKs to support master keys stored in AWS KMS\. 
+To interact with AWS KMS, the AWS Encryption SDK requires the AWS SDK for your preferred programming language\. The AWS Encryption SDK client library works with the AWS SDKs to support master keys stored in AWS KMS\. 
 
 **To prepare to use the AWS Encryption SDK with AWS KMS**
 

@@ -1,6 +1,6 @@
 # Using keyrings<a name="choose-keyring"></a>
 
-The AWS Encryption SDK for C and AWS Encryption SDK for JavaScript use *keyrings* to perform [envelope encryption](https://docs.aws.amazon.com/crypto/latest/userguide/cryptography-concepts.html#define-envelope-encryption)\. Keyrings generate, encrypt, and decrypt the unique data keys that encrypt your data\. Keyrings also define the wrapping keys that are used to encrypt and decrypt the data keys\. You can use the keyrings that the AWS Encryption SDK provides or write your own compatible custom keyrings\.
+The AWS Encryption SDK for C, the AWS Encryption SDK for JavaScript, and the AWS Encryption SDK for \.NET use *keyrings* to perform [envelope encryption](https://docs.aws.amazon.com/crypto/latest/userguide/cryptography-concepts.html#define-envelope-encryption)\. Keyrings generate, encrypt, and decrypt data keys\. Keyrings determine the source of the unique data keys that protect each message, and the [wrapping keys](concepts.md#master-key) that encrypt that data key\. You specify a keyring when encrypting and the same or a different keyring when decrypting\. You can use the keyrings that the SDK provides or write your own compatible custom keyrings\. 
 
 You can use each keyring individually or combine keyrings into a [multi\-keyring](use-multi-keyring.md)\. Although most keyrings can generate, encrypt, and decrypt data keys, you might create a keyring that performs only one particular operation, such as a keyring that only generates data keys, and use that keyring in combination with others\.
 

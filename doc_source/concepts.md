@@ -59,12 +59,12 @@ Each encrypted data key includes metadata, including the identifier of the wrapp
 
 ## Wrapping key<a name="master-key"></a>
 
-A *wrapping key* \(or *master key*\) is a key\-encryption key that the AWS Encryption SDK uses to encrypt the [data key](#DEK) that encrypts your data\. Each plaintext data key can be encrypted under one or more wrapping keys\. You determine which wrapping keys are used to protect your data when you configure a [keyring](#keyring) or [master key provider](#master-key-provider)\.
+A *wrapping key* is a key\-encryption key that the AWS Encryption SDK uses to encrypt the [data key](#DEK) that encrypts your data\. Each plaintext data key can be encrypted under one or more wrapping keys\. You determine which wrapping keys are used to protect your data when you configure a [keyring](#keyring) or [master key provider](#master-key-provider)\.
 
 **Note**  
 *Wrapping key* refers to the keys in a keyring or master key provider\. *Master key* is typically associated with the `MasterKey` class that you instantiate when you use a master key provider\.
 
-The AWS Encryption SDK supports several commonly used wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and raw RSA keys\. You can also extend or implement your own wrapping keys\. 
+The AWS Encryption SDK supports several commonly used wrapping keys, such as AWS Key Management Service \(AWS KMS\) symmetric [AWS KMS keys](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys) \(including [multi\-Region KMS keys](configure.md#config-mrks)\), raw AES\-GCM \(Advanced Encryption Standard/Galois Counter Mode\) keys, and raw RSA keys\. You can also extend or implement your own wrapping keys\. 
 
 When you use envelope encryption, you need to protect your wrapping keys from unauthorized access\. You can do this in any of the following ways:
 + Use a web service designed for this purpose, such as [AWS Key Management Service \(AWS KMS\)](https://aws.amazon.com/kms/)\.
@@ -75,9 +75,9 @@ If you don't have a key management system, we recommend AWS KMS\. The AWS Encryp
 
 ## Keyrings and master key providers<a name="keyring"></a>
 
-To specify the wrapping keys you use for encryption and decryption, you use a keyring \(C and JavaScript\) or a master key provider \(Java, Python, CLI\)\. You can use the keyrings and master key providers that the AWS Encryption SDK provides or design your own implementations\. The AWS Encryption SDK provides keyrings and master key providers that are compatible with each other subject to language constraints\. For details, see [Keyring compatibility](keyring-compatibility.md)\. 
+To specify the wrapping keys you use for encryption and decryption, you use a keyring \(C, C\# / \.NET, and JavaScript\) or a master key provider \(Java, Python, CLI\)\. You can use the keyrings and master key providers that the AWS Encryption SDK provides or design your own implementations\. The AWS Encryption SDK provides keyrings and master key providers that are compatible with each other subject to language constraints\. For details, see [Keyring compatibility](keyring-compatibility.md)\. 
 
-A *keyring* generates, encrypts, and decrypts data keys\. When you define a keyring, you can specify the [wrapping keys](#master-key) that encrypt your data keys\. Most keyrings specify at least one wrapping key or a service that provides and protects wrapping keys\. You can also define a keyring with no wrapping keys or a more complex keyring with additional configuration options\. For help choosing and using the keyrings that the AWS Encryption SDK defines, see [Using keyrings](choose-keyring.md)\. Keyrings are supported in C and JavaScript\.
+A *keyring* generates, encrypts, and decrypts data keys\. When you define a keyring, you can specify the [wrapping keys](#master-key) that encrypt your data keys\. Most keyrings specify at least one wrapping key or a service that provides and protects wrapping keys\. You can also define a keyring with no wrapping keys or a more complex keyring with additional configuration options\. For help choosing and using the keyrings that the AWS Encryption SDK defines, see [Using keyrings](choose-keyring.md)\. Keyrings are supported in C, C\# / \.NET, and JavaScript\.
 
 A *master key provider* is an alternative to a keyring\. The master key provider returns the wrapping keys \(or master keys\) you specify\. Each master key is associated with one master key provider, but a master key provider typically provides multiple master keys\. Master key providers are supported in Java, Python, and the AWS Encryption CLI\. 
 
@@ -101,7 +101,7 @@ The following example encryption context consists of two encryption context pair
 
 To decrypt the data, you pass in the encrypted message\. Because the AWS Encryption SDK can extract the encryption context from the encrypted message header, you are not required to provide the encryption context separately\. However, the encryption context can help you to confirm that you are decrypting the correct encrypted message\. 
 + In the [AWS Encryption SDK Command Line Interface](crypto-cli.md) \(CLI\), if you provide an encryption context in a decrypt command, the CLI verifies that the values are present in the encryption context of the encrypted message before it returns the plaintext data\. 
-+ In other languages, the decrypt response includes the encryption context and the plaintext data\. The decrypt function in your application should always verify that the encryption context in the decrypt response includes the encryption context in the encrypt request \(or a subset\) before it returns the plaintext data\.
++ In other programming language implementations, the decrypt response includes the encryption context and the plaintext data\. The decrypt function in your application should always verify that the encryption context in the decrypt response includes the encryption context in the encrypt request \(or a subset\) before it returns the plaintext data\.
 
 When choosing an encryption context, remember that it is not a secret\. The encryption context is displayed in plaintext in the header of the [encrypted message](#message) that the AWS Encryption SDK returns\. If you are using AWS Key Management Service, the encryption context also might appear in plaintext in audit records and logs, such as AWS CloudTrail\.
 

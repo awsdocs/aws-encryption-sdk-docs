@@ -12,7 +12,7 @@ To identify the AES key in a keyring, the Raw AES keyring uses a *key namespace*
 
 **Note**  
 The key namespace and key name are equivalent to the *Provider ID* \(or *Provider*\) and *Key ID* fields in the `JceMasterKey` and `RawMasterKey`\.  
-The AWS Encryption SDK for C reserves the `aws-kms` key namespace value for KMS keys\. Do not use it in a Raw AES keyring or Raw RSA keyring with the AWS Encryption SDK for C\.
+The AWS Encryption SDK for C and AWS Encryption SDK for \.NET reserve the `aws-kms` key namespace value for KMS keys\. Do not use this namespace value in a Raw AES keyring or Raw RSA keyring with these libraries\.
 
 If you construct different keyrings to encrypt and decrypt a given message, the namespace and name values are critical\. If the key namespace and key name in the decryption keyring isn't an exact, case\-sensitive match for the key namespace and key name in the encryption keyring, the decryption keyring isn't used, even if the key material bytes are identical\.
 
@@ -33,6 +33,36 @@ AWS_STATIC_STRING_FROM_LITERAL(wrapping_key_name, "AES_256_012");
 
 struct aws_cryptosdk_keyring *raw_aes_keyring = aws_cryptosdk_raw_aes_keyring_new(
         alloc, wrapping_key_namespace, wrapping_key_name, aes_wrapping_key, wrapping_key_len);
+```
+
+------
+#### [ C\# / \.NET ]
+
+To create a Raw AES keyring in AWS Encryption SDK for \.NET, use the `materialProviders.CreateRawAesKeyring()` method\. For a complete example, see [RawAESKeyringExample\.cs](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/Examples/Keyring/RawAESKeyringExample.cs)
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+var keyNamespace = "HSM_01";
+var keyName = "AES_256_012";
+
+// This example uses the key generator in Bouncy Castle to generate the key material.
+// In production, use key material from a secure source.
+var aesWrappingKey = new MemoryStream(GeneratorUtilities.GetKeyGenerator("AES256").GenerateKey());
+
+// Create the keyring that determines how your data keys are protected.
+var createKeyringInput = new CreateRawAesKeyringInput
+{
+    KeyNamespace = keyNamespace,
+    KeyName = keyName,
+    WrappingKey = aesWrappingKey,
+    WrappingAlg = AesWrappingAlg.ALG_AES256_GCM_IV12_TAG16
+};
+
+var keyring = materialProviders.CreateRawAesKeyring(createKeyringInput);
 ```
 
 ------

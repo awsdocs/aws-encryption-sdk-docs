@@ -161,7 +161,7 @@ The following examples create an AWS KMS master key provider in strict mode for 
 
 This example represents code in an application that uses version 1\.7\.*x* or later of the AWS Encryption SDK for Java\. For a complete example, see [DiscoveryDecryptionExample\.java](https://github.com/aws/aws-encryption-sdk-java/blob/master/src/examples/java/com/amazonaws/crypto/examples/)\.
 
-To instantiate a master key provider in strict mode for encrypting, this example uses the `Builder.buildStrict()` method\. To instantiate a master key provider in discovery mode for decrypting, it uses the the `Builder.buildDiscovery()` method\. The `Builder.buildDiscovery()` method takes a `DiscoveryFilter` that limits the AWS Encryption SDK to AWS KMS keys in the specified AWS partition and accounts\. 
+To instantiate a master key provider in strict mode for encrypting, this example uses the `Builder.buildStrict()` method\. To instantiate a master key provider in discovery mode for decrypting, it uses the `Builder.buildDiscovery()` method\. The `Builder.buildDiscovery()` method takes a `DiscoveryFilter` that limits the AWS Encryption SDK to AWS KMS keys in the specified AWS partition and accounts\. 
 
 ```
 // Create a master key provider in strict mode for encrypting

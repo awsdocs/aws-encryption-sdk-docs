@@ -1,6 +1,6 @@
 # Setting your commitment policy<a name="migrate-commitment-policy"></a>
 
-[Key commitment](concepts.md#key-commitment) assures that your encrypted data always decrypts to the same plaintext\. To provide this security property, beginning in version 1\.7\.*x*, AWS Encryption SDK uses new [algorithm suites](supported-algorithms.md) with key commitment\. To determine whether your data is encrypted and decrypted with key commitment, use the [commitment policy](concepts.md#commitment-policy) configuration setting\. Encrypting and decrypting data with key commitment is an [AWS Encryption SDK best practice](best-practices.md)\.
+[Key commitment](concepts.md#key-commitment) assures that your encrypted data always decrypts to the same plaintext\. To provide this security property, beginning in version 1\.7\.*x*, the AWS Encryption SDK uses new [algorithm suites](supported-algorithms.md) with key commitment\. To determine whether your data is encrypted and decrypted with key commitment, use the [commitment policy](concepts.md#commitment-policy) configuration setting\. Encrypting and decrypting data with key commitment is an [AWS Encryption SDK best practice](best-practices.md)\.
 
 Setting a commitment policy is an important step in migrating from version 1\.7\.*x* of the AWS Encryption SDK to versions 2\.0\.*x* and later\. After setting and changing your commitment policy, be sure to test your application thoroughly before deploying it in production\. For migration guidance, see [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)\.
 
@@ -9,7 +9,7 @@ The commitment policy setting has three valid values in versions 2\.0\.*x* and l
 
   In version 1\.7\.*x*, this is the only valid value\. It ensures that you don't encrypt with key commitment until you are fully prepared to decrypt with key commitment\. Setting the value explicitly prevents your commitment policy from changing automatically to `require-encrypt-require-decrypt` when you upgrade to version 2\.0\.*x* or later\. Instead, you can [migrate your commitment policy](#migrate-commitment-policy) in stages\.
 + `RequireEncryptAllowDecrypt` — The AWS Encryption SDK must encrypt with key commitment\. It can decrypt ciphertexts encrypted with or without key commitment\. This value is added in version 2\.0\.*x*\.
-+ `RequireEncryptRequireDecrypt` — The AWS Encryption SDK must encrypt with key commitment\. It only decrypts ciphertexts with key commitment\. This value is added in version 2\.0\.*x*\. It is the default value in version 2\.0\.*x*\.
++ `RequireEncryptRequireDecrypt` — The AWS Encryption SDK must encrypt with key commitment\. It only decrypts ciphertexts with key commitment\. This value is added in version 2\.0\.*x*\. It is the default value in versions 2\.0\.*x* and later\.
 
 In version 1\.7\.*x*, the only valid commitment policy value is `ForbidEncryptAllowDecrypt`\. After you migrate to version 2\.0\.*x* or later, you can [change your commitment policy in stages](migration-guide.md) as you are ready\. Don't update your commitment policy to `RequireEncryptRequireDecrypt` until you are certain that you don't have any messages encrypted without key commitment\. 
 
@@ -83,6 +83,59 @@ aws_cryptosdk_session_process(decrypt_session,
                               ciphertext_input,
                               ciphertext_len_input,
                               &ciphertext_consumed_output)
+```
+
+------
+#### [ C\# / \.NET ]
+
+The `require-encrypt-require-decrypt` value is the default commitment policy in all versions of the AWS Encryption SDK for \.NET\. You can set it explicitly as a best practice, but it's not required\. However, if you are using the AWS Encryption SDK for \.NET to decrypt ciphertext that was encrypted by another language implementation of the AWS Encryption SDK without key commitment, you need to change the commitment policy value to `REQUIRE_ENCRYPT_ALLOW_DECRYPT` or `FORBID_ENCRYPT_ALLOW_DECRYPT`\. Otherwise, attempts to decrypt the ciphertext will fail\.
+
+In the AWS Encryption SDK for \.NET, you set the commitment policy on an instance of the AWS Encryption SDK\. Instantiate an `AwsEncryptionSdkConfig` object with a `CommitmentPolicy` parameter, and use the configuration object to create the AWS Encryption SDK instance\. Then, call the `Encrypt()` and `Decrypt()` methods of the configured AWS Encryption SDK instance\. 
+
+This example sets the commitment policy to `require-encrypt-allow-decrypt`\.
+
+```
+// Instantiate the material providers
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+// Configure the commitment policy on the AWS Encryption SDK instance
+var config = new AwsEncryptionSdkConfig
+{
+    CommitmentPolicy = CommitmentPolicy.REQUIRE_ENCRYPT_ALLOW_DECRYPT
+};
+var encryptionSdk = AwsEncryptionSdkFactory.CreateAwsEncryptionSdk(config);
+
+string keyArn = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab";
+
+var encryptionContext = new Dictionary<string, string>()
+{
+    {"purpose", "test"}encryptionSdk
+};
+
+var createKeyringInput = new CreateAwsKmsKeyringInput
+{
+    KmsClient = new AmazonKeyManagementServiceClient(),
+    KmsKeyId = keyArn
+};
+var keyring = materialProviders.CreateAwsKmsKeyring(createKeyringInput);
+
+// Encrypt your plaintext data
+var encryptInput = new EncryptInput
+{
+    Plaintext = plaintext,
+    Keyring = keyring,
+    EncryptionContext = encryptionContext
+};
+var encryptOutput = encryptionSdk.Encrypt(encryptInput);
+
+// Decrypt your ciphertext
+var decryptInput = new DecryptInput
+{
+    Ciphertext = ciphertext,
+    Keyring = keyring
+};
+var decryptOutput = encryptionSdk.Decrypt(decryptInput);
 ```
 
 ------

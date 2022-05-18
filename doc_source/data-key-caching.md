@@ -13,6 +13,8 @@ The AWS Encryption SDK helps you to create and manage your data key cache\. It p
 
 Data key caching is an optional feature of the AWS Encryption SDK that you should use cautiously\. By default, the AWS Encryption SDK generates a new data key for every encryption operation\. This technique supports cryptographic best practices, which discourage excessive reuse of data keys\. In general, use data key caching only when it is required to meet your performance goals\. Then, use the data key caching [security thresholds](thresholds.md) to ensure that you use the minimum amount of caching required to meet your cost and performance goals\. 
 
+Data key caching is not supported by the [AWS Encryption SDK for \.NET](dot-net.md)\.
+
 For a detailed discussion of these security tradeoffs, see [AWS Encryption SDK: How to Decide if Data Key Caching is Right for Your Application](http://aws.amazon.com/blogs/security/aws-encryption-sdk-how-to-decide-if-data-key-caching-is-right-for-your-application/) in the AWS Security Blog\.
 
 **Topics**

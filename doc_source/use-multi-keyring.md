@@ -10,6 +10,7 @@ Beginning in [version 1\.7\.*x*](about-versions.md#version-1.7), when an encrypt
 
 To see a working example of a multi\-keyring, see:
 + C: [multi\_keyring\.cpp](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/multi_keyring.cpp)[]()
++ C\# / \.NET: [MultiKeyringExample\.cs](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/Examples/Keyring/MultiKeyringExample.cs)
 + JavaScript Node\.js: [multi\_keyring\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/multi_keyring.ts)
 + JavaScript Browser: [multi\_keyring\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/multi_keyring.ts)
 
@@ -25,6 +26,17 @@ struct aws_cryptosdk_keyring *kms_keyring = Aws::Cryptosdk::KmsKeyring::Builder(
 // Define a Raw AES keyring. For details, see [raw\_aes\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_aes_keyring.c) */
 struct aws_cryptosdk_keyring *aes_keyring = aws_cryptosdk_raw_aes_keyring_new(
         alloc, wrapping_key_namespace, wrapping_key_name, wrapping_key, AWS_CRYPTOSDK_AES256);
+```
+
+------
+#### [ C\# / \.NET ]
+
+```
+// Define an AWS KMS keyring. For details, see [AwsKmsKeyringExample\.cs](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/Examples/Keyring/AwsKmsKeyringExample.cs).
+var kmsKeyring = materialProviders.CreateAwsKmsKeyring(createKmsKeyringInput);
+
+// Define a Raw AES keyring. For details, see [RawAESKeyringExample\.cs](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/Examples/Keyring/RawAESKeyringExample.cs).
+var aesKeyring = materialProviders.CreateRawAesKeyring(createAesKeyringInput);
 ```
 
 ------
@@ -69,6 +81,21 @@ To add a child keyring to your multi\-keyring, use the `aws_cryptosdk_multi_keyr
 ```
 // Add the Raw AES keyring (C only)
 aws_cryptosdk_multi_keyring_add_child(multi_keyring, aes_keyring);
+```
+
+------
+#### [ C\# / \.NET ]
+
+ The \.NET `CreateMultiKeyringInput` constructor lets you define a generator keyring and child keyrings\. The resulting `CreateMultiKeyringInput` object is immutable\.
+
+```
+var createMultiKeyringInput = new CreateMultiKeyringInput
+{
+    Generator = kmsKeyring,
+    ChildKeyrings = new List<IKeyring>() {aesKeyring}
+};
+
+var multiKeyring = materialProviders.CreateMultiKeyring(createMultiKeyringInput);
 ```
 
 ------

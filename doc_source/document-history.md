@@ -12,6 +12,7 @@ The following table describes significant changes to this documentation since No
 
 | Change | Description | Date | 
 | --- |--- |--- |
+| [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/dot-net.html) | Introducing support for the AWS Encryption SDK for \.NET\. | May 17, 2022 | 
 | [Documentation change](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/concepts.html#master-key) | Replace the AWS Key Management Service term *customer master key \(CMK\)* with *AWS KMS key* and *KMS key*\. | August 30, 2021 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/configure.html#config-mrks) | Added support for AWS Key Management Service\.\(AWS KMS\) multi\-Region keys\. Multi\-Region keys are AWS KMS keys in different AWS Regions that can be used interchangeably because they have the same key ID and key material\. | June 8, 2021 | 
 | [General availability](https://docs.aws.amazon.com/encryption-sdk/latest/developer-guide/concepts.html#digital-sigs) | Added and updated documentation about the improved message decryption process\. | May 11, 2021 | 

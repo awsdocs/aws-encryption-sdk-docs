@@ -12,11 +12,6 @@ If you encrypt data with a Raw RSA keyring that includes the public key of an RS
 
 When constructing a Raw RSA keyring in the AWS Encryption SDK for C, be sure to provide the *contents* of the PEM file that includes each key as a null\-terminated C\-string, not as a path or file name\. When constructing a Raw RSA keyring in JavaScript, be aware of [potential incompatibility](javascript-compatibility.md) with other language implementations\.
 
-For an example of how to use a Raw RSA keyring, see:
-+ C: [raw\_rsa\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_rsa_keyring.c)
-+ JavaScript Node\.js: [rsa\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-node/src/rsa_simple.ts)
-+ JavaScript Browser: [rsa\_simple\.ts](https://github.com/aws/aws-encryption-sdk-javascript/blob/master/modules/example-browser/src/rsa_simple.ts)
-
 **Namespaces and names**
 
 To identify the RSA key material in a keyring, the Raw RSA keyring uses a *key namespace* and *key name* that you provide\. These values are not secret\. They appear in plain text in the header of the [encrypted message](concepts.md#message) that the encrypt operation returns\. We recommend using the key namespace and key name that identifies the RSA key pair \(or its private key\) in your HSM or key management system\.
@@ -45,7 +40,7 @@ The following examples show how to create a Raw RSA keyring with the public and 
 ------
 #### [ C ]
 
-In the AWS Encryption SDK for C, use `aws_cryptosdk_raw_rsa_keyring_new` to create a Raw RSA keyring\. 
+To create a Raw RSA keyring in the AWS Encryption SDK for C, use `aws_cryptosdk_raw_rsa_keyring_new`\. 
 
 When constructing a Raw RSA keyring in the AWS Encryption SDK for C, be sure to provide the *contents* of the PEM file that includes each key as a null\-terminated C\-string, not as a path or file name\. For a complete example, see [raw\_rsa\_keyring\.c](https://github.com/aws/aws-encryption-sdk-c/blob/master/examples/raw_rsa_keyring.c)\.
 
@@ -62,6 +57,38 @@ struct aws_cryptosdk_keyring *rawRsaKeyring = aws_cryptosdk_raw_rsa_keyring_new(
     private_key_from_pem,
     public_key_from_pem,
     AWS_CRYPTOSDK_RSA_OAEP_SHA256_MGF1);
+```
+
+------
+#### [ C\# / \.NET ]
+
+To instantiate a Raw RSA keyring in the AWS Encryption SDK for \.NET, use the `materialProviders.CreateRawRsaKeyring()` method\. For a complete example, see [RawRSAKeyringExample\.cs](https://github.com/aws/aws-encryption-sdk-dafny/blob/mainline/aws-encryption-sdk-net/Examples/Keyring/RawRSAKeyringExample.cs)\.
+
+```
+// Instantiate the AWS Encryption SDK and material providers
+var encryptionSdk = AwsEncryptionSdkFactory.CreateDefaultAwsEncryptionSdk();
+var materialProviders =
+    AwsCryptographicMaterialProvidersFactory.CreateDefaultAwsCryptographicMaterialProviders();
+
+var keyNamespace = "HSM_01";
+var keyName = "RSA_2048_06";
+
+// Get public and private keys from PEM files
+var publicKey = new MemoryStream(System.IO.File.ReadAllBytes("RSAKeyringExamplePublicKey.pem"));
+var privateKey = new MemoryStream(System.IO.File.ReadAllBytes("RSAKeyringExamplePrivateKey.pem"));
+
+// Create the keyring input
+var createRawRsaKeyringInput = new CreateRawRsaKeyringInput
+{
+    KeyNamespace = keyNamespace,
+    KeyName = keyName,
+    PaddingScheme = PaddingScheme.OAEP_SHA512_MGF1,
+    PublicKey = publicKey,
+    PrivateKey = privateKey
+};
+
+// Create the keyring
+var rawRsaKeyring = materialProviders.CreateRawRsaKeyring(createRawRsaKeyringInput);
 ```
 
 ------
