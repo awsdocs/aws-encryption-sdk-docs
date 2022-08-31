@@ -35,9 +35,9 @@ from aws_encryption_sdk import CommitmentPolicy
 
 
 def cycle_string(key_arn, source_plaintext, botocore_session=None):
-    """Encrypts and then decrypts a string under an AWS KMS key.
+    """Encrypts and then decrypts a string under an &KMS; key.
 
-    :param str key_arn: Amazon Resource Name (ARN) of the AWS KMS key
+    :param str key_arn: Amazon Resource Name (ARN) of the &KMS; key
     :param bytes source_plaintext: Data to encrypt
     :param botocore_session: existing botocore session instance
     :type botocore_session: botocore.session.Session
@@ -252,7 +252,7 @@ def cycle_file(key_arn, source_plaintext_filename, botocore_session=None):
     key provider. Both master key providers are used to encrypt the plaintext file, so either one alone
     can decrypt it.
 
-    :param str key_arn: Amazon Resource Name (ARN) of the AWS KMS key
+    :param str key_arn: Amazon Resource Name (ARN) of the &KMS; key
     (http://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html)
     :param str source_plaintext_filename: Filename of file to encrypt
     :param botocore_session: existing botocore session instance
@@ -349,9 +349,9 @@ from aws_encryption_sdk import CommitmentPolicy
 
 
 def encrypt_with_caching(kms_key_arn, max_age_in_cache, cache_capacity):
-    """Encrypts a string using an AWS KMS key and data key caching.
+    """Encrypts a string using an &KMS; key and data key caching.
 
-    :param str kms_key_arn: Amazon Resource Name (ARN) of the AWS KMS key
+    :param str kms_key_arn: Amazon Resource Name (ARN) of the &KMS; key
     :param float max_age_in_cache: Maximum time in seconds that a cached entry can be used
     :param int cache_capacity: Maximum number of entries to retain in cache at once
     """
@@ -369,7 +369,7 @@ def encrypt_with_caching(kms_key_arn, max_age_in_cache, cache_capacity):
     # commitment policy, REQUIRE_ENCRYPT_REQUIRE_DECRYPT is used by default.
     client = aws_encryption_sdk.EncryptionSDKClient(commitment_policy=CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT)
 
-    # Create a master key provider for the AWS KMS key
+    # Create a master key provider for the &KMS; key
     key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_key_arn])
 
     # Create a local cache

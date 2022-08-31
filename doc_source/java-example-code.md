@@ -37,12 +37,12 @@ import java.util.Map;
 
 /**
  * <p>
- * Encrypts and then decrypts data using an AWS KMS key.
+ * Encrypts and then decrypts data using an &KMS; key.
  *
  * <p>
  * Arguments:
  * <ol>
- * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your AWS KMS key, see 'Finding the key ID and key ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
+ * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your &KMS; key, see 'Finding the key ID and key ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
  * </ol>
  */
 public class BasicEncryptionExample {
@@ -69,7 +69,7 @@ public class BasicEncryptionExample {
         // 2. Instantiate an AWS KMS master key provider in strict mode using buildStrict().
         // In strict mode, the AWS KMS master key provider encrypts and decrypts only by using the key
         // indicated by keyArn.
-        // To encrypt and decrypt with this master key provider, use an AWS KMS key ARN to identify the AWS KMS keys.
+        // To encrypt and decrypt with this master key provider, use an &KMS; key ARN to identify the &KMS; keys.
         // In strict mode, the decrypt operation requires a key ARN.
         final KmsMasterKeyProvider keyProvider = KmsMasterKeyProvider.builder().buildStrict(keyArn);
 
@@ -257,7 +257,7 @@ import java.security.PublicKey;
  * <p>
  * Arguments:
  * <ol>
- * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your AWS KMS key, see 'Find the key ID and ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
+ * <li>Key ARN: For help finding the Amazon Resource Name (ARN) of your &KMS; key, see 'Find the key ID and ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
  * <li>Name of file containing plaintext data to encrypt
  * </ol>
  * <p>
@@ -265,8 +265,8 @@ import java.security.PublicKey;
  * still want the option of decrypting your data offline independently of AWS KMS. This sample
  * demonstrates one way to do this.
  * <p>
- * The sample encrypts data under both an AWS KMS key and an "escrowed" RSA key pair
- * so that either key alone can decrypt it. You might commonly use the AWS KMS key for decryption. However,
+ * The sample encrypts data under both an &KMS; key and an "escrowed" RSA key pair
+ * so that either key alone can decrypt it. You might commonly use the &KMS; key for decryption. However,
  * at any time, you can use the private RSA key to decrypt the ciphertext independent of AWS KMS.
  * <p>
  * This sample uses the JCEMasterKey class to generate a RSA public-private key pair
@@ -294,7 +294,7 @@ public class EscrowedEncryptExample {
     }
 
     private static void standardEncrypt(final String kmsArn, final String fileName) throws Exception {
-        // Encrypt with the AWS KMS key and the escrowed public key
+        // Encrypt with the &KMS; key and the escrowed public key
         // 1. Instantiate the SDK
         // This builds the AwsCrypto client with the RequireEncryptRequireDecrypt commitment policy,
         // which enforces that this client only encrypts using committing algorithm suites and enforces
@@ -335,7 +335,7 @@ public class EscrowedEncryptExample {
     }
 
     private static void standardDecrypt(final String kmsArn, final String fileName) throws Exception {
-        // Decrypt with the AWS KMS key and the escrow public key. You can use a combined provider,
+        // Decrypt with the &KMS; key and the escrow public key. You can use a combined provider,
         // as shown here, or just the AWS KMS master key provider.
 
         // 1. Instantiate the SDK.

@@ -10,6 +10,7 @@ When configuring your implementation, review the AWS Encryption SDK [best practi
 + [Use multi\-Region AWS KMS keys](#config-mrks)
 + [Choosing an algorithm suite](#config-algorithm)
 + [Limit encrypted data keys](#config-limit-keys)
++ [Setting a commitment policy](#config-commitment-policy)
 + [Work with streaming data](#config-stream)
 + [Cache data keys](#config-caching)
 
@@ -1368,6 +1369,14 @@ plaintext, header = client.decrypt(source=ciphertext, key_provider=master_key_pr
 ```
 
 ------
+
+## Setting a commitment policy<a name="config-commitment-policy"></a>
+
+A [*commitment policy*](concepts.md#commitment-policy) is a configuration setting that determines whether your application encrypts and decrypts with [key commitment](concepts.md#key-commitment)\. Encrypting and decrypting with key commitment is an [AWS Encryption SDK best practice](best-practices.md)\.
+
+Setting and adjusting your commitment policy is a critical step in [migrating](migration.md) from versions 1\.7\.*x* and earlier of the AWS Encryption SDK to version 2\.0\.*x* and later\. This progression is explained in detail in the [migration topic](migrate-commitment-policy.md)\.
+
+The default commitment policy value in the latest versions of the AWS Encryption SDK \(beginning in version 2\.0\.*x*\), `RequireEncryptRequireDecrypt`, is ideal for most situations\. However, if you need to decrypt ciphertext that was encrypted without key commitment, you might need to change your commitment policy to `RequireEncryptAllowDecrypt`\. For examples of how to set a commitment policy in each programming language, see [Setting your commitment policy](migrate-commitment-policy.md)\.
 
 ## Work with streaming data<a name="config-stream"></a>
 

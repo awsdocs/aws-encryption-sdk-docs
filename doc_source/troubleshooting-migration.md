@@ -1,6 +1,9 @@
-# Troubleshooting migration to versions 2\.0\.*x* and later<a name="troubleshooting-migration"></a>
+# Troubleshooting migration to the latest versions<a name="troubleshooting-migration"></a>
 
-Before updating your application to version 2\.0\.*x* or later of the AWS Encryption SDK, update to version 1\.7\.*x* and deploy it completely\. That will help you avoid most errors you might encounter when updating to version 2\.0\.*x*\. For detailed guidance, including examples, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.
+Before updating your application to version 2\.0\.*x* or later of the AWS Encryption SDK, update to the latest 1\.*x* version of the AWS Encryption SDK and deploy it completely\. That will help you avoid most errors you might encounter when updating to versions 2\.0\.*x* and later\. For detailed guidance, including examples, see [Migrating your AWS Encryption SDK](migration.md)\.
+
+**Important**  
+Verify that your latest 1\.*x* version is version 1\.7\.*x* or later of the AWS Encryption SDK\.
 
 **Note**  
 **AWS Encryption CLI**: References in this guide to version 1\.7\.*x* of the AWS Encryption SDK apply to version 1\.8\.*x* of the AWS Encryption CLI\. References in this guide to version 2\.0\.*x* of the AWS Encryption SDK apply to 2\.1\.*x* of the AWS Encryption CLI\.  
@@ -19,7 +22,7 @@ This topic is designed to help you recognize and resolve the most common errors 
 
 ## Deprecated or removed objects<a name="deprecated-removed"></a>
 
-Version 2\.0\.*x* includes several breaking changes, including removing legacy constructors, methods, functions, and classes that were deprecated in version 1\.7\.*x*\. To avoid compiler errors, import errors, syntax errors, and symbol not found errors \(depending on your programming language\), upgrade first to version 1\.7\.*x* of the AWS Encryption SDK\. While using version 1\.7\.*x*, you can begin using the replacement elements before the original symbols are removed\.
+Version 2\.0\.*x* includes several breaking changes, including removing legacy constructors, methods, functions, and classes that were deprecated in version 1\.7\.*x*\. To avoid compiler errors, import errors, syntax errors, and symbol not found errors \(depending on your programming language\), upgrade first to the latest 1\.*x* version of the AWS Encryption SDK for your programming language\. \(This must be version 1\.7\.*x* or later\.\) While using the latest 1\.*x* version, you can begin using the replacement elements before the original symbols are removed\.
 
 If you need to upgrade to version 2\.0\.*x* or later immediately, [consult the changelog](about-versions.md) for your programming language, and replace the legacy symbols with the symbols the changelog recommends\.
 
@@ -43,7 +46,7 @@ The `RequireEncryptRequireDecrypt` [commitment policy](concepts.md#commitment-po
 
 To avoid this error, before setting the `RequireEncryptRequireDecrypt` commitment policy, be sure that all ciphertexts encrypted without key commitment are decrypted and re\-encrypted with key commitment, or handled by a different application\. If you encounter this error, you can return an error for the conflicting ciphertext or change your commitment policy temporarily to `RequireEncryptAllowDecrypt`\.
 
-If you are encountering this error because you upgraded to version 2\.0\.*x* or later from a version earlier than 1\.7\.*x*, you might consider [rolling back](#migration-rollback) to version 1\.7\.*x* and deploying that version to all hosts before upgrading to version 2\.0\.*x* or later\. For help, see [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)\.
+If you are encountering this error because you upgraded to version 2\.0\.*x* or later from a version earlier than 1\.7\.*x* without first upgrading to the latest 1\.*x* version \(version 1\.7\.*x* or later\), consider [rolling back](#migration-rollback) to the latest 1\.*x* version and deploying that version to all hosts before upgrading to version 2\.0\.*x* or later\. For help, see [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)\.
 
 ## Key commitment validation failed<a name="commitment-failed"></a>
 
@@ -68,7 +71,7 @@ If you used a keyring or master key provider that specifies wrapping keys, the A
 If your application is failing to encrypt or decrypt data, you can usually resolve the problem by updating the code symbols, keyrings, master key providers, or [commitment policy](concepts.md#commitment-policy)\. However, in some cases, you might decide that it's best to roll back your application to a previous version of the AWS Encryption SDK\.
 
 If you must roll back, do so with caution\. Versions of the AWS Encryption SDK prior to 1\.7\.*x* cannot decrypt ciphertext encrypted with [key commitment](concepts.md#key-commitment)\.
-+ Rolling back from version 1\.7\.*x* to a previous version of the AWS Encryption SDK is generally safe\. You might have to undo changes you made to your code to use symbols and objects that are not supported in previous versions\. 
++ Rolling back from the latest 1\.*x* version to a previous version of the AWS Encryption SDK is generally safe\. You might have to undo changes you made to your code to use symbols and objects that are not supported in previous versions\. 
 + Once you have begun encrypting with key commitment \(setting your commitment policy to `RequireEncryptAllowDecrypt`\) in version 2\.0\.*x* or later, you can roll back to version 1\.7\.*x*, but not to any earlier version\. Versions of the AWS Encryption SDK prior to 1\.7\.*x* cannot decrypt ciphertext encrypted with [key commitment](concepts.md#key-commitment)\.
 
 If you accidentally enable encrypting with key commitment before all hosts can decrypt with key commitment, it might be best to continue with the roll out rather than to roll back\. If messages are transient or can be safely dropped, then you might consider a rollback with loss of messages\. If a rollback is required, you might consider writing a tool that decrypts and re\-encrypts all messages\.

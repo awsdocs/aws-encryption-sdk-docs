@@ -466,12 +466,12 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
- * Encrypts a string using an AWS KMS key and data key caching
+ * Encrypts a string using an &KMS; key and data key caching
  *
  * <p>
  * Arguments:
  * <ol>
- * <li>KMS Key ARN: To find the Amazon Resource Name of your AWS KMS key,
+ * <li>KMS Key ARN: To find the Amazon Resource Name of your &KMS; key,
  *     see 'Find the key ID and ARN' at https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html
  * <li>Max entry age: Maximum time (in seconds) that a cached entry can be used
  * <li>Cache capacity: Maximum number of entries in the cache
@@ -568,23 +568,23 @@ declare const credentials: {
 
 /* This is done to facilitate testing. */
 export async function testCachingCMMExample() {
-  /* This example uses an AWS KMS keyring. The generator key in a AWS KMS keyring generates and encrypts the data key.
-   * The caller needs kms:GenerateDataKey permission on the AWS KMS key in generatorKeyId.
+  /* This example uses an &KMS; keyring. The generator key in a &KMS; keyring generates and encrypts the data key.
+   * The caller needs kms:GenerateDataKey permission on the &KMS; key in generatorKeyId.
    */
   const generatorKeyId =
     'arn:aws:kms:us-west-2:658956600833:alias/EncryptDecrypt'
 
   /* Adding additional KMS keys that can decrypt.
-   * The caller must have kms:Encrypt permission for every AWS KMS key in keyIds.
+   * The caller must have kms:Encrypt permission for every &KMS; key in keyIds.
    * You might list several keys in different AWS Regions.
    * This allows you to decrypt the data in any of the represented Regions.
    * In this example, the generator key
-   * and the additional key are actually the same AWS KMS key.
-   * In `generatorId`, this AWS KMS key is identified by its alias ARN.
-   * In `keyIds`, this AWS KMS key is identified by its key ARN.
-   * In practice, you would specify different AWS KMS keys,
+   * and the additional key are actually the same &KMS; key.
+   * In `generatorId`, this &KMS; key is identified by its alias ARN.
+   * In `keyIds`, this &KMS; key is identified by its key ARN.
+   * In practice, you would specify different &KMS; keys,
    * or omit the `keyIds` parameter.
-   * This is *only* to demonstrate how the AWS KMS key ARNs are configured.
+   * This is *only* to demonstrate how the &KMS; key ARNs are configured.
    */
   const keyIds = [
     'arn:aws:kms:us-west-2:658956600833:key/b3537ef1-d8dc-4780-9f5a-55776cbb2f7f',
@@ -612,7 +612,7 @@ export async function testCachingCMMExample() {
     },
   })
 
-  /* You must configure the KMS keyring with your AWS KMS keys */
+  /* You must configure the KMS keyring with your &KMS; keys */
   const keyring = new KmsKeyringBrowser({
     clientProvider,
     generatorKeyId,
@@ -779,29 +779,29 @@ const { encrypt, decrypt } = buildClient(
 )
 
 export async function cachingCMMNodeSimpleTest() {
-  /* An AWS KMS key is required to generate the data key.
-   * You need kms:GenerateDataKey permission on the AWS KMS key in generatorKeyId.
+  /* An &KMS; key is required to generate the data key.
+   * You need kms:GenerateDataKey permission on the &KMS; key in generatorKeyId.
    */
   const generatorKeyId =
     'arn:aws:kms:us-west-2:658956600833:alias/EncryptDecrypt'
 
-  /* Adding alternate AWS KMS keys that can decrypt.
-   * Access to kms:Encrypt is required for every AWS KMS key in keyIds.
+  /* Adding alternate &KMS; keys that can decrypt.
+   * Access to kms:Encrypt is required for every &KMS; key in keyIds.
    * You might list several keys in different AWS Regions.
    * This allows you to decrypt the data in any of the represented Regions.
    * In this example, the generator key
-   * and the additional key are actually the same AWS KMS key.
-   * In `generatorId`, this AWS KMS key is identified by its alias ARN.
-   * In `keyIds`, this AWS KMS key is identified by its key ARN.
-   * In practice, you would specify different AWS KMS keys,
+   * and the additional key are actually the same &KMS; key.
+   * In `generatorId`, this &KMS; key is identified by its alias ARN.
+   * In `keyIds`, this &KMS; key is identified by its key ARN.
+   * In practice, you would specify different &KMS; keys,
    * or omit the `keyIds` parameter.
-   * This is *only* to demonstrate how the AWS KMS key ARNs are configured.
+   * This is *only* to demonstrate how the &KMS; key ARNs are configured.
    */
   const keyIds = [
     'arn:aws:kms:us-west-2:658956600833:key/b3537ef1-d8dc-4780-9f5a-55776cbb2f7f',
   ]
 
-  /* The AWS KMS keyring must be configured with the desired AWS KMS keys
+  /* The &KMS; keyring must be configured with the desired &KMS; keys
    * This example passes the keyring to the caching CMM
    * instead of using it directly.
    */
@@ -951,9 +951,9 @@ from aws_encryption_sdk import CommitmentPolicy
 
 
 def encrypt_with_caching(kms_key_arn, max_age_in_cache, cache_capacity):
-    """Encrypts a string using an AWS KMS key and data key caching.
+    """Encrypts a string using an &KMS; key and data key caching.
 
-    :param str kms_key_arn: Amazon Resource Name (ARN) of the AWS KMS key
+    :param str kms_key_arn: Amazon Resource Name (ARN) of the &KMS; key
     :param float max_age_in_cache: Maximum time in seconds that a cached entry can be used
     :param int cache_capacity: Maximum number of entries to retain in cache at once
     """
@@ -971,7 +971,7 @@ def encrypt_with_caching(kms_key_arn, max_age_in_cache, cache_capacity):
     # commitment policy, REQUIRE_ENCRYPT_REQUIRE_DECRYPT is used by default.
     client = aws_encryption_sdk.EncryptionSDKClient(commitment_policy=CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT)
 
-    # Create a master key provider for the AWS KMS key
+    # Create a master key provider for the &KMS; key
     key_provider = aws_encryption_sdk.StrictAwsKmsMasterKeyProvider(key_ids=[kms_key_arn])
 
     # Create a local cache

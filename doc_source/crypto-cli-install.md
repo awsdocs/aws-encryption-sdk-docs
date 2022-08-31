@@ -4,7 +4,7 @@ This topic explains how to install the AWS Encryption CLI\. For detailed informa
 
 **Topics**
 + [Installing the prerequisites](#crypto-cli-prerequisites)
-+ [Installing the AWS Encryption CLI](#install-sdk-cli)
++ [Installing the CLI](#install-sdk-cli)
 
 ## Installing the prerequisites<a name="crypto-cli-prerequisites"></a>
 
@@ -43,15 +43,14 @@ On Linux installations, versions of `pip` earlier than 8\.1 can't build the **cr
 The AWS Command Line Interface \(AWS CLI\) is required only if you are using AWS KMS keys in AWS Key Management Service \(AWS KMS\) with the AWS Encryption CLI\. If you are using a different [master key provider](concepts.md#master-key-provider), the AWS CLI is not required\.  
 To use AWS KMS keys with the AWS Encryption CLI, you need to [install](https://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [configure ](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration) the AWS CLI\. The configuration makes the credentials that you use to authenticate to AWS KMS available to the AWS Encryption CLI\. 
 
-## Installing the AWS Encryption CLI<a name="install-sdk-cli"></a>
+## Installing and updating the AWS Encryption CLI<a name="install-sdk-cli"></a>
 
-When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)\.
+Install the latest version of the AWS Encryption CLI\. When you use `pip` to install the AWS Encryption CLI, it automatically installs the libraries that the CLI needs, including the [AWS Encryption SDK for Python](python.md), the Python [cryptography library](https://cryptography.io/en/latest/), and the [AWS SDK for Python \(Boto3\)](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)\.
 
 **Note**  
-If you are new to the AWS Encryption CLI, install the latest available version\.   
-If you support commands and scripts designed for version of the AWS Encryption CLI before 1\.8\.*x*, we recommend that you upgrade first to version 1\.8\.*x* before upgrading to version 2\.1\.*x* or later\. Version 2\.1\.*x* of the AWS Encryption CLI introduces new security features to support [AWS Encryption SDK best practices](best-practices.md)\. However, version 2\.1\.*x* is not backward\-compatible; it will cause scripts designed for earlier versions of the AWS Encryption CLI to fail\.   
-New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.  
-For information about the changes and for help migrating from your current version to version 1\.8\.*x* and 2\.1\.*x*, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.
+Versions of the AWS Encryption CLI earlier than 4\.0\.0 are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
+You can safely update from version 2\.1\.*x* and later to the latest version of the AWS Encryption CLI without any code or data changes\. However, [ new security features](about-versions.md#version-2) introduced in version 2\.1\.*x* are not backward\-compatible\. To update from version 1\.7\.*x* or earlier, you must first update to the latest 1\.*x* version of the AWS Encryption CLI\. For details, see [Migrating your AWS Encryption SDK](migration.md)\.  
+New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 **To install the latest version of the AWS Encryption CLI**  
 

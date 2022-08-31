@@ -1,10 +1,10 @@
 # Versions of the AWS Encryption CLI<a name="crypto-cli-versions"></a>
 
-We recommend that you use the latest version of the AWS Encryption CLI\. If you're using a version of the AWS Encryption CLI older than 2\.1\.*x*, we recommend that you upgrade to version 1\.8\.*x* and then to version 2\.1\.*x* as soon as possible\.
-
-In version 2\.1\.*x*, the AWS Encryption CLI introduces support for significant new security features that meet [AWS Encryption SDK best practices](best-practices.md)\. These new features cause breaking changes that will require updates to your commands and scripts\. To make migration to version 2\.1\.*x* easier, we provide a transition version, 1\.8\.*x* that lets you prepare your commands and scripts for 2\.1\.*x*\. Features that are deprecated in version 1\.8\.*x* are removed in version 2\.1\.*x*\.
+We recommend that you use the latest version of the AWS Encryption CLI\.
 
 **Note**  
+Versions of the AWS Encryption CLI earlier than 4\.0\.0 are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
+You can safely update from version 2\.1\.*x* and later to the latest version of the AWS Encryption CLI without any code or data changes\. However, [ new security features](about-versions.md#version-2) introduced in version 2\.1\.*x* are not backward\-compatible\. To update from version 1\.7\.*x* or earlier, you must first update to the latest 1\.*x* version of the AWS Encryption CLI\. For details, see [Migrating your AWS Encryption SDK](migration.md)\.  
 New security features were originally released in AWS Encryption CLI versions 1\.7\.*x* and 2\.0\.*x*\. However, AWS Encryption CLI version 1\.8\.*x* replaces version 1\.7\.*x* and AWS Encryption CLI 2\.1\.*x* replaces 2\.0\.*x*\. For details, see the relevant [security advisory](https://github.com/aws/aws-encryption-sdk-cli/security/advisories/GHSA-2xwp-m7mq-7q3r) in the [aws\-encryption\-sdk\-cli](https://github.com/aws/aws-encryption-sdk-cli/) repository on GitHub\.
 
 For information about significant versions of the AWS Encryption SDK, see [Versions of the AWS Encryption SDK](about-versions.md)\.
@@ -13,10 +13,10 @@ For information about significant versions of the AWS Encryption SDK, see [Versi
 
 If you're new to the AWS Encryption CLI, use the latest version\.
 
-To decrypt data encrypted by a version of the AWS Encryption SDK earlier than version 1\.7\.*x*, start with version 1\.8\.*x*\. Make [all recommended changes](migration-guide.md) before updating to version 2\.1\.*x* or later\. Otherwise, you can begin with the latest available version of the AWS Encryption CLI\.
+To decrypt data encrypted by a version of the AWS Encryption SDK earlier than version 1\.7\.*x*, migrate first to the latest version of the AWS Encryption CLI\. Make [all recommended changes](migration-guide.md) before updating to version 2\.1\.*x* or later\. For details, see [Migrating your AWS Encryption SDK](migration.md)\.
 
 **Learn more**
-+ For detailed information about the changes and guidance for migrating to these new versions, see [Migrating to versions 2\.0\.*x* and later](migration.md)\.
++ For detailed information about the changes and guidance for migrating to these new versions, see [Migrating your AWS Encryption SDK](migration.md)\.
 + For descriptions of the new AWS Encryption CLI parameters and attributes, see [AWS Encryption SDK CLI syntax and parameter reference](crypto-cli-reference.md)\.
 
 The following lists describe the change to the AWS Encryption CLI in versions 1\.8\.*x* and 2\.1\.*x*\.

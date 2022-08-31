@@ -4,7 +4,7 @@ The AWS Encryption SDK language implementations use [semantic versioning](https:
 
 Whenever possible, use the latest version of the AWS Encryption SDK in your chosen programming language\. The [maintenance and support policy](introduction.md#support) for each version differs between programming language implementations\. For details about the supported versions in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
-When upgrades include new features that require special configuration to avoid encryption or decryption error, we provide an intermediate version and detailed instructions for using it\. For example, versions 1\.7\.*x* and 1\.8\.*x* are designed to be transitional versions that help you upgrade from versions earlier than 1\.7\.*x* to versions 2\.0\.*x* and later\. For details, see [Migrating to AWS Encryption SDK Versions 2\.0\.*x* and later](migration.md)\.
+When upgrades include new features that require special configuration to avoid encryption or decryption error, we provide an intermediate version and detailed instructions for using it\. For example, versions 1\.7\.*x* and 1\.8\.*x* are designed to be transitional versions that help you upgrade from versions earlier than 1\.7\.*x* to versions 2\.0\.*x* and later\. For details, see [Migrating your AWS Encryption SDK](migration.md)\.
 
 For a detailed description of the changes for each version your programming language, see the Changelog for each repository\. 
 + AWS Encryption SDK for C — [CHANGELOG\.md](https://github.com/aws/aws-encryption-sdk-c/blob/master/CHANGELOG.md)
@@ -35,14 +35,14 @@ The following list describes the major differences between supported versions of
 ## Versions earlier than 1\.7\.*x*<a name="versions-earlier"></a>
 
 **Note**  
-All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle) effective July 2022\. Upgrade to the latest available version of the AWS Encryption SDK for your programming language as soon as is practical\. To upgrade from an AWS Encryption SDK version earlier than 1\.7\.*x*, you must first upgrade to 1\.7\.*x*\. For details, see [Migrating to AWS Encryption SDK Versions 2\.0\.*x* and later](migration.md)\.
+All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\. Upgrade to the latest available version of the AWS Encryption SDK for your programming language as soon as is practical\. To upgrade from an AWS Encryption SDK version earlier than 1\.7\.*x*, you must first upgrade to 1\.7\.*x*\. For details, see [Migrating your AWS Encryption SDK](migration.md)\.
 
 Versions of the AWS Encryption SDK earlier than 1\.7\.*x* provide important security features, including encryption with the Advanced Encryption Standard algorithm in Galois/Counter Mode \(AES\-GCM\), an HMAC\-based extract\-and\-expand key derivation function \(HKDF\), signing, and a 256\-bit encryption key\. However, these versions don't support [best practices](best-practices.md) that we recommend, including [key commitment](concepts.md#key-commitment)\. 
 
 ## Version 1\.7\.*x*<a name="version-1.7"></a>
 
 **Note**  
-All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle) effective July 2022\.
+All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.
 
 Version 1\.7\.*x* is designed to help users of earlier versions of the AWS Encryption SDK to upgrade to versions 2\.0\.*x* and later\. If you are new to the AWS Encryption SDK, you can skip this version and begin with the latest available version in your programming language\.
 
@@ -80,7 +80,7 @@ Version 1\.7\.*x* introduces changes to the Default cryptographic materials mana
 ## Version 1\.8\.*x*<a name="version-1.8"></a>
 
 **Note**  
-All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle) effective July 2022\.
+All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.
 
 For the AWS Encryption CLI, version 1\.8\.*x* is the transition version between versions earlier than 1\.7\.*x* and versions 2\.1\.*x* and later\. For the AWS Encryption CLI, version 1\.8\.*x* is fully backward compatible; it does not introduce any breaking changes or change the behavior of the AWS Encryption SDK\. It's also forwards compatible; it allows you to update your code so it's compatible with version 2\.0\.*x*\. It includes new features, but doesn't fully enable them\. It requires configuration values that prevent you from immediately adopting all new features until you are ready\.
 
@@ -89,7 +89,7 @@ For information about version 1\.8\.*x* of the AWS Encryption CLI, see [Version 
 ## Version 1\.9\.*x*<a name="ver19"></a>
 
 **Note**  
-All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle) effective July 2022\.
+All 1\.*x*\.*x* versions of the AWS Encryption SDK are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.
 
 Version 1\.9\.*x* supports the digital signature security improvements found in version 2\.2\.*x*\. If you currently use digital signatures with your applications and use AWS Encryption SDK versions earlier than version 2\.0\.*x*, you should upgrade to version 1\.9\.*x* to take advantage of the improvements\.
 
@@ -102,6 +102,7 @@ Like version 1\.7\.*x*, version 1\.9\.*x* is backwards compatible with versions 
 Version 2\.0\.*x* supports new security features offered in the AWS Encryption SDK, including specified wrapping keys and key commitment\. To support these features, version 2\.0\.*x* includes breaking changes for earlier versions of the AWS Encryption SDK\. You can prepare for these changes by deploying version 1\.7\.*x*\. Version 2\.0\.*x* includes all of the new features introduced in version 1\.7\.*x* with the following additions and changes\.
 
 **Note**  
+Version 2\.*x*\.*x* of the AWS Encryption SDK for Python and the AWS Encryption CLI are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
 For information about [support and maintenance](introduction.md#support) of this AWS Encryption SDK version in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
 **AWS KMS master key providers**  
@@ -119,6 +120,7 @@ If you are migrating from an earlier version of the AWS Encryption SDK to versio
 ## Version 2\.1\.*x*<a name="version-2.1"></a>
 
 **Note**  
+Version 2\.*x*\.*x* of the AWS Encryption SDK for Python and the AWS Encryption CLI are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
 For information about [support and maintenance](introduction.md#support) of this AWS Encryption SDK version in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
 For the AWS Encryption CLI, version 2\.1\.*x* is the version that includes specified wrapping keys and key commitment\. This is equivalent to version 2\.0\.*x* in other programming languages\.
@@ -130,6 +132,7 @@ For information about version 2\.1\.*x* of the AWS Encryption CLI, see [Version 
 Adds support for digital signatures and limiting encrypted data keys\.
 
 **Note**  
+Version 2\.*x*\.*x* of the AWS Encryption SDK for Python and the AWS Encryption CLI are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
 For information about [support and maintenance](introduction.md#support) of this AWS Encryption SDK version in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
 **Digital signatures**  
@@ -147,9 +150,13 @@ Adds support for AWS KMS multi\-Region keys\. For details, see [Use multi\-Regio
 
 **Note**  
 The AWS Encryption CLI supports multi\-Region keys beginning in [version 3\.0\.*x*](#version3.0)\.  
+Version 2\.*x*\.*x* of the AWS Encryption SDK for Python and the AWS Encryption CLI are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
 For information about [support and maintenance](introduction.md#support) of this AWS Encryption SDK version in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
 ## Version 2\.4\.*x*<a name="version2.4"></a>
+
+**Note**  
+Version 2\.*x*\.*x* of the AWS Encryption SDK for Python and the AWS Encryption CLI are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.
 
 The AWS Encryption SDK for Java version 2\.4\.0 adds support for the AWS SDK for Java 2\.x\. Beginning in version 2\.4\.0, the AWS Encryption SDK for Java supports AWS SDK for Java version 1\.*x* and version 2\.*x*\. Use of the AWS SDK for Java is optional\. The AWS Encryption SDK for Java requires the AWS SDK for Java only if you are using AWS Key Management Service \(AWS KMS\) as your master key provider\.
 
@@ -158,6 +165,7 @@ For details, see [Prerequisites](java.md#java-prerequisites)\.
 ## Version 3\.0\.*x*<a name="version3.0"></a>
 
 **Note**  
+Version 3\.*x*\.*x* of the AWS Encryption CLI is in [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
 For information about [support and maintenance](introduction.md#support) of this AWS Encryption SDK version in your preferred programming language, see the `SUPPORT_POLICY.rst` file in its [GitHub repository](introduction.md#esdk-repos)\.
 
 AWS Encryption CLI version 3\.0\.*x* adds support for AWS KMS multi\-Region keys\. For details, see in the *AWS Key Management Service Developer Guide*\. \(Other AWS Encryption SDK programming languages support multi\-Region keys beginning in [version 2\.3\.*x*](#version2.3)\.\)

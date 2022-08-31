@@ -4,13 +4,13 @@
 *****Copyright &copy; Amazon Web Services, Inc. and/or its affiliates. All rights reserved.*****
 
 -----
-Amazon's trademarks and trade dress may not be used in 
-     connection with any product or service that is not Amazon's, 
-     in any manner that is likely to cause confusion among customers, 
-     or in any manner that disparages or discredits Amazon. All other 
-     trademarks not owned by Amazon are the property of their respective
-     owners, who may or may not be affiliated with, connected to, or 
-     sponsored by Amazon.
+Amazon's trademarks and trade dress may not be used in
+connection with any product or service that is not Amazon's,
+in any manner that is likely to cause confusion among customers,
+or in any manner that disparages or discredits Amazon. All other
+trademarks not owned by Amazon are the property of their respective
+owners, who may or may not be affiliated with, connected to, or
+sponsored by Amazon.
 
 -----
 ## Contents
@@ -59,12 +59,12 @@ Amazon's trademarks and trade dress may not be used in
       + [Data key caching example code](sample-cache-example-code.md)
       + [Data key caching example: AWS CloudFormation template](sample-cache-example-cloudformation.md)
 + [Versions of the AWS Encryption SDK](about-versions.md)
-+ [Migrating to AWS Encryption SDK Versions 2.0.x and later](migration.md)
++ [Migrating your AWS Encryption SDK](migration.md)
    + [How to migrate and deploy the AWS Encryption SDK](migration-guide.md)
    + [Updating AWS KMS master key providers](migrate-mkps-v2.md)
    + [Updating AWS KMS keyrings](migrate-keyrings-v2.md)
    + [Setting your commitment policy](migrate-commitment-policy.md)
-   + [Troubleshooting migration to versions 2.0.x and later](troubleshooting-migration.md)
+   + [Troubleshooting migration to the latest versions](troubleshooting-migration.md)
 + [Frequently asked questions](faq.md)
 + [AWS Encryption SDK reference](reference.md)
    + [AWS Encryption SDK message format reference](message-format.md)

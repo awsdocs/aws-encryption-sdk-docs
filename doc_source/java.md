@@ -23,8 +23,8 @@ If you don't have Bouncy Castle, go to [Bouncy Castle latest releases](https://b
 
 **AWS SDK for Java \(Optional\)**  
 The AWS Encryption SDK for Java does not require the AWS SDK for Java\. However, the AWS SDK for Java is required to use [AWS Key Management Service](https://aws.amazon.com/kms/) \(AWS KMS\) as a master key provider\. It's also required for some of the Java code examples in this guide\.  
-Beginning in the AWS Encryption SDK for Java version 2\.4\.0, the AWS Encryption SDK for Java supports both version 1\.x and 2\.x of the AWS SDK for Java\. AWS Encryption SDK code for the AWS SDK for Java 1\.x and 2\.x are interoperable\. For example, you can encrypt data with AWS Encryption SDK code that supports AWS SDK for Java 1\.x and decrypt it using code that supports AWS SDK for Java 2\.x \(or vice versa\)\. Versions of the AWS Encryption SDK for Java earlier than 2\.4\.0 support only AWS SDK for Java 1\.x\. For information about updating your version of the AWS Encryption SDK, see [Migrating to AWS Encryption SDK Versions 2\.0\.*x* and later](migration.md)\.  
-When updating your AWS Encryption SDK for Java code from the AWS SDK for Java 1\.x to AWS SDK for Java 2\.x, replace references to the [`AWSKMS` interface](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/kms/package-summary.html) in AWS SDK for Java 1\.x with references to the [`KmsClient` interface](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/kms/package-summary.html) in AWS SDK for Java 2\.x\. Also, update your code to use the AWS KMS\-related objects in the `kmssdkv2` namespace, instead of the `kms` namespace\.   
+Beginning in the AWS Encryption SDK for Java version 2\.4\.0, the AWS Encryption SDK for Java supports both version 1\.x and 2\.x of the AWS SDK for Java\. AWS Encryption SDK code for the AWS SDK for Java 1\.x and 2\.x are interoperable\. For example, you can encrypt data with AWS Encryption SDK code that supports AWS SDK for Java 1\.x and decrypt it using code that supports AWS SDK for Java 2\.x \(or vice versa\)\. Versions of the AWS Encryption SDK for Java earlier than 2\.4\.0 support only AWS SDK for Java 1\.x\. For information about updating your version of the AWS Encryption SDK, see [Migrating your AWS Encryption SDK](migration.md)\.  
+When updating your AWS Encryption SDK for Java code from the AWS SDK for Java 1\.x to AWS SDK for Java 2\.x, replace references to the [`AWSKMS` interface](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/kms/package-summary.html) in AWS SDK for Java 1\.x with references to the [`KmsClient` interface](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/kms/package-summary.html) in AWS SDK for Java 2\.x\. The AWS Encryption SDK for Java does not support the [`KmsAsyncClient` interface](https://sdk.amazonaws.com/java/api/latest/software/amazon/awssdk/services/kms/KmsAsyncClient.html)\. Also, update your code to use the AWS KMS\-related objects in the `kmssdkv2` namespace, instead of the `kms` namespace\.   
 To install the AWS SDK for Java, use Apache Maven\.   
 + To [import the entire AWS SDK for Java](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/setup-project-maven.html#build-the-entire-sdk-into-your-project) as a dependency, declare it in your `pom.xml` file\.
 + To create a dependency only for the AWS KMS module in AWS SDK for Java 1\.x, follow the instructions for [specifying particular modules](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-project-maven.html#modules-dependencies), and set the `artifactId` to `aws-java-sdk-kms`\.
@@ -33,6 +33,12 @@ For more changes, see [What's different between the AWS SDK for Java 1\.x and 2\
 Java examples in the AWS Encryption SDK Developer Guide use the AWS SDK for Java 2\.x\.
 
 ## Installation<a name="java-installation"></a>
+
+Install the latest version of the AWS Encryption SDK for Java\.
+
+**Note**  
+All versions of the AWS Encryption SDK for Java earlier than 2\.0\.0 are in the [end\-of\-support phase](https://docs.aws.amazon.com/sdkref/latest/guide/maint-policy.html#version-life-cycle)\.  
+You can safely update from version 2\.0\.*x* and later to the latest version of the AWS Encryption SDK for Java without any code or data changes\. However, [ new security features](about-versions.md#version-2) introduced in version 2\.0\.*x* are not backward\-compatible\. To update from versions earlier than 1\.7\.*x* to version 2\.0\.*x* and later, you must first update to the latest 1\.*x* version of the AWS Encryption SDK\. For details, see [Migrating your AWS Encryption SDK](migration.md)\.
 
 You can install the AWS Encryption SDK for Java in the following ways\.
 

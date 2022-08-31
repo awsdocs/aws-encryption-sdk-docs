@@ -3,9 +3,9 @@
 The AWS KMS keyrings in the [AWS Encryption SDK for C](c-language.md), the [AWS Encryption SDK for \.NET](dot-net.md), and the [AWS Encryption SDK for JavaScript](javascript.md) support [best practices](best-practices.md) by allowing you to specify wrapping keys when encrypting and decrypting\. If you create an [AWS KMS discovery keyring](use-kms-keyring.md#kms-keyring-discovery), you do so explicitly\. 
 
 **Note**  
-The earliest version of the AWS Encryption SDK for \.NET is version 3\.0\.*x*\. You do not need to update or migrate to another version if you are using this library\.
+The earliest version of the AWS Encryption SDK for \.NET is version 3\.0\.*x*\. All versions of the AWS Encryption SDK for \.NET support the security best practices introduced in 2\.0\.*x* of the AWS Encryption SDK\. You can safely upgrade to the latest version without any code or data changes\.
 
-When you update to versions 1\.7\.*x* and later, you can also limit the wrapping keys that any [AWS KMS discovery keyring](use-kms-keyring.md#kms-keyring-discovery) or [AWS KMS regional discovery keyring](use-kms-keyring.md#kms-keyring-regional) uses when decrypting to those in particular AWS accounts\. Filtering a discovery keyring is an AWS Encryption SDK [best practice](best-practices.md)\.
+When you update to the latest 1\.*x* version of the AWS Encryption SDK, you can use a [discovery filter](use-kms-keyring.md#kms-keyring-discovery) to limit the wrapping keys that an [AWS KMS discovery keyring](use-kms-keyring.md#kms-keyring-discovery) or [AWS KMS regional discovery keyring](use-kms-keyring.md#kms-keyring-regional) uses when decrypting to those in particular AWS accounts\. Filtering a discovery keyring is an AWS Encryption SDK [best practice](best-practices.md)\.
 
 The examples in this section will show you how to add the discovery filter to an AWS KMS regional discovery keyring\.
 
