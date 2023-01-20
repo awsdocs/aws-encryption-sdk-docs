@@ -249,11 +249,11 @@ For a complete example, see [set\_commitment\.py](https://github.com/aws/aws-enc
 
 ```
 # Instantiate the client
-client = EncryptionSDKClient(CommitmentPolicy.ForbidEncryptAllowDecrypt)
+client = aws_encryption_sdk.EncryptionSDKClient(commitment_policy=CommitmentPolicy.FORBID_ENCRYPT_ALLOW_DECRYPT)
 
 // Create a master key provider in strict mode
 aws_kms_key = "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
-aws_kms_strict_master_key_provider = StrictAwsKmsMasterKeyProvider(
+kms_key_provider = StrictAwsKmsMasterKeyProvider(
         key_ids=[aws_kms_key]
 )
 
@@ -261,13 +261,13 @@ aws_kms_strict_master_key_provider = StrictAwsKmsMasterKeyProvider(
 ciphertext, encrypt_header = client.encrypt(
         source=source_plaintext,
         encryption_context=encryption_context,
-        master_key_provider=aws_kms_strict_master_key_provider
+        key_provider=kms_key_provider
 )
 
 # Decrypt your ciphertext
 decrypted, decrypt_header = client.decrypt(
         source=ciphertext,
-        master_key_provider=aws_kms_strict_master_key_provider
+        key_provider=kms_key_provider
 )
 ```
 
